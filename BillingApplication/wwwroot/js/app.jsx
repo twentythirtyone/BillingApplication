@@ -1,6 +1,6 @@
 class Hello extends React.Component {
     render() {
-        return <h1>Привет, React.JS</h1>;
+        return <button>РљРЅРѕРїРєР°</button>;
     }
 }
 ReactDOM.render(
