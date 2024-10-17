@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BillingApplication.Entities
 {
-    public class Admin
+    public class AdminEntity
     {
         public int Id { get; set; }
         public required string Email { get; set; }

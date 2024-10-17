@@ -13,5 +13,8 @@ namespace BillingApplication.Entities
         public int LastTariffId { get; set; }
         public int NewTariffId { get; set; }
         public DateTime Date { get; set; }
+        public virtual SubscriberEntity Subscriber { get; set; }
+        public virtual TariffEntity LastTariff { get; set; }
+        public virtual TariffEntity NewTariff { get; set; }
     }
 }
