@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace BillingApplication
 {
-    internal class UserConfiguration : IEntityTypeConfiguration<UserEntity>
+    internal class UserConfiguration : IEntityTypeConfiguration<SubscriberEntity>
     {
-        public void Configure(EntityTypeBuilder<UserEntity> builder)
+        public void Configure(EntityTypeBuilder<SubscriberEntity> builder)
         {
             builder.HasKey(x=>x.Id);
             builder.Property(x => x.Email)

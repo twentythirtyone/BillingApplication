@@ -14,5 +14,6 @@ namespace BillingApplication.Entities
         public DateTime Date { get; set; }
         public decimal Price { get; set; }
         public string MessageText { get; set; } = "";
+        public virtual SubscriberEntity Subscriber { get; set; }
     }
 }

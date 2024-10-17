@@ -9,10 +9,10 @@ namespace BillingApplication.Logic.Auth
 {
     public interface IAuth
     {
-        Task<User?> GetUserById(int? id);
-        Task<int?> CreateOrUpdateUser(User user);
-        Task<IEnumerable<User>> GetUsers();
-        public string GenerateJwtToken(User user);
-        Task<User?> ValidateUserCredentials(string email, string password);
+        Task<Subscriber?> GetUserById(int? id);
+        Task<int?> CreateOrUpdateUser(Subscriber user);
+        Task<IEnumerable<Subscriber>> GetUsers();
+        public string GenerateJwtToken(Subscriber user);
+        Task<Subscriber?> ValidateUserCredentials(string email, string password);
     }
 }

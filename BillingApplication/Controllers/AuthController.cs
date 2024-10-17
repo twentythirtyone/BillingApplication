@@ -16,7 +16,7 @@ namespace BillingApplication.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] User model)
+        public async Task<IActionResult> Login([FromBody] Subscriber model)
         {
             var user = await auth.ValidateUserCredentials(model.Email, model.Password);
             if (user == null)
@@ -27,7 +27,7 @@ namespace BillingApplication.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] User user)
+        public async Task<IActionResult> Register([FromBody] Subscriber user)
         {
             var result = await auth.CreateOrUpdateUser(user);
             if (result == null)

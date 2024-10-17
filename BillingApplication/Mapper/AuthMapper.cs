@@ -5,15 +5,16 @@ namespace BillingApplication.Mapper
 {
     public class AuthMapper
     {
-        public static User? UserEntityToUserModel(UserEntity? userEntity)
+        public static Models.Subscriber? UserEntityToUserModel(Entities.SubscriberEntity? userEntity)
         {
             if (userEntity == null)
                 return null;
-            return new User()
+            return new Models.Subscriber()
             {
                 Email = userEntity.Email ?? "",
                 Salt = userEntity.Salt ?? "",
-                Password = userEntity.Password ?? ""
+                Password = userEntity.Password ?? "",
+                Number = userEntity.Number ?? "",
             };
         }
     }
