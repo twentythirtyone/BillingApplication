@@ -42,9 +42,10 @@ builder.Services.AddCors(options =>
 });
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddScoped<IAuth, Auth>(); // Регистрация класса Auth
-builder.Services.AddScoped<IEncrypt, Encrypt>(); // Регистрация сервиса шифрования
-builder.Services.AddScoped<IUserRepository, UserRepository>(); // Регистрация репозитория пользователя
+
+builder.Services.AddScoped<IAuth, Auth>(); 
+builder.Services.AddScoped<IEncrypt, Encrypt>();
+builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>(); 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();

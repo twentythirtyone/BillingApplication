@@ -15,16 +15,16 @@ namespace BillingApplication.Logic.Auth
     public class Auth : IAuth
     {
         private readonly IEncrypt encrypt;
-        private readonly IUserRepository userRepository;
+        private readonly ISubscriberRepository userRepository;
         private readonly IConfiguration configuration;
-        public Auth(IEncrypt encrypt, IUserRepository userRepository, IConfiguration configuration)
+        public Auth(IEncrypt encrypt, ISubscriberRepository userRepository, IConfiguration configuration)
         {
             this.encrypt = encrypt;
             this.userRepository = userRepository;
             this.configuration = configuration;
         }
 
-        public async Task<int?> CreateOrUpdateUser(User user)
+        public async Task<int?> CreateOrUpdateUser(Subscriber user)
         {
             var currentUser = await GetUserById(user.Id);
             int? id = currentUser?.Id;
@@ -41,17 +41,17 @@ namespace BillingApplication.Logic.Auth
             return id;
         }
 
-        public async Task<User?> GetUserById(int? id)
+        public async Task<Subscriber?> GetUserById(int? id)
         {
             return await userRepository.GetUserById(id);
         }
 
-        public async Task<IEnumerable<User>> GetUsers()
+        public async Task<IEnumerable<Subscriber>> GetUsers()
         {
             return await userRepository.Get();
         }
 
-        public string GenerateJwtToken(User user)
+        public string GenerateJwtToken(Subscriber user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
@@ -73,10 +73,10 @@ namespace BillingApplication.Logic.Auth
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<User?> ValidateUserCredentials(string email, string password)
+        public async Task<Subscriber?> ValidateUserCredentials(string phoneNumber, string password)
         {
             // Находим пользователя по email
-            var user = await userRepository.GetUserbyEmail(email);
+            var user = await userRepository.GetUserbyEmail(phoneNumber);
             if (user == null)
             {
                 return null; // Пользователь не найден

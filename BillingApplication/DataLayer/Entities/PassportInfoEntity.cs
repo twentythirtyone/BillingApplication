@@ -14,5 +14,6 @@ namespace BillingApplication.Entities
         public DateTime? ExpiryDate { get; set; }
         public string? IssuedBy { get; set; }
         public string? Registration { get; set; }
+        public virtual ICollection<SubscriberEntity> Subscribers { get; set; }
     }
 }
