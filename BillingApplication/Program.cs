@@ -1,11 +1,12 @@
 using BillingApplication;
+using BillingApplication.DataLayer.Repositories;
 using BillingApplication.Logic.Auth;
+using BillingApplication.Logic.TariffManager;
 using BillingApplication.Repositories;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using React.AspNet;
 using System.Text;
@@ -33,6 +34,7 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddControllers();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -40,12 +42,15 @@ builder.Services.AddCors(options =>
                           .AllowAnyMethod()
                           .AllowAnyHeader());
 });
+
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IAuth, Auth>(); 
 builder.Services.AddScoped<IEncrypt, Encrypt>();
-builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>(); 
+builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
+builder.Services.AddScoped<ITariffRepository, TariffRepository>();
+builder.Services.AddScoped<ITariffManager, TariffManager>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
@@ -60,11 +65,9 @@ app.UseCors("AllowAllOrigins");
 app.UseReact(config => { });
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.MapControllers();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
