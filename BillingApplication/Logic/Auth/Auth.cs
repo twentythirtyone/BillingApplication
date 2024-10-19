@@ -1,4 +1,5 @@
-﻿using BillingApplication.Models;
+﻿using BillingApplication.Exceptions;
+using BillingApplication.Models;
 using BillingApplication.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -24,20 +25,39 @@ namespace BillingApplication.Logic.Auth
             this.configuration = configuration;
         }
 
-        public async Task<int?> CreateOrUpdateUser(Subscriber user)
+        public async Task<int?> CreateUser(Subscriber user, PassportInfo passport, Tariff? tariff = null)
         {
             var currentUser = await GetUserById(user.Id);
             int? id = currentUser?.Id;
             user.Salt = Guid.NewGuid().ToString();
             user.Password = encrypt.HashPassword(user.Password, user.Salt);
-            if(id > 0)
+            if (id > 0)
             {
-                id = await userRepository.Update(user);
+                if(passport != null || tariff != null) 
+                    id = await userRepository.Update(user, passport, tariff);
+                else
+                    id = await userRepository.Update(user);
             }
             else
             {
-                id = await userRepository.Create(user);
+                id = await userRepository.Create(user, passport!, tariff!);
             }
+            return id;
+        }
+
+        public async Task<int?> UpdateUser(Subscriber user, PassportInfo? passport = null, Tariff? tariff = null)
+        {
+            var currentUser = await GetUserById(user.Id);
+            int? id = currentUser?.Id;
+            if (id > 0)
+            {
+                if (passport != null || tariff != null)
+                    id = await userRepository.Update(user, passport, tariff);
+                else
+                    id = await userRepository.Update(user);
+            }
+            else
+                throw new UserNotFoundException();
             return id;
         }
 
@@ -58,7 +78,7 @@ namespace BillingApplication.Logic.Auth
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Number),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
@@ -75,12 +95,10 @@ namespace BillingApplication.Logic.Auth
 
         public async Task<Subscriber?> ValidateUserCredentials(string phoneNumber, string password)
         {
-            // Находим пользователя по email
-            var user = await userRepository.GetUserbyEmail(phoneNumber);
+            // Находим пользователя по Телефону
+            var user = await userRepository.GetUserbyPhone(phoneNumber);
             if (user == null)
-            {
-                return null; // Пользователь не найден
-            }
+                throw new UserNotFoundException("Телефон пользователя не найден");
 
             // Проверяем пароль
             var hashedPassword = encrypt.HashPassword(password, user.Salt);
