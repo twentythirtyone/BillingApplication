@@ -30,8 +30,8 @@ namespace BillingApplication.Entities
         [Column("internet")]
         public long Internet { get; set; }
 
-        public virtual PassportInfoEntity PassportInfo { get; set; }
-        public virtual TariffEntity Tariff { get; set; }
+        public required virtual PassportInfoEntity PassportInfo { get; set; }
+        public required virtual TariffEntity Tariff { get; set; }
         public virtual ICollection<PaymentEntity> Payments { get; set; }
         public virtual ICollection<TopUpsEntity> TopUps { get; set; }
         public virtual ICollection<CallsEntity> Calls { get; set; }
