@@ -11,9 +11,10 @@ namespace BillingApplication.Repositories
     {
         Task<Subscriber?> GetUserById(int? id);
         Task<IEnumerable<Subscriber>> Get();
-        Task<int?> Create(Subscriber user);
-        Task<int?> Update(Subscriber user);
+        Task<int?> Create(Subscriber user, PassportInfo passportInfo, Tariff tariff);
+        Task<int?> Update(Subscriber user, PassportInfo? passportInfo = null, Tariff? tariff = null);
         Task<int?> Delete(int? id);
         Task<Subscriber?> GetUserbyEmail(string email);
+        Task<Subscriber?> GetUserbyPhone(string phone);
     }
 }
