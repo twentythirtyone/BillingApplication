@@ -1,6 +1,6 @@
 @BillingApplication.Server_HostAddress = http://localhost:5183
 
-GET {{BillingApplication.Server_HostAddress}}/weatherforecast/
+GET {{BillingApplication.Server_HostAddress}}/billingapplication/
 Accept: application/json
 
 ###
