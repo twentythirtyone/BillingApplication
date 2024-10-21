@@ -1,9 +1,6 @@
-class Hello extends React.Component {
-    render() {
-        return <button>Кнопка</button>;
-    }
-}
+﻿import HomePage from './home.jsx';
+
 ReactDOM.render(
-    <Hello />,
+    <HomePage />,
     document.getElementById("content")
 );
