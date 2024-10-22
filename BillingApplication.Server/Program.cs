@@ -13,23 +13,15 @@ using React.AspNet;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddEnvironmentVariables();
+builder.Configuration
+    .AddUserSecrets<Program>()
+    .AddEnvironmentVariables();
+
+if (builder.Configuration["db_connection"] == null || builder.Configuration["db_connection"]!.Length == 0) throw new Exception("no_database_connection");
+if (builder.Configuration["secret"] == null || builder.Configuration["secret"]!.Length == 0) throw new Exception("no_secret");
 
 var configuration = builder.Configuration;
 
-string? connectionString = "";
-string? jwtKey = "";
-
-if (builder.Environment.IsDevelopment())
-{
-    connectionString = configuration["db_connection"];
-    jwtKey = configuration["secret"];
-}
-else
-{
-    connectionString = configuration.GetConnectionString("DefaultConnection");
-    jwtKey = configuration["Jwt:Key"];
-}
 
 builder.Services.AddAuthentication(options =>
 {
@@ -46,7 +38,7 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secret"]!))
         };
     });
 
@@ -61,7 +53,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(configuration["db_connection"]));
 
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<IEncrypt, Encrypt>();
