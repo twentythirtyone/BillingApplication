@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Models
+namespace BillingApplication.Server.Logic.Models.Roles
 {
-    public class Subscriber
+    public class Subscriber: IUser
     {
         public int? Id { get; set; }
         public string Email { get; set; } = "";
@@ -21,5 +21,6 @@ namespace BillingApplication.Models
         public NpgsqlInterval CallTime { get; set; }
         public int Messages { get; set; }
         public long Internet { get; set; }
+        public string UniqueId => Id.ToString()!;
     }
 }

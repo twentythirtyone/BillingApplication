@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Models
+namespace BillingApplication.Entities
 {
-    public class Admin
+    public class OperatorEntity
     {
         public int Id { get; set; }
         public required string Email { get; set; }
         public required string Nickname { get; set; }
         public required string Password { get; set; }
+        public required bool IsAdmin { get; set; }
+
     }
 }

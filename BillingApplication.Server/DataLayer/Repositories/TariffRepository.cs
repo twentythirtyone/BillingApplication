@@ -2,6 +2,7 @@
 using BillingApplication.Mapper;
 using BillingApplication.Models;
 using BillingApplication.Server.Exceptions;
+using BillingApplication.Server.Logic.Models.Roles;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication.DataLayer.Repositories

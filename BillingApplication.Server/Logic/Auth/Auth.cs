@@ -5,10 +5,12 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BillingApplication.Server.Logic.Auth.Roles;
+using BillingApplication.Server.Logic.Models.Roles;
 
 
 namespace BillingApplication.Logic.Auth
@@ -25,9 +27,9 @@ namespace BillingApplication.Logic.Auth
             this.configuration = configuration;
         }
 
-        public async Task<int?> CreateUser(Subscriber user, PassportInfo passport, Tariff? tariff = null)
+        public async Task<int?> CreateSubscriber(Subscriber user, PassportInfo passport, Tariff? tariff = null)
         {
-            var currentUser = await GetUserById(user.Id);
+            var currentUser = await GetSubscriberById(user.Id);
             int? id = currentUser?.Id;
             user.Salt = Guid.NewGuid().ToString();
             user.Password = encrypt.HashPassword(user.Password, user.Salt);
@@ -45,9 +47,9 @@ namespace BillingApplication.Logic.Auth
             return id;
         }
 
-        public async Task<int?> UpdateUser(Subscriber user, PassportInfo? passport = null, Tariff? tariff = null)
+        public async Task<int?> UpdateSubscriber(Subscriber user, PassportInfo? passport = null, Tariff? tariff = null)
         {
-            var currentUser = await GetUserById(user.Id);
+            var currentUser = await GetSubscriberById(user.Id);
             int? id = currentUser?.Id;
             if (id > 0)
             {
@@ -61,7 +63,7 @@ namespace BillingApplication.Logic.Auth
             return id;
         }
 
-        public async Task<Subscriber?> GetUserById(int? id)
+        public async Task<Subscriber?> GetSubscriberById(int? id)
         {
             return await subscriberRepository.GetUserById(id);
         }
@@ -71,16 +73,31 @@ namespace BillingApplication.Logic.Auth
             return await subscriberRepository.Get();
         }
 
-        public string GenerateJwtToken(Subscriber user)
+        public string GenerateJwtToken<T>(T user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var userRoles = new List<string>();
 
-            var claims = new[]
+            if (user is Subscriber subscriber)
+                userRoles.Add(UserRoles.USER);
+            else if (user is Operator @operator)
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Number),
+                if (@operator.IsAdmin)
+                    userRoles.Add(UserRoles.ADMIN);
+                userRoles.Add(UserRoles.OPERATOR);
+            }
+            else
+                throw new ArgumentException("Unsupported user type");
+
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, (user as IUser)?.UniqueId ?? string.Empty),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
+
+            claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secret"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
                 issuer: configuration["Jwt:Issuer"],
@@ -92,6 +109,7 @@ namespace BillingApplication.Logic.Auth
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
 
         public async Task<Subscriber?> ValidateUserCredentials(string phoneNumber, string password)
         {

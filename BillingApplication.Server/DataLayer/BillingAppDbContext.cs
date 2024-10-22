@@ -20,8 +20,8 @@ namespace BillingApplication
         }
 
         public DbSet<PassportInfoEntity> PassportInfos { get; set; }
-        public DbSet<AdminEntity> Admins { get; set; }
-        public DbSet<SubscriberEntity> SubscriberEntity { get; set; }
+        public DbSet<OperatorEntity> Operators { get; set; }
+        public DbSet<SubscriberEntity> Subscribers { get; set; }
         public DbSet<BundleEntity> Bundles { get; set; }
         public DbSet<TariffEntity> Tariffs { get; set; }
         public DbSet<ExtrasEntity> Extras { get; set; }

@@ -31,7 +31,7 @@ namespace BillingApplication.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model)
         {
-            var result = await auth.CreateUser(model.User, model.Passport, model.Tariff);
+            var result = await auth.CreateSubscriber(model.User, model.Passport, model.Tariff);
             if (result == null)
                 return BadRequest("User registration failed.");
 

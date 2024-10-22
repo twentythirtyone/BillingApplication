@@ -1,4 +1,4 @@
-﻿using BillingApplication.Models;
+﻿using BillingApplication.Server.Logic.Models.Roles;
 
 namespace BillingApplication.Server.Logic.UserManager
 {
