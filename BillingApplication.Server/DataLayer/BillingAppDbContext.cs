@@ -84,6 +84,14 @@ namespace BillingApplication
                 .WithOne(s => s.Tariff) // У подписчика есть один тариф
                 .HasForeignKey(s => s.TariffId); // Внешний ключ в таблице подписчиков
 
+
+            // Связь между Bundle и Tariff
+            modelBuilder.Entity<BundleEntity>()
+                .HasMany(b => b.Tariffs) // Один бандл имеет много тарифов
+                .WithOne(t => t.Bundle) // У тарифа есть один бандл
+                .HasForeignKey(t => t.TariffPlan); // Внешний ключ в тарифе
+
+
             // Связь между Bundle и Extras
             modelBuilder.Entity<BundleEntity>()
                 .HasMany(b => b.Extras) // Один пакет имеет много дополнительных услуг

@@ -13,7 +13,8 @@ namespace BillingApplication.Entities
         public required string Title { get; set; }
         public string? Description { get; set; }
         public decimal Price { get; set; }
+        public int TariffPlan { get; set; }
         public virtual ICollection<SubscriberEntity> Subscribers { get; set; }
-        public virtual ICollection<BundleEntity> Bundles { get; set; }
+        public virtual BundleEntity Bundle { get; set; }
     }
 }
