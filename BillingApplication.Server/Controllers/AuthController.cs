@@ -28,7 +28,7 @@ namespace BillingApplication.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model) //TODO: Переделать в DTO??
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model) //TODO: Переделать в DTO??
         {
             var result = await auth.CreateUser(model.User, model.Passport, model.Tariff);
             if (result == null)
