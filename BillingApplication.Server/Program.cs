@@ -12,22 +12,23 @@ using Microsoft.IdentityModel.Tokens;
 using React.AspNet;
 using System.Text;
 
-//var builder = WebApplication.CreateBuilder(args);
-//builder.Configuration.AddEnvironmentVariables();
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 var configuration = builder.Configuration;
-string? connectionString = configuration.GetConnectionString("DefaultConnection");
-string? jwtKey = configuration["Jwt:Key"];
-if (Environment.GetEnvironmentVariable("CONNECTION") != null)
+string? connectionString = "";
+string? jwtKey = "";
+if (builder.Environment.IsDevelopment())
 {
-    connectionString = Environment.GetEnvironmentVariable("CONNECTION");
+    connectionString = configuration["db_connection"];
+    jwtKey = configuration["secret"];
 }
-if (Environment.GetEnvironmentVariable("JWT_SECRET_KEY") != null)
+else
 {
-    jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+    connectionString = configuration.GetConnectionString("DefaultConnection");
+    jwtKey = configuration["Jwt:Key"];
 }
+
 
 builder.Services.AddAuthentication(options =>
 {

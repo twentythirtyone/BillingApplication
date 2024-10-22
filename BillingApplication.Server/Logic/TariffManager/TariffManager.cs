@@ -13,10 +13,33 @@ namespace BillingApplication.Logic.TariffManager
             this.tariffRepository = tariffRepository;
         }
 
-        public Task<int?> CreateTariff(Tariff tariffModel)
+        public async Task<int?> CreateTariff(Tariff tariffModel)
         {
-            var id = tariffRepository.Create(tariffModel);
-            return id;
+            var id = await tariffRepository.Create(tariffModel);
+            return id ?? 0;
+        }
+
+        public async Task DeleteTariff(Tariff tariffModel)
+        {
+            await tariffRepository.Delete(tariffModel.Id);
+        }
+
+        public async Task<IEnumerable<Tariff?>> GetAllTariffs()
+        {
+            var tariffs = await tariffRepository.Get();
+            return tariffs ?? Enumerable.Empty<Tariff>();
+        }
+
+        public async Task<Tariff> GetTariffByTitle(string title)
+        {
+            var tariff = await tariffRepository.GetByTitle(title);
+            return tariff ?? new Tariff() {Title="None"};
+        }
+
+        public async Task<int> UpdateTariff(Tariff tariffModel)
+        {
+            var id = await tariffRepository.Update(tariffModel);
+            return id ?? 0;
         }
     }
 }
