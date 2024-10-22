@@ -22,7 +22,6 @@ if (builder.Configuration["secret"] == null || builder.Configuration["secret"]!.
 
 var configuration = builder.Configuration;
 
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
