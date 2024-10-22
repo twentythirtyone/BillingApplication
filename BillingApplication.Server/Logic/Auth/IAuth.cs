@@ -14,6 +14,6 @@ namespace BillingApplication.Logic.Auth
         Task<int?> UpdateUser(Subscriber user, PassportInfo? passport = null, Tariff? tariff = null);
         Task<IEnumerable<Subscriber>> GetUsers();
         public string GenerateJwtToken(Subscriber user);
-        Task<Subscriber?> ValidateUserCredentials(string email, string password);
+        Task<Subscriber?> ValidateUserCredentials(string number, string password);
     }
 }

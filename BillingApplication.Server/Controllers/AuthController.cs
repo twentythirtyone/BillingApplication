@@ -1,6 +1,7 @@
 ﻿using BillingApplication.Logic.Auth;
 using BillingApplication.Logic.Models;
 using BillingApplication.Models;
+using BillingApplication.Server.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Controllers
@@ -17,9 +18,9 @@ namespace BillingApplication.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] Subscriber userModel)
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
         {
-            var user = await auth.ValidateUserCredentials(userModel.Email, userModel.Password);
+            var user = await auth.ValidateUserCredentials(loginModel.PhoneNumber, loginModel.Password);
             if (user == null)
                 return Unauthorized();
 
@@ -28,7 +29,7 @@ namespace BillingApplication.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model) //TODO: Переделать в DTO??
+        public async Task<IActionResult> RegisterUser([FromBody] RegisterModel model)
         {
             var result = await auth.CreateUser(model.User, model.Passport, model.Tariff);
             if (result == null)

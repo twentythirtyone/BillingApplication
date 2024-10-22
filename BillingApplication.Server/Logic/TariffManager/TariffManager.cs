@@ -2,6 +2,7 @@
 using BillingApplication.Logic.Auth;
 using BillingApplication.Models;
 using BillingApplication.Repositories;
+using BillingApplication.Server.Exceptions;
 
 namespace BillingApplication.Logic.TariffManager
 {
@@ -19,9 +20,22 @@ namespace BillingApplication.Logic.TariffManager
             return id ?? 0;
         }
 
-        public async Task DeleteTariff(Tariff tariffModel)
+        public async Task<string> DeleteTariff(string title)
         {
-            await tariffRepository.Delete(tariffModel.Id);
+            var tariff = await tariffRepository.GetByTitle(title);
+            if (tariff == null)
+                throw new TariffNotFoundException();
+            await tariffRepository.Delete(tariff.Id);
+            return tariff.Title;
+        }
+
+        public async Task<string> DeleteTariff(int id)
+        {
+            var tariff = await tariffRepository.GetById(id);
+            if (tariff == null)
+                throw new TariffNotFoundException();
+            await tariffRepository.Delete(tariff.Id);
+            return tariff.Title;
         }
 
         public async Task<IEnumerable<Tariff?>> GetAllTariffs()
@@ -30,16 +44,22 @@ namespace BillingApplication.Logic.TariffManager
             return tariffs ?? Enumerable.Empty<Tariff>();
         }
 
+        public async Task<Tariff> GetTariffById(int id)
+        {
+            var tariff = await tariffRepository.GetById(id);
+            return tariff ?? throw new TariffNotFoundException();
+        }
+
         public async Task<Tariff> GetTariffByTitle(string title)
         {
             var tariff = await tariffRepository.GetByTitle(title);
-            return tariff ?? new Tariff() {Title="None"};
+            return tariff ?? throw new TariffNotFoundException();
         }
 
         public async Task<int> UpdateTariff(Tariff tariffModel)
         {
             var id = await tariffRepository.Update(tariffModel);
-            return id ?? 0;
+            return id ?? throw new TariffNotFoundException();
         }
     }
 }

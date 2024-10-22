@@ -16,12 +16,12 @@ namespace BillingApplication.Logic.Auth
     public class Auth : IAuth
     {
         private readonly IEncrypt encrypt;
-        private readonly ISubscriberRepository userRepository;
+        private readonly ISubscriberRepository subscriberRepository;
         private readonly IConfiguration configuration;
         public Auth(IEncrypt encrypt, ISubscriberRepository userRepository, IConfiguration configuration)
         {
             this.encrypt = encrypt;
-            this.userRepository = userRepository;
+            this.subscriberRepository = userRepository;
             this.configuration = configuration;
         }
 
@@ -34,13 +34,13 @@ namespace BillingApplication.Logic.Auth
             if (id > 0)
             {
                 if(passport != null || tariff != null) 
-                    id = await userRepository.Update(user, passport, tariff);
+                    id = await subscriberRepository.Update(user, passport, tariff);
                 else
-                    id = await userRepository.Update(user);
+                    id = await subscriberRepository.Update(user);
             }
             else
             {
-                id = await userRepository.Create(user, passport!, tariff!);
+                id = await subscriberRepository.Create(user, passport!, tariff!);
             }
             return id;
         }
@@ -52,9 +52,9 @@ namespace BillingApplication.Logic.Auth
             if (id > 0)
             {
                 if (passport != null || tariff != null)
-                    id = await userRepository.Update(user, passport, tariff);
+                    id = await subscriberRepository.Update(user, passport, tariff);
                 else
-                    id = await userRepository.Update(user);
+                    id = await subscriberRepository.Update(user);
             }
             else
                 throw new UserNotFoundException();
@@ -63,12 +63,12 @@ namespace BillingApplication.Logic.Auth
 
         public async Task<Subscriber?> GetUserById(int? id)
         {
-            return await userRepository.GetUserById(id);
+            return await subscriberRepository.GetUserById(id);
         }
 
         public async Task<IEnumerable<Subscriber>> GetUsers()
         {
-            return await userRepository.Get();
+            return await subscriberRepository.Get();
         }
 
         public string GenerateJwtToken(Subscriber user)
@@ -96,7 +96,7 @@ namespace BillingApplication.Logic.Auth
         public async Task<Subscriber?> ValidateUserCredentials(string phoneNumber, string password)
         {
             // Находим пользователя по Телефону
-            var user = await userRepository.GetUserbyPhone(phoneNumber);
+            var user = await subscriberRepository.GetUserbyPhone(phoneNumber);
             if (user == null)
                 throw new UserNotFoundException("Телефон пользователя не найден");
 

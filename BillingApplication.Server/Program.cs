@@ -16,8 +16,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 var configuration = builder.Configuration;
+
 string? connectionString = "";
 string? jwtKey = "";
+
 if (builder.Environment.IsDevelopment())
 {
     connectionString = configuration["db_connection"];
@@ -28,7 +30,6 @@ else
     connectionString = configuration.GetConnectionString("DefaultConnection");
     jwtKey = configuration["Jwt:Key"];
 }
-
 
 builder.Services.AddAuthentication(options =>
 {

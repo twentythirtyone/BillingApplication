@@ -1,6 +1,7 @@
 ﻿using BillingApplication.Entities;
 using BillingApplication.Mapper;
 using BillingApplication.Models;
+using BillingApplication.Server.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication.DataLayer.Repositories
@@ -28,7 +29,7 @@ namespace BillingApplication.DataLayer.Repositories
             if (tariff != null)
                 context.Tariffs.Remove(tariff);
             await context.SaveChangesAsync();
-            return tariff?.Id ?? throw new NullReferenceException();
+            return tariff?.Id ?? throw new TariffNotFoundException();
         }
 
         public async Task<IEnumerable<Tariff?>> Get()
@@ -62,17 +63,15 @@ namespace BillingApplication.DataLayer.Repositories
 
         public async Task<int?> Update(Tariff? tariff)
         {
-            var currentTariff = context.Tariffs.Where(x => x.Id == tariff.Id);
-
-            if (currentTariff.FirstOrDefaultAsync()?.Id > 0)
+            var currentTariff = await context.Tariffs.Where(x => x.Id == tariff.Id).FirstOrDefaultAsync();
+            if (currentTariff.Id > 0)
             {
-                await currentTariff.ExecuteUpdateAsync(x => x
-                    .SetProperty(x => x.Title, x => tariff.Title)
-                    .SetProperty(x => x.Description, x => tariff.Description)
-                    .SetProperty(x => x.Price, x => tariff.Price));
+                currentTariff.Title = tariff.Title;
+                currentTariff.Description = tariff.Description;
+                currentTariff.Price=tariff.Price;
             }
-
-            return currentTariff.FirstOrDefault()?.Id ?? throw new NullReferenceException();
+            await context.SaveChangesAsync();
+            return currentTariff.Id;
         }
     }
 }

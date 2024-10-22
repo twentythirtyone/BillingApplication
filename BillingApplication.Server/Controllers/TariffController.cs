@@ -29,11 +29,18 @@ namespace BillingApplication.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("delete")]
-        public async Task<IActionResult> Delete([FromBody] Tariff tariffModel)
+        [HttpDelete("deletebytitle/{title}")]
+        public async Task<IActionResult> DeleteById(string title)
         {
-            var result = await tariffManager.CreateTariff(tariffModel);
-            return Ok(result);
+            var result = await tariffManager.DeleteTariff(title);
+            return Ok($"Тариф {result} был удалён");
+        }
+
+        [HttpDelete("deletebyid/{id}")]
+        public async Task<IActionResult> DeleteByIdTitle(int id)
+        {
+            var result = await tariffManager.DeleteTariff(id);
+            return Ok($"Тариф {result} был удалён");
         }
 
         [HttpGet("getall")]
@@ -43,10 +50,17 @@ namespace BillingApplication.Controllers
             return Ok(result);
         }
 
-        [HttpGet("getbytitle")]
-        public async Task<IActionResult> GetByTitle([FromBody] string title)
+        [HttpGet("getbytitle/{title}")]
+        public async Task<IActionResult> GetByTitle(string title)
         {
             var result = await tariffManager.GetTariffByTitle(title);
+            return Ok(result);
+        }
+
+        [HttpGet("getbyid/{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var result = await tariffManager.GetTariffById(id);
             return Ok(result);
         }
     }

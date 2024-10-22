@@ -12,13 +12,14 @@
     public class PassportDto
     {
         public string PassportNumber { get; set; }
+        public string IssuedBy { get; set; }
+        public string Registration { get; set; }
         public DateTime IssueDate { get; set; }
         public DateTime? ExpiryDate { get; set; } 
     }
 
     public class TariffDto
     {
-        public string Title { get; set; }
-        public decimal Price { get; set; }
+        public int id { get; set; }
     }
 }
