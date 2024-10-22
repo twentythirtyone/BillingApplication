@@ -8,7 +8,7 @@ namespace BillingApplication.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    
+    [ServiceFilter(typeof(RoleAuthorizeFilter))]
     public class TariffController : ControllerBase
     {
         private readonly ITariffManager tariffManager;
@@ -18,7 +18,7 @@ namespace BillingApplication.Controllers
             this.tariffManager = tariffManager;
         }
 
-        [Authorize(Roles = UserRoles.ADMIN)]
+        [RoleAuthorize(UserRoles.ADMIN)]
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] Tariff tariffModel)
         {
@@ -26,7 +26,7 @@ namespace BillingApplication.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = UserRoles.ADMIN)]
+        [RoleAuthorize(UserRoles.ADMIN)]
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] Tariff tariffModel)
         {
@@ -34,7 +34,7 @@ namespace BillingApplication.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = UserRoles.ADMIN)]
+        [RoleAuthorize(UserRoles.ADMIN)]
         [HttpDelete("deletebytitle/{title}")]
         public async Task<IActionResult> DeleteById(string title)
         {
@@ -42,7 +42,7 @@ namespace BillingApplication.Controllers
             return Ok($"Тариф {result} был удалён");
         }
 
-        [Authorize(Roles = UserRoles.ADMIN)]
+        [RoleAuthorize(UserRoles.ADMIN)]
         [HttpDelete("deletebyid/{id}")]
         public async Task<IActionResult> DeleteByIdTitle(int id)
         {
@@ -50,7 +50,7 @@ namespace BillingApplication.Controllers
             return Ok($"Тариф {result} был удалён");
         }
 
-        [Authorize(Roles = $"{UserRoles.ADMIN}, {UserRoles.OPERATOR}")]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
@@ -58,7 +58,8 @@ namespace BillingApplication.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = $"{UserRoles.ADMIN}, {UserRoles.OPERATOR}")]
+        
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpGet("getbytitle/{title}")]
         public async Task<IActionResult> GetByTitle(string title)
         {
@@ -66,7 +67,7 @@ namespace BillingApplication.Controllers
             return Ok(result);
         }
 
-        [Authorize(Roles = $"{UserRoles.ADMIN}, {UserRoles.OPERATOR}")]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpGet("getbyid/{id}")]
         public async Task<IActionResult> GetById(int id)
         {

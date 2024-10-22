@@ -3,12 +3,14 @@ using BillingApplication.DataLayer.Repositories;
 using BillingApplication.Logic.Auth;
 using BillingApplication.Logic.TariffManager;
 using BillingApplication.Repositories;
+using BillingApplication.Server.Logic.Auth.Roles;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using React.AspNet;
 using System.Security.Claims;
 using System.Text;
@@ -61,8 +63,39 @@ builder.Services.AddScoped<IEncrypt, Encrypt>();
 builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 builder.Services.AddScoped<ITariffRepository, TariffRepository>();
 builder.Services.AddScoped<ITariffManager, TariffManager>();
+builder.Services.AddScoped<RoleAuthorizeFilter>();
+
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BillingApplication API", Version = "v1" });
+
+    // Определяем схему безопасности
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Введите 'Bearer' [пробел] и затем ваш токен",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey
+    });
+
+    // Добавляем требования к безопасности
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] {}
+        }
+    });
+});
+
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddReact();
