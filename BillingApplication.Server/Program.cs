@@ -7,12 +7,27 @@ using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using React.AspNet;
 using System.Text;
 
+//var builder = WebApplication.CreateBuilder(args);
+//builder.Configuration.AddEnvironmentVariables();
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
+
 var configuration = builder.Configuration;
+string? connectionString = configuration.GetConnectionString("DefaultConnection");
+string? jwtKey = configuration["Jwt:Key"];
+if (Environment.GetEnvironmentVariable("CONNECTION") != null)
+{
+    connectionString = Environment.GetEnvironmentVariable("CONNECTION");
+}
+if (Environment.GetEnvironmentVariable("JWT_SECRET_KEY") != null)
+{
+    jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+}
 
 builder.Services.AddAuthentication(options =>
 {
@@ -29,7 +44,7 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
         };
     });
 
@@ -44,7 +59,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
-    options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<IEncrypt, Encrypt>();
