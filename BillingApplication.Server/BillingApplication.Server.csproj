@@ -7,9 +7,18 @@
     <SpaRoot>..\billingapplication.client</SpaRoot>
     <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
     <SpaProxyServerUrl>https://localhost:5173</SpaProxyServerUrl>
+    <UserSecretsId>77f3c84a-0be8-441e-b1b5-7385c0928933</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'" />
+
+  <ItemGroup>
+    <Content Remove="secrets_example.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="secrets_example.json" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaProxy">

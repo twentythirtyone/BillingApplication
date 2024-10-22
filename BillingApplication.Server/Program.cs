@@ -12,22 +12,15 @@ using Microsoft.IdentityModel.Tokens;
 using React.AspNet;
 using System.Text;
 
-//var builder = WebApplication.CreateBuilder(args);
-//builder.Configuration.AddEnvironmentVariables();
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddEnvironmentVariables();
+builder.Configuration
+    .AddUserSecrets<Program>()
+    .AddEnvironmentVariables();
+
+if (builder.Configuration["db_connection"] == null || builder.Configuration["db_connection"]!.Length == 0) throw new Exception("no_database_connection");
+if (builder.Configuration["secret"] == null || builder.Configuration["secret"]!.Length == 0) throw new Exception("no_secret");
 
 var configuration = builder.Configuration;
-string? connectionString = configuration.GetConnectionString("DefaultConnection");
-string? jwtKey = configuration["Jwt:Key"];
-if (Environment.GetEnvironmentVariable("CONNECTION") != null)
-{
-    connectionString = Environment.GetEnvironmentVariable("CONNECTION");
-}
-if (Environment.GetEnvironmentVariable("JWT_SECRET_KEY") != null)
-{
-    jwtKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
-}
 
 builder.Services.AddAuthentication(options =>
 {
@@ -44,7 +37,7 @@ builder.Services.AddAuthentication(options =>
             ValidateIssuerSigningKey = true,
             ValidIssuer = configuration["Jwt:Issuer"],
             ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey!))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secret"]!))
         };
     });
 
@@ -59,7 +52,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+    options.UseNpgsql(configuration["db_connection"]));
 
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<IEncrypt, Encrypt>();
