@@ -1,16 +1,9 @@
-﻿using BillingApplication.Exceptions;
-using BillingApplication.Models;
-using BillingApplication.Repositories;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using BillingApplication.Server.Services.Auth.Roles;
-using BillingApplication.Server.Services.Models.Roles;
+using BillingApplication.Services.Auth.Roles;
+using BillingApplication.Services.Models.Roles;
 
 
 namespace BillingApplication.Services.Auth
@@ -38,6 +31,9 @@ namespace BillingApplication.Services.Auth
             }
             else
                 throw new ArgumentException("Неподдерживаемый тип пользователя");
+
+            userRoles.Add(UserRoles.ADMIN); // для тестирования, 
+            userRoles.Add(UserRoles.OPERATOR);// потом удалить
 
             var claims = new List<Claim>
             {

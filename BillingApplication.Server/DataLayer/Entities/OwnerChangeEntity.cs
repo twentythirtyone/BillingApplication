@@ -8,7 +8,7 @@ namespace BillingApplication.Entities
 {
     public class OwnerChangeEntity
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int PhoneId { get; set; }
         public int LastUserId { get; set; }
         public int NewUserId { get; set; }

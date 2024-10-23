@@ -15,6 +15,6 @@ namespace BillingApplication.Entities
         public decimal Price { get; set; }
         public int TariffPlan { get; set; }
         public virtual ICollection<SubscriberEntity> Subscribers { get; set; }
-        public virtual BundleEntity Bundle { get; set; }
+        public required virtual BundleEntity Bundle { get; set; }
     }
 }

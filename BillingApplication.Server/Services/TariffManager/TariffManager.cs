@@ -1,8 +1,8 @@
 ﻿using BillingApplication.DataLayer.Repositories;
 using BillingApplication.Services.Auth;
-using BillingApplication.Models;
 using BillingApplication.Repositories;
-using BillingApplication.Server.Exceptions;
+using BillingApplication.Exceptions;
+using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.Services.TariffManager
 {
@@ -14,9 +14,9 @@ namespace BillingApplication.Services.TariffManager
             this.tariffRepository = tariffRepository;
         }
 
-        public async Task<int?> CreateTariff(Tariff tariffModel)
+        public async Task<int?> CreateTariff(Tariffs tariffModel, int bundleId)
         {
-            var id = await tariffRepository.Create(tariffModel);
+            var id = await tariffRepository.Create(tariffModel, bundleId);
             return id ?? throw new TariffNotFoundException("Ошибка при создании тарифа");
         }
 
@@ -34,27 +34,33 @@ namespace BillingApplication.Services.TariffManager
             return tariff.Title ?? throw new TariffNotFoundException("Ошибка при удалении тарифа");
         }
 
-        public async Task<IEnumerable<Tariff?>> GetAllTariffs()
+        public async Task<IEnumerable<Tariffs?>> GetAllTariffs()
         {
             var tariffs = await tariffRepository.Get();
-            return tariffs ?? Enumerable.Empty<Tariff>();
+            return tariffs ?? Enumerable.Empty<Tariffs>();
         }
 
-        public async Task<Tariff> GetTariffById(int id)
+        public async Task<Tariffs> GetTariffById(int id)
         {
             var tariff = await tariffRepository.GetById(id);
             return tariff ?? throw new TariffNotFoundException();
         }
 
-        public async Task<Tariff> GetTariffByTitle(string title)
+        public async Task<Tariffs> GetTariffBySubscriberId(int id)
+        {
+            var tariff = await tariffRepository.GetBySubscriber(id);
+            return tariff ?? throw new TariffNotFoundException();
+        }
+
+        public async Task<Tariffs> GetTariffByTitle(string title)
         {
             var tariff = await tariffRepository.GetByTitle(title);
             return tariff ?? throw new TariffNotFoundException();
         }
 
-        public async Task<int> UpdateTariff(Tariff tariffModel)
+        public async Task<int> UpdateTariff(Tariffs tariffModel, int bundleId)
         {
-            var id = await tariffRepository.Update(tariffModel);
+            var id = await tariffRepository.Update(tariffModel, bundleId);
             return id ?? throw new TariffNotFoundException();
         }
     }

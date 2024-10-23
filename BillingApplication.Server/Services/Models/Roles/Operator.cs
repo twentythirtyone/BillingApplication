@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace BillingApplication.Server.Services.Models.Roles
+namespace BillingApplication.Services.Models.Roles
 {
     public class Operator : IUser
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public required string Email { get; set; }
         public required string Nickname { get; set; }
         public required string Password { get; set; }

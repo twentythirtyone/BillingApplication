@@ -1,5 +1,5 @@
 ﻿using BillingApplication.Entities;
-using BillingApplication.Models;
+using BillingApplication.Services.Models.Subscriber;
 
 namespace BillingApplication.Mapper
 {
@@ -26,13 +26,24 @@ namespace BillingApplication.Mapper
                 return null;
             return new PassportInfoEntity()
             {
-                Id = passportModel.Id,
                 ExpiryDate = passportModel.ExpiryDate ?? DateTime.MinValue,
                 IssueDate = passportModel?.IssueDate ?? DateTime.MinValue,
                 PassportNumber = passportModel?.PassportNumber ?? "00 00 000 000",
                 IssuedBy = passportModel?.IssuedBy ?? "",
                 Registration = passportModel?.Registration ?? ""
             };
+        }
+
+        public static PassportInfoEntity? UpdatePassportEntity(PassportInfoEntity passportEntity, PassportInfo? passportModel)
+        {
+            if (passportModel == null)
+                return null;
+            passportEntity.ExpiryDate = passportModel.ExpiryDate ?? DateTime.MinValue;
+            passportEntity.IssueDate = passportModel?.IssueDate ?? DateTime.MinValue;
+            passportEntity.PassportNumber = passportModel?.PassportNumber ?? "00 00 000 000";
+            passportEntity.IssuedBy = passportModel?.IssuedBy ?? "";
+            passportEntity.Registration = passportModel?.Registration ?? "";
+            return passportEntity;
         }
     }
 }

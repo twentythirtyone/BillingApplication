@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Server.Services.Models.Roles
+namespace BillingApplication.Services.Models.Roles
 {
     public class Subscriber: IUser
     {

@@ -1,7 +1,7 @@
-﻿using BillingApplication.Models;
-using BillingApplication.Server.Services.Models.Roles;
+﻿using BillingApplication.Services.Models.Roles;
+using BillingApplication.Services.Models.Subscriber;
 
-namespace BillingApplication.Server.Services.UserManager
+namespace BillingApplication.Services.UserManager
 {
     public interface ISubscriberManager
     {
@@ -9,7 +9,7 @@ namespace BillingApplication.Server.Services.UserManager
         Task<Subscriber> GetSubscriberById(int? id);
         Task<Subscriber> GetSubscriberByPhoneNumber(string phoneNumber);
         Task<int?> CreateSubscriber(Subscriber user, PassportInfo passport, int? tariffId);
-        Task<int?> UpdateSubscriber(Subscriber user, PassportInfo? passport = null, Tariff? tariff = null);
+        Task<int?> UpdateSubscriber(Subscriber user, PassportInfo passport, int? tariffId);
         Task<IEnumerable<Subscriber>> GetUsers();
         Task<Subscriber?> ValidateUserCredentials(string number, string password);
     }

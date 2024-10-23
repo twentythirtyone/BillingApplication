@@ -1,13 +1,12 @@
 ﻿using BillingApplication.Services.Auth;
+using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models;
-using BillingApplication.Models;
-using BillingApplication.Server.Services.Auth.Roles;
-using BillingApplication.Server.Services.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BillingApplication.Server.Attributes;
+using BillingApplication.Attributes;
 using BillingApplication.Exceptions;
-using BillingApplication.Server.Services.UserManager;
+using BillingApplication.Services.UserManager;
+using BillingApplication.Services.Models.Auth;
 
 namespace BillingApplication.Controllers
 {
@@ -16,26 +15,26 @@ namespace BillingApplication.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuth auth;
-        private readonly ISubscriberManager subscriber;
+        private readonly ISubscriberManager subscriberManager;
 
-        public AuthController(IAuth auth, ISubscriberManager subscriber)
+        public AuthController(IAuth auth, ISubscriberManager subscriberManager)
         {
             this.auth = auth;
-            this.subscriber = subscriber;
+            this.subscriberManager = subscriberManager;
         }
 
         [HttpPost("operator")]
-        public async Task<IActionResult> LoginOperator([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> LoginOperator([FromBody] SubscriberLoginModel loginModel)
         {
             return NotFound();
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginSubscriber([FromBody] LoginModel loginModel)
+        public async Task<IActionResult> LoginSubscriber([FromBody] SubscriberLoginModel loginModel)
         {
             try
             {
-                var user = await subscriber.ValidateUserCredentials(loginModel.PhoneNumber, loginModel.Password);
+                var user = await subscriberManager.ValidateUserCredentials(loginModel.PhoneNumber, loginModel.Password);
                 if (user == null)
                     return Unauthorized("Неверный номер/пароль");
                 var token = auth.GenerateJwtToken(user);
@@ -47,15 +46,15 @@ namespace BillingApplication.Controllers
             } 
         }
 
-        [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        //[ServiceFilter(typeof(RoleAuthorizeFilter))]
+        //[RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterSubscriber([FromBody] RegisterModel model)
+        public async Task<IActionResult> RegisterSubscriber([FromBody] SubscriberRegisterModel model)
         {
             int? result = 0;
             try
             {
-                result = await subscriber.CreateSubscriber(model.User, model.Passport, model.TariffId);
+                result = await subscriberManager.CreateSubscriber(model.User, model.Passport, model.TariffId);
                 if (result == null)
                     return BadRequest("Ошибка при регистрации пользователя");
                 return Ok(result);

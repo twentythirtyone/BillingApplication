@@ -1,10 +1,10 @@
 ﻿using BillingApplication.Exceptions;
-using BillingApplication.Models;
 using BillingApplication.Repositories;
-using BillingApplication.Server.Services.Models.Roles;
+using BillingApplication.Services.Models.Roles;
+using BillingApplication.Services.Models.Subscriber;
 using BillingApplication.Services.Auth;
 
-namespace BillingApplication.Server.Services.UserManager
+namespace BillingApplication.Services.UserManager
 {
     public class SubscriberManager : ISubscriberManager
     {
@@ -15,27 +15,27 @@ namespace BillingApplication.Server.Services.UserManager
             this.encrypt = encrypt;
             this.subscriberRepository = subscriberRepository;
         }
-        public async Task<int?> CreateSubscriber(Subscriber user, PassportInfo passport, int? tariffId = null)
+        public async Task<int?> CreateSubscriber(Subscriber user, PassportInfo passport, int? tariffId)
         {
-            var currentUser = await GetSubscriberById(user.Id);
+            var currentUser = await GetSubscriberByPhoneNumber(user.Number);
             int? id = currentUser?.Id;
+            if (id != null)
+                throw new UserNotFoundException("Такой телефон уже существует");
             user.Salt = Guid.NewGuid().ToString();
             user.Password = encrypt.HashPassword(user.Password, user.Salt);
-            if (id != null)
-                id = await subscriberRepository.Create(user, passport!, tariffId);
+            id = await subscriberRepository.Create(user, passport!, tariffId);
             return id;
         }
 
-        public async Task<int?> UpdateSubscriber(Subscriber user, PassportInfo? passport = null, Tariff? tariff = null)
+        public async Task<int?> UpdateSubscriber(Subscriber user, PassportInfo passport, int? tariffId)
         {
             var currentUser = await GetSubscriberById(user.Id);
             int? id = currentUser?.Id;
-            if (id > 0)
+            if (id is not null)
             {
-                if (passport != null || tariff != null)
-                    id = await subscriberRepository.Update(user, passport, tariff);
-                else
-                    id = await subscriberRepository.Update(user);
+                user.Salt = Guid.NewGuid().ToString();
+                user.Password = encrypt.HashPassword(user.Password, user.Salt);
+                id = await subscriberRepository.Update(user, passport, tariffId);
             }
             else
                 throw new UserNotFoundException();
@@ -69,9 +69,9 @@ namespace BillingApplication.Server.Services.UserManager
             return await subscriberRepository.Get();
         }
 
-        public Task<Subscriber> GetSubscriberByPhoneNumber(string phoneNumber)
+        public async Task<Subscriber> GetSubscriberByPhoneNumber(string phoneNumber)
         {
-            throw new NotImplementedException();
+            return await subscriberRepository.GetUserbyPhone(phoneNumber);
         }
 
         public Task<IEnumerable<Subscriber>> GetSubscribersByTariff(string title)

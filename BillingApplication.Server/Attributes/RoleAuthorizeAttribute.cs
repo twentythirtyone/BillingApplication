@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace BillingApplication.Server.Attributes
+namespace BillingApplication.Attributes
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
     public class RoleAuthorizeAttribute : Attribute

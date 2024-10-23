@@ -5,7 +5,7 @@ namespace BillingApplication.DataLayer.Entities
 {
     public class BundleEntity
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public TimeSpan Interval { get; set; }
         public int Messages { get; set; }
         public long Internet { get; set; }

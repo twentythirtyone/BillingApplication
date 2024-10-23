@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Models
+namespace BillingApplication.Services.Models.Subscriber.Stats
 {
     public class Calls
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int FromPhoneId { get; set; }
         public string? ToPhoneNumber { get; set; }
         public DateTime Date { get; set; }

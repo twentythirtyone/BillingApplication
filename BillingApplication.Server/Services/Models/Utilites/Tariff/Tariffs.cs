@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Models
+namespace BillingApplication.Services.Models.Utilites.Tariff
 {
-    public class Tariff
+    public class Tariffs
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public required string Title { get; set; }
         public string Description { get; set; } = "";
         public decimal Price { get; set; }

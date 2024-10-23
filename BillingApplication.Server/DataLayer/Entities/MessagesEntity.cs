@@ -8,7 +8,7 @@ namespace BillingApplication.Entities
 {
     public class MessagesEntity
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int FromPhoneId { get; set; }
         public string? ToPhoneNumber { get; set; }
         public DateTime Date { get; set; }

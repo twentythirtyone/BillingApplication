@@ -1,16 +1,16 @@
-﻿using BillingApplication.Models;
-using BillingApplication.Server.Services.Models.Roles;
+﻿using BillingApplication.Services.Models.Roles;
+using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.DataLayer.Repositories
 {
     public interface ITariffRepository
     {
-        Task<Tariff?> GetById(int? id);
-        Task<IEnumerable<Tariff?>> Get();
-        Task<int?> Create(Tariff? tariff);
-        Task<int?> Update(Tariff? tariff);
+        Task<Tariffs?> GetById(int? id);
+        Task<IEnumerable<Tariffs>> Get();
+        Task<int?> Create(Tariffs tariff, int? bundleId);
+        Task<int?> Update(Tariffs tariff, int? bundleId);
         Task<int?> Delete(int? id);
-        Task<Tariff?> GetByTitle(string Title);
-        Task<Tariff?> GetByUser(Subscriber user);
+        Task<Tariffs?> GetByTitle(string title);
+        Task<Tariffs?> GetBySubscriber(int userId);
     }
 }

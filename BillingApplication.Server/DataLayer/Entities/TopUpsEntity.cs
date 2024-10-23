@@ -8,7 +8,7 @@ namespace BillingApplication.Entities
 {
     public class TopUpsEntity
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int PhoneId { get; set; }
         public string SenderInfo { get; set; } = "";
         public decimal Amount { get; set; }

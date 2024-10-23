@@ -1,4 +1,4 @@
-﻿namespace BillingApplication.Server.Services.Auth.Roles
+﻿namespace BillingApplication.Services.Auth.Roles
 {
     public static class UserRoles
     {

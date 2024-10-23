@@ -8,7 +8,7 @@ namespace BillingApplication.Entities
 {
     public class TariffChangeEntity
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int PhoneId { get; set; }
         public int LastTariffId { get; set; }
         public int NewTariffId { get; set; }

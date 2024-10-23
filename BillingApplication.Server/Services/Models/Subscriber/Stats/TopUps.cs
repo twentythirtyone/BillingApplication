@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Models
+namespace BillingApplication.Services.Models.Subscriber.Stats
 {
-    public class UserChange
+    public class TopUps
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public int PhoneId { get; set; }
-        public int LastUserId { get; set; }
-        public int NewUserId { get; set; }
+        public string SenderInfo { get; set; } = "";
+        public decimal Amount { get; set; }
         public DateTime Date { get; set; }
     }
 }

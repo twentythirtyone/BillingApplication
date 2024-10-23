@@ -1,4 +1,4 @@
-﻿namespace BillingApplication.Server.Exceptions
+﻿namespace BillingApplication.Exceptions
 {
     public class TariffNotFoundException : Exception
     {

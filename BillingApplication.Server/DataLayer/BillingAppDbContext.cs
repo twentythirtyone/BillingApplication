@@ -1,13 +1,6 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Entities;
-using BillingApplication.Services.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BillingApplication
 {

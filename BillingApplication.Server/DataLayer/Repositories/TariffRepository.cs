@@ -1,8 +1,8 @@
 ﻿using BillingApplication.Entities;
 using BillingApplication.Mapper;
-using BillingApplication.Models;
-using BillingApplication.Server.Exceptions;
-using BillingApplication.Server.Services.Models.Roles;
+using BillingApplication.Exceptions;
+using BillingApplication.Services.Models.Roles;
+using BillingApplication.Services.Models.Utilites.Tariff;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication.DataLayer.Repositories
@@ -14,9 +14,14 @@ namespace BillingApplication.DataLayer.Repositories
         {
             this.context = context;
         }
-        public async Task<int?> Create(Tariff? tariff)
+        public async Task<int?> Create(Tariffs? tariff, int? bundleId)
         {
-            var tariffEntity = TariffMapper.TariftModelToTarifEntity(tariff);
+            var existingBundle = await context.Bundles.FindAsync(bundleId);
+            if (existingBundle == null)
+            {
+                throw new InvalidOperationException("Указанный в тарифе пакет не существует");
+            }
+            var tariffEntity = TariffMapper.TariftModelToTarifEntity(tariff, existingBundle);
 
             await context.Tariffs.AddAsync(tariffEntity);
             await context.SaveChangesAsync();
@@ -26,14 +31,14 @@ namespace BillingApplication.DataLayer.Repositories
 
         public async Task<int?> Delete(int? id)
         {
-            var tariff = await context.Tariffs.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var tariff = await context.Tariffs.FindAsync(id);
             if (tariff != null)
                 context.Tariffs.Remove(tariff);
             await context.SaveChangesAsync();
             return tariff?.Id;
         }
 
-        public async Task<IEnumerable<Tariff?>> Get()
+        public async Task<IEnumerable<Tariffs?>> Get()
         {
             var tariffEntities = await context.Tariffs
                 .AsNoTracking()
@@ -41,33 +46,43 @@ namespace BillingApplication.DataLayer.Repositories
             return tariffEntities.Select(TariffMapper.TariftEntityToTarifModel);
         }
 
-        public async Task<Tariff?> GetById(int? id)
+        public async Task<Tariffs?> GetById(int? id)
         {
-            var tariffEntity = await context.Tariffs.Where(t => t.Id == id).FirstOrDefaultAsync();
+            var tariffEntity = await context.Tariffs.FindAsync(id);
             var tariff = TariffMapper.TariftEntityToTarifModel(tariffEntity);
             return tariff;
         }
 
-        public async Task<Tariff?> GetByTitle(string Title)
+        public async Task<Tariffs?> GetByTitle(string Title)
         {
             var tariffEntity = await context.Tariffs.Where(t => t.Title == Title).FirstOrDefaultAsync();
             var tariff = TariffMapper.TariftEntityToTarifModel(tariffEntity);
             return tariff;
         }
 
-        public async Task<Tariff?> GetByUser(Subscriber user)
+        public async Task<Tariffs?> GetBySubscriber(int id)
         {
-            var tariffEntity = await context.Tariffs.Where(t => t.Id == user.TariffId).FirstOrDefaultAsync();
+            var existingSubscriber = await context.Subscribers.FindAsync(id);
+            if(existingSubscriber == null) 
+            {
+                throw new UserNotFoundException();
+            }
+            var tariffEntity = await context.Tariffs.Where(t => t.Id == id).FirstOrDefaultAsync();
             var tariff = TariffMapper.TariftEntityToTarifModel(tariffEntity);
             return tariff;
         }
 
-        public async Task<int?> Update(Tariff? tariff)
+        public async Task<int?> Update(Tariffs? tariff, int? bundleId)
         {
-            var currentTariff = await context.Tariffs.Where(x => x.Id == tariff.Id).FirstOrDefaultAsync();
-            if (currentTariff.Id > 0)
+            var existingBundle = await context.Bundles.FindAsync(bundleId);
+            if (existingBundle == null)
             {
-                currentTariff = TariffMapper.TariftModelToTarifEntity(tariff);
+                throw new InvalidOperationException("Указанный в тарифе пакет не существует");
+            }
+            var currentTariff = await context.Tariffs.FindAsync(tariff.Id);
+            if (currentTariff.Id is not null)
+            {
+                TariffMapper.UpdateTariffEntity(currentTariff, tariff, existingBundle);
             }
             await context.SaveChangesAsync();
             return currentTariff.Id;

@@ -1,8 +1,8 @@
 ﻿using BillingApplication.Entities;
 using BillingApplication.Services.Auth;
 using BillingApplication.Mapper;
-using BillingApplication.Models;
-using BillingApplication.Server.Services.Models.Roles;
+using BillingApplication.Services.Models.Utilites.Tariff;
+using BillingApplication.Services.Models.Roles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
@@ -11,93 +11,86 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BillingApplication.Exceptions;
+using BillingApplication.DataLayer.Repositories;
+using BillingApplication.Services.Models.Subscriber;
 
 namespace BillingApplication.Repositories
 {
     public class SubscriberRepository : ISubscriberRepository
     {
-        private readonly BillingAppDbContext _context;
+        private readonly BillingAppDbContext context;
 
-        public SubscriberRepository(BillingAppDbContext context, IEncrypt encrypt)
+        public SubscriberRepository(BillingAppDbContext context, ITariffRepository tariffRepository)
         {
-            _context = context;
+            this.context = context;
         }
 
         public async Task<Subscriber?> GetUserById(int? id)
         {
-            var userEntity = await _context.Subscribers.Where(u => u.Id == id).FirstOrDefaultAsync();
-            var user = UserMapper.UserEntityToUserModel(userEntity);
+            var userEntity = await context.Subscribers.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var user = SubscriberMapper.UserEntityToUserModel(userEntity);
             return user;
         }
 
         public async Task<IEnumerable<Subscriber?>> Get()
         {
-            var userEntities = await _context.Subscribers
+            var userEntities = await context.Subscribers
                 .AsNoTracking()
                 .ToListAsync();
 
-            return userEntities.Select(UserMapper.UserEntityToUserModel);
+            return userEntities.Select(SubscriberMapper.UserEntityToUserModel);
         }
 
         public async Task<int?> Create(Subscriber user, PassportInfo passportInfo, int? tariffId)
         {
-            var existingTariff = await _context.Tariffs.FindAsync(tariffId);
+            var existingTariff = await context.Tariffs.FindAsync(tariffId);
             if (existingTariff == null)
             {
                 throw new InvalidOperationException("Указанный тариф не существует");
             }
 
-            var userEntity = new Entities.SubscriberEntity
-            {
-                Email = user.Email,
-                Password = user.Password,
-                Salt = user.Salt,
-                Number = user.Number,
-                PassportInfo = PassportMapper.PassportModelToPassportEntity(passportInfo),
-                Tariff = existingTariff
-            };
+            var userEntity = SubscriberMapper.UserModelToUserEntity(user, existingTariff, passportInfo);
 
-            await _context.Subscribers.AddAsync(userEntity);
-            await _context.SaveChangesAsync();
+            await context.Subscribers.AddAsync(userEntity);
+            await context.SaveChangesAsync();
 
             return userEntity.Id;
         }
 
-        public async Task<int?> Update(Subscriber user, PassportInfo? passportInfo = null, Tariff? tariff = null)
+        public async Task<int?> Update(Subscriber user, PassportInfo passportInfo, int? tariffId)
         {
-            var currentUser = _context.Subscribers.Where(x => x.Id == user.Id);
-
-            if (currentUser.FirstOrDefaultAsync()?.Id > 0)
+            var existingTariff = await context.Tariffs.FindAsync(tariffId);
+            if (existingTariff == null)
             {
-                await currentUser.ExecuteUpdateAsync(x => x
-                    .SetProperty(x => x.Password, x => user.Password)
-                    .SetProperty(x => x.Salt, x => user.Salt)
-                    .SetProperty(x => x.Email, x => user.Email));
-                //TODO: Добавить обновление паспорта и тарифа
-            }  
-
-            return currentUser.FirstOrDefault()?.Id;
+                throw new InvalidOperationException("Указанный тариф не существует");
+            }
+            var currentUser = await context.Subscribers.FindAsync(user.Id);
+            var currentPassport = await context.PassportInfos.FindAsync(passportInfo.Id);
+            PassportMapper.UpdatePassportEntity(currentPassport, passportInfo);
+            SubscriberMapper.UpdateEntity(currentUser, user, existingTariff, currentPassport);
+            await context.SaveChangesAsync();
+            return currentUser.Id;
         }
 
         public async Task<int?> Delete(int? id)
         {
-            var user = await _context.Subscribers.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var user = await context.Subscribers.Where(u => u.Id == id).FirstOrDefaultAsync();
             if(user != null)
-                _context.Subscribers.Remove(user);
-            await _context.SaveChangesAsync();
+                context.Subscribers.Remove(user);
+            await context.SaveChangesAsync();
             return user?.Id;
         }
 
         public async Task<Subscriber?> GetUserbyEmail(string email)
         {
-            var user = await _context.Subscribers.Where(u => u.Email == email).FirstOrDefaultAsync();
-            return UserMapper.UserEntityToUserModel(user);
+            var user = await context.Subscribers.Where(u => u.Email == email).FirstOrDefaultAsync();
+            return SubscriberMapper.UserEntityToUserModel(user);
         }
 
         public async Task<Subscriber?> GetUserbyPhone(string phone)
         {
-            var user = await _context.Subscribers.Where(u => u.Number == phone).FirstOrDefaultAsync();
-            return UserMapper.UserEntityToUserModel(user);
+            var user = await context.Subscribers.Where(u => u.Number == phone).FirstOrDefaultAsync();
+            return SubscriberMapper.UserEntityToUserModel(user);
         }
 
     }
