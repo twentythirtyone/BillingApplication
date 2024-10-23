@@ -1,4 +1,4 @@
-﻿namespace BillingApplication.Server.Logic.Models
+﻿namespace BillingApplication.Server.Services.Models
 {
     public class LoginModel
     {

@@ -1,13 +1,13 @@
 ﻿using BillingApplication.Models;
-using BillingApplication.Server.Logic.Models.Roles;
+using BillingApplication.Server.Services.Models.Roles;
 
-namespace BillingApplication.Logic.Models
+namespace BillingApplication.Services.Models
 {
     public class RegisterModel
     {
         public Subscriber User { get; set; } = new Subscriber { Number = "+7 000 000 00 00" };
         public PassportInfo Passport { get; set; } = new PassportInfo();
-        public Tariff Tariff { get; set; } = new Tariff { Title = "Default"};
+        public int? TariffId { get; set; }
     }
 }
 

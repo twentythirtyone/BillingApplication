@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Logic.Auth
+namespace BillingApplication.Services.Auth
 {
     public interface IEncrypt
     {

@@ -2,7 +2,7 @@
 using BillingApplication.Mapper;
 using BillingApplication.Models;
 using BillingApplication.Server.Exceptions;
-using BillingApplication.Server.Logic.Models.Roles;
+using BillingApplication.Server.Services.Models.Roles;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication.DataLayer.Repositories
@@ -21,7 +21,7 @@ namespace BillingApplication.DataLayer.Repositories
             await context.Tariffs.AddAsync(tariffEntity);
             await context.SaveChangesAsync();
 
-            return tariffEntity.Id;
+            return tariffEntity?.Id;
         }
 
         public async Task<int?> Delete(int? id)
@@ -30,7 +30,7 @@ namespace BillingApplication.DataLayer.Repositories
             if (tariff != null)
                 context.Tariffs.Remove(tariff);
             await context.SaveChangesAsync();
-            return tariff?.Id ?? throw new TariffNotFoundException();
+            return tariff?.Id;
         }
 
         public async Task<IEnumerable<Tariff?>> Get()
@@ -67,9 +67,7 @@ namespace BillingApplication.DataLayer.Repositories
             var currentTariff = await context.Tariffs.Where(x => x.Id == tariff.Id).FirstOrDefaultAsync();
             if (currentTariff.Id > 0)
             {
-                currentTariff.Title = tariff.Title;
-                currentTariff.Description = tariff.Description;
-                currentTariff.Price=tariff.Price;
+                currentTariff = TariffMapper.TariftModelToTarifEntity(tariff);
             }
             await context.SaveChangesAsync();
             return currentTariff.Id;

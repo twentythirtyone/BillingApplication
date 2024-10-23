@@ -1,10 +1,10 @@
 ﻿using BillingApplication.DataLayer.Repositories;
-using BillingApplication.Logic.Auth;
+using BillingApplication.Services.Auth;
 using BillingApplication.Models;
 using BillingApplication.Repositories;
 using BillingApplication.Server.Exceptions;
 
-namespace BillingApplication.Logic.TariffManager
+namespace BillingApplication.Services.TariffManager
 {
     public class TariffManager : ITariffManager
     {
@@ -17,25 +17,21 @@ namespace BillingApplication.Logic.TariffManager
         public async Task<int?> CreateTariff(Tariff tariffModel)
         {
             var id = await tariffRepository.Create(tariffModel);
-            return id ?? 0;
+            return id ?? throw new TariffNotFoundException("Ошибка при создании тарифа");
         }
 
         public async Task<string> DeleteTariff(string title)
         {
             var tariff = await tariffRepository.GetByTitle(title);
-            if (tariff == null)
-                throw new TariffNotFoundException();
             await tariffRepository.Delete(tariff.Id);
-            return tariff.Title;
+            return tariff.Title ?? throw new TariffNotFoundException("Ошибка при удалении тарифа");
         }
 
         public async Task<string> DeleteTariff(int id)
         {
             var tariff = await tariffRepository.GetById(id);
-            if (tariff == null)
-                throw new TariffNotFoundException();
             await tariffRepository.Delete(tariff.Id);
-            return tariff.Title;
+            return tariff.Title ?? throw new TariffNotFoundException("Ошибка при удалении тарифа");
         }
 
         public async Task<IEnumerable<Tariff?>> GetAllTariffs()

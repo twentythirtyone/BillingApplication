@@ -1,5 +1,5 @@
 ﻿using BillingApplication.Models;
-using BillingApplication.Server.Logic.Models.Roles;
+using BillingApplication.Server.Services.Models.Roles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +12,7 @@ namespace BillingApplication.Repositories
     {
         Task<Subscriber?> GetUserById(int? id);
         Task<IEnumerable<Subscriber>> Get();
-        Task<int?> Create(Subscriber user, PassportInfo passportInfo, Tariff tariff);
+        Task<int?> Create(Subscriber user, PassportInfo passportInfo, int? tariffId);
         Task<int?> Update(Subscriber user, PassportInfo? passportInfo = null, Tariff? tariff = null);
         Task<int?> Delete(int? id);
         Task<Subscriber?> GetUserbyEmail(string email);

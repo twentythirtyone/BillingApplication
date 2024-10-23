@@ -1,8 +1,8 @@
 ﻿using BillingApplication.Entities;
-using BillingApplication.Logic.Auth;
+using BillingApplication.Services.Auth;
 using BillingApplication.Mapper;
 using BillingApplication.Models;
-using BillingApplication.Server.Logic.Models.Roles;
+using BillingApplication.Server.Services.Models.Roles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BillingApplication.Exceptions;
 
 namespace BillingApplication.Repositories
 {
@@ -38,12 +39,12 @@ namespace BillingApplication.Repositories
             return userEntities.Select(UserMapper.UserEntityToUserModel);
         }
 
-        public async Task<int?> Create(Subscriber user, PassportInfo passportInfo, Tariff tariff)
+        public async Task<int?> Create(Subscriber user, PassportInfo passportInfo, int? tariffId)
         {
-            var existingTariff = await _context.Tariffs.FindAsync(tariff.Id);
+            var existingTariff = await _context.Tariffs.FindAsync(tariffId);
             if (existingTariff == null)
             {
-                throw new InvalidOperationException("The specified tariff does not exist.");
+                throw new InvalidOperationException("Указанный тариф не существует");
             }
 
             var userEntity = new Entities.SubscriberEntity
@@ -75,7 +76,7 @@ namespace BillingApplication.Repositories
                 //TODO: Добавить обновление паспорта и тарифа
             }  
 
-            return currentUser.FirstOrDefault()?.Id ?? throw new NullReferenceException();
+            return currentUser.FirstOrDefault()?.Id;
         }
 
         public async Task<int?> Delete(int? id)
@@ -84,7 +85,7 @@ namespace BillingApplication.Repositories
             if(user != null)
                 _context.Subscribers.Remove(user);
             await _context.SaveChangesAsync();
-            return user?.Id ?? throw new NullReferenceException();
+            return user?.Id;
         }
 
         public async Task<Subscriber?> GetUserbyEmail(string email)

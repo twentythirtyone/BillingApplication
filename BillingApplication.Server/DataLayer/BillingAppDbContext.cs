@@ -1,6 +1,6 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Entities;
-using BillingApplication.Logic.Models;
+using BillingApplication.Services.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

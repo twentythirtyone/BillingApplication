@@ -1,8 +1,9 @@
-﻿using BillingApplication.Logic.TariffManager;
+﻿using BillingApplication.Services.TariffManager;
 using BillingApplication.Models;
-using BillingApplication.Server.Logic.Auth.Roles;
-using Microsoft.AspNetCore.Authorization;
+using BillingApplication.Server.Services.Auth.Roles;
 using Microsoft.AspNetCore.Mvc;
+using BillingApplication.Server.Attributes;
+using BillingApplication.Server.Exceptions;
 
 namespace BillingApplication.Controllers
 {
@@ -22,40 +23,75 @@ namespace BillingApplication.Controllers
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] Tariff tariffModel)
         {
-            var result = await tariffManager.CreateTariff(tariffModel);
-            return Ok(result);
+            try
+            {
+                var result = await tariffManager.CreateTariff(tariffModel);
+                return Ok(result);
+            }
+            catch(TariffNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] Tariff tariffModel)
         {
-            var result = await tariffManager.UpdateTariff(tariffModel);
-            return Ok(result);
+            try
+            {
+                var result = await tariffManager.UpdateTariff(tariffModel);
+                return Ok(result);
+            }
+            catch (TariffNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
         [HttpDelete("deletebytitle/{title}")]
         public async Task<IActionResult> DeleteById(string title)
         {
-            var result = await tariffManager.DeleteTariff(title);
-            return Ok($"Тариф {result} был удалён");
+            try
+            {
+                var result = await tariffManager.DeleteTariff(title);
+                return Ok($"Тариф {result} был удалён");
+            }
+            catch (TariffNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
         [HttpDelete("deletebyid/{id}")]
         public async Task<IActionResult> DeleteByIdTitle(int id)
         {
-            var result = await tariffManager.DeleteTariff(id);
-            return Ok($"Тариф {result} был удалён");
+            try
+            {
+                var result = await tariffManager.DeleteTariff(id);
+                return Ok($"Тариф {result} был удалён");
+            }
+            catch (TariffNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpGet("getall")]
         public async Task<IActionResult> GetAll()
         {
-            var result = await tariffManager.GetAllTariffs();
-            return Ok(result);
+            try
+            {
+                var result = await tariffManager.GetAllTariffs();
+                return Ok(result);
+            }
+            catch (TariffNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         
@@ -63,16 +99,30 @@ namespace BillingApplication.Controllers
         [HttpGet("getbytitle/{title}")]
         public async Task<IActionResult> GetByTitle(string title)
         {
-            var result = await tariffManager.GetTariffByTitle(title);
-            return Ok(result);
+            try
+            {
+                var result = await tariffManager.GetTariffByTitle(title);
+                return Ok(result);
+            }
+            catch (TariffNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpGet("getbyid/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await tariffManager.GetTariffById(id);
-            return Ok(result);
+            try
+            {
+                var result = await tariffManager.GetTariffById(id);
+                return Ok(result);
+            }
+            catch (TariffNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

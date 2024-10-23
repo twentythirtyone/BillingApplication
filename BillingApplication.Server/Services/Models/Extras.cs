@@ -1,4 +1,4 @@
-﻿namespace BillingApplication.Logic.Models
+﻿namespace BillingApplication.Services.Models
 {
     public class Extras
     {

@@ -1,9 +1,9 @@
 using BillingApplication;
 using BillingApplication.DataLayer.Repositories;
-using BillingApplication.Logic.Auth;
-using BillingApplication.Logic.TariffManager;
+using BillingApplication.Services.Auth;
+using BillingApplication.Services.TariffManager;
 using BillingApplication.Repositories;
-using BillingApplication.Server.Logic.Auth.Roles;
+using BillingApplication.Server.Services.Auth.Roles;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using React.AspNet;
 using System.Security.Claims;
 using System.Text;
+using BillingApplication.Server.Services.UserManager;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
@@ -63,6 +64,7 @@ builder.Services.AddScoped<IEncrypt, Encrypt>();
 builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 builder.Services.AddScoped<ITariffRepository, TariffRepository>();
 builder.Services.AddScoped<ITariffManager, TariffManager>();
+builder.Services.AddScoped<ISubscriberManager, SubscriberManager>();
 builder.Services.AddScoped<RoleAuthorizeFilter>();
 
 builder.Services.AddEndpointsApiExplorer();

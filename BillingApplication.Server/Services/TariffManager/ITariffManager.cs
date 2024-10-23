@@ -1,6 +1,6 @@
 ﻿using BillingApplication.Models;
 
-namespace BillingApplication.Logic.TariffManager
+namespace BillingApplication.Services.TariffManager
 {
     public interface ITariffManager
     {

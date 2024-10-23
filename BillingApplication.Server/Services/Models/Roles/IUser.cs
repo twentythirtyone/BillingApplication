@@ -1,4 +1,4 @@
-﻿namespace BillingApplication.Server.Logic.Models.Roles
+﻿namespace BillingApplication.Server.Services.Models.Roles
 {
     public interface IUser
     {

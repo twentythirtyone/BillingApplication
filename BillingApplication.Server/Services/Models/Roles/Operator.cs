@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace BillingApplication.Server.Logic.Models.Roles
+namespace BillingApplication.Server.Services.Models.Roles
 {
     public class Operator : IUser
     {

@@ -1,14 +1,13 @@
-﻿using BillingApplication.Logic.Auth;
+﻿using BillingApplication.Services.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserController : Controller
+    public class SubscriberController : Controller
     {
-        private readonly IAuth auth;
-        public UserController()
+        public SubscriberController()
         {
             
         }

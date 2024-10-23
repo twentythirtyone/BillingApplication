@@ -1,4 +1,4 @@
-﻿using BillingApplication.Server.Logic.Auth.Roles;
+﻿using BillingApplication.Server.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Linq;

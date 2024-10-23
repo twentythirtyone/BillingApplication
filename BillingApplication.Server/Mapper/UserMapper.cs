@@ -1,5 +1,5 @@
 ﻿using BillingApplication.Entities;
-using BillingApplication.Server.Logic.Models.Roles;
+using BillingApplication.Server.Services.Models.Roles;
 
 namespace BillingApplication.Mapper
 {
