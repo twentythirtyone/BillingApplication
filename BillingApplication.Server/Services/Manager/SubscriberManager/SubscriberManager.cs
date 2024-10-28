@@ -3,8 +3,11 @@ using BillingApplication.Repositories;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber;
 using BillingApplication.Services.Auth;
+using BillingApplication.Services.Models.Utilites;
+using BillingApplication.Services.Models.Subscriber.Stats;
+using BillingApplication.Server.Exceptions;
 
-namespace BillingApplication.Services.UserManager
+namespace BillingApplication.Server.Services.Manager.SubscriberManager
 {
     public class SubscriberManager : ISubscriberManager
     {
@@ -42,10 +45,10 @@ namespace BillingApplication.Services.UserManager
             return id;
         }
 
-        public async Task<Subscriber?> ValidateUserCredentials(string phoneNumber, string password)
+        public async Task<Subscriber?> ValidateSubscriberCredentials(string phoneNumber, string password)
         {
             // Находим пользователя по Телефону
-            var user = await subscriberRepository.GetUserbyPhone(phoneNumber);
+            var user = await subscriberRepository.GetSubscriberByPhone(phoneNumber);
             if (user == null)
                 throw new UserNotFoundException("Телефон пользователя не найден");
 
@@ -61,22 +64,47 @@ namespace BillingApplication.Services.UserManager
 
         public async Task<Subscriber?> GetSubscriberById(int? id)
         {
-            return await subscriberRepository.GetUserById(id);
+            return await subscriberRepository.GetSubscriberById(id);
         }
 
-        public async Task<IEnumerable<Subscriber>> GetUsers()
+        public async Task<IEnumerable<Subscriber>> GetSubscribers()
         {
-            return await subscriberRepository.Get();
+            return await subscriberRepository.GetAll();
         }
 
         public async Task<Subscriber> GetSubscriberByPhoneNumber(string phoneNumber)
         {
-            return await subscriberRepository.GetUserbyPhone(phoneNumber);
+            return await subscriberRepository.GetSubscriberByPhone(phoneNumber) ?? throw new UserNotFoundException("Номер телефона не найден");
         }
 
-        public Task<IEnumerable<Subscriber>> GetSubscribersByTariff(string title)
+        public async Task<Subscriber> GetSubscriberByEmail(string email)
         {
-            throw new NotImplementedException();
+            return await subscriberRepository.GetSubscriberByEmail(email) ?? throw new UserNotFoundException("Почта не найдена");
+        }
+
+        public async Task<IEnumerable<Subscriber>> GetSubscribersByTariff(int? tariffId)
+        {
+            return await subscriberRepository.GetSubscribersByTariff(tariffId);
+        }
+
+        public async Task<decimal> GetExpensesCurrentMonth(int? subscriberId)
+        {
+            return await subscriberRepository.GetExpensesCurrentMonth(subscriberId);
+        }
+
+        public async Task<decimal> GetExpensesCurrentYear(int? subscriberId)
+        {
+            return await subscriberRepository.GetExpensesCurrentYear(subscriberId);
+        }
+
+        public async Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId)
+        {
+            return await subscriberRepository.GetExpensesInMonth(month, subscriberId);
+        }
+
+        public async Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId)
+        {
+            return await subscriberRepository.AddExtraToSubscriber(extra, subscriberId) ?? throw new PackageNotFoundException();
         }
     }
 }

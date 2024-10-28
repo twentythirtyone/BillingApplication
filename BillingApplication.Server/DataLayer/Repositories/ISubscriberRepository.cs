@@ -1,5 +1,7 @@
-﻿using BillingApplication.Services.Models.Roles;
+﻿using BillingApplication.Server.Services.Manager.SubscriberManager;
+using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber;
+using BillingApplication.Services.Models.Utilites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +12,17 @@ namespace BillingApplication.Repositories
 {
     public interface ISubscriberRepository
     {
-        Task<Subscriber?> GetUserById(int? id);
-        Task<IEnumerable<Subscriber>> Get();
+        Task<Subscriber?> GetSubscriberById(int? id);
+        Task<IEnumerable<Subscriber>> GetAll();
         Task<int?> Create(Subscriber user, PassportInfo passportInfo, int? tariffId);
         Task<int?> Update(Subscriber user, PassportInfo passportInfo, int? tariffId);
         Task<int?> Delete(int? id);
-        Task<Subscriber?> GetUserbyEmail(string email);
-        Task<Subscriber?> GetUserbyPhone(string phone);
+        Task<Subscriber?> GetSubscriberByEmail(string email);
+        Task<Subscriber?> GetSubscriberByPhone(string phone);
+        Task<IEnumerable<Subscriber>> GetSubscribersByTariff(int? tariffId);
+        Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId);
+        Task<decimal> GetExpensesCurrentMonth(int? subscriberId);
+        Task<decimal> GetExpensesCurrentYear(int? subscriberId);
+        Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId);
     }
 }

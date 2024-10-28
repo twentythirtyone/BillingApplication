@@ -1,7 +1,6 @@
 using BillingApplication;
 using BillingApplication.DataLayer.Repositories;
 using BillingApplication.Services.Auth;
-using BillingApplication.Services.TariffManager;
 using BillingApplication.Repositories;
 using BillingApplication.Services.Auth.Roles;
 using JavaScriptEngineSwitcher.ChakraCore;
@@ -14,9 +13,12 @@ using Microsoft.OpenApi.Models;
 using React.AspNet;
 using System.Security.Claims;
 using System.Text;
-using BillingApplication.Services.UserManager;
-using BillingApplication.Server.Services.BundleManager;
 using BillingApplication.Server.DataLayer.Repositories;
+using BillingApplication.Server.Services.Manager.BundleManager;
+using BillingApplication.Server.Services.Manager.SubscriberManager;
+using BillingApplication.Server.Services.Manager.TariffManager;
+using BillingApplication.Server.Services.Manager.MessagesManager;
+using BillingApplication.Server.Services.Manager.CallsManager;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
@@ -62,12 +64,15 @@ builder.Services.AddDbContext<BillingAppDbContext>(options =>
     options.UseNpgsql(configuration["db_connection"]));
 
 builder.Services.AddScoped<IAuth, Auth>();
+builder.Services.AddScoped<Auth>();
 builder.Services.AddScoped<IEncrypt, Encrypt>();
 builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 builder.Services.AddScoped<ITariffRepository, TariffRepository>();
 builder.Services.AddScoped<IBundleRepository, BundleRepository>();
 builder.Services.AddScoped<ITariffManager, TariffManager>();
 builder.Services.AddScoped<ISubscriberManager, SubscriberManager>();
+builder.Services.AddScoped<IMessagesManager, MessagesManager>();
+builder.Services.AddScoped<ICallsManager, CallsManager>();
 builder.Services.AddScoped<IBundleManager, BundleManager>();
 builder.Services.AddScoped<RoleAuthorizeFilter>();
 

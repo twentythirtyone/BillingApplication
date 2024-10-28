@@ -21,7 +21,7 @@ public class RoleAuthorizeFilter : IAuthorizationFilter
             {
                 context.Result = new ObjectResult(new
                 {
-                    message = "Unauthorized access. You do not have permission to access this resource."
+                    message = "У вас нет доступа к этому ресурсу."
                 })
                 {
                     StatusCode = StatusCodes.Status401Unauthorized // Код состояния 401
