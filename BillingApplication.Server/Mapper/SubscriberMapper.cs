@@ -17,6 +17,13 @@ namespace BillingApplication.Mapper
                 Salt = userEntity.Salt ?? "",
                 Password = userEntity.Password ?? "",
                 Number = userEntity.Number ?? "",
+                Balance = userEntity.Balance,
+                CallTime = userEntity.CallTime,
+                Internet = userEntity.Internet,
+                Messages = userEntity.MessagesCount,
+                PaymentDate = userEntity.PaymentDate,
+                PassportId = userEntity.PassportId,
+                TariffId = userEntity.TariffId
             };
         }
 

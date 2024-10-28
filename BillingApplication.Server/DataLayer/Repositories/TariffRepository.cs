@@ -67,7 +67,8 @@ namespace BillingApplication.DataLayer.Repositories
             {
                 throw new UserNotFoundException();
             }
-            var tariffEntity = await context.Tariffs.Where(t => t.Id == id).FirstOrDefaultAsync();
+           
+            var tariffEntity = await context.Tariffs.Where(t => t.Id == existingSubscriber.TariffId).FirstOrDefaultAsync();
             var tariff = TariffMapper.TariftEntityToTarifModel(tariffEntity);
             return tariff;
         }
