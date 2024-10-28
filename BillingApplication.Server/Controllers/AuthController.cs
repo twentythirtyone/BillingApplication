@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BillingApplication.Attributes;
 using BillingApplication.Exceptions;
-using BillingApplication.Services.UserManager;
 using BillingApplication.Services.Models.Auth;
+using BillingApplication.Server.Services.Manager.SubscriberManager;
 
 namespace BillingApplication.Controllers
 {
@@ -23,31 +23,32 @@ namespace BillingApplication.Controllers
             this.subscriberManager = subscriberManager;
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> LoginSubscriber([FromBody] SubscriberLoginModel loginModel)
+        {
+            try
+            {
+                var user = await subscriberManager.ValidateSubscriberCredentials(loginModel.PhoneNumber, loginModel.Password);
+                if (user == null)
+                    return Unauthorized("Неверный номер/пароль");
+                var token = auth.GenerateJwtToken(user);
+                return Ok(new { token });
+            }
+            catch (Exception ex) when (ex is ArgumentException || ex is UserNotFoundException)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("operator")]
         public async Task<IActionResult> LoginOperator([FromBody] SubscriberLoginModel loginModel)
         {
             return NotFound();
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> LoginSubscriber([FromBody] SubscriberLoginModel loginModel)
-        {
-            try
-            {
-                var user = await subscriberManager.ValidateUserCredentials(loginModel.PhoneNumber, loginModel.Password);
-                if (user == null)
-                    return Unauthorized("Неверный номер/пароль");
-                var token = auth.GenerateJwtToken(user);
-                return Ok(new { token });
-            }
-            catch(Exception ex) when (ex is ArgumentException || ex is UserNotFoundException)
-            {
-                return BadRequest(ex.Message);
-            } 
-        }
 
-        //[ServiceFilter(typeof(RoleAuthorizeFilter))]
-        //[RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("register")]
         public async Task<IActionResult> RegisterSubscriber([FromBody] SubscriberRegisterModel model)
         {
@@ -60,6 +61,22 @@ namespace BillingApplication.Controllers
                 return Ok(result);
             }
             catch(InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("currentuser")]
+        public IActionResult GetCurrentUser()
+        {
+            try
+            {
+                var userId = auth.GetCurrentUserId();
+                if (userId == -1) return Unauthorized("Не авторизован");
+                var roles = auth.GetCurrentUserRoles();
+                return Ok(new { userId, roles });
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

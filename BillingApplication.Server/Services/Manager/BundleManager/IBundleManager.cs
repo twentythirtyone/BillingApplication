@@ -1,6 +1,6 @@
 ﻿using BillingApplication.Services.Models.Utilites;
 
-namespace BillingApplication.Server.Services.BundleManager
+namespace BillingApplication.Server.Services.Manager.BundleManager
 {
     public interface IBundleManager
     {
@@ -9,5 +9,6 @@ namespace BillingApplication.Server.Services.BundleManager
         Task<IEnumerable<Bundle>> GetAllBundles();
         Task<Bundle?> GetBundleById(int id);
         Task<int?> UpdateBundle(Bundle bundleModel);
+        Task<Bundle> GetRemainingUserPackages(int? subscriberId);
     }
 }

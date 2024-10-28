@@ -1,16 +1,16 @@
-﻿using BillingApplication.Services.TariffManager;
-using BillingApplication.Services.Auth.Roles;
+﻿using BillingApplication.Services.Auth.Roles;
 using Microsoft.AspNetCore.Mvc;
 using BillingApplication.Attributes;
 using BillingApplication.Exceptions;
 using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Services.Models.Utilites.Tariff;
+using BillingApplication.Server.Services.Manager.TariffManager;
 
 namespace BillingApplication.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[ServiceFilter(typeof(RoleAuthorizeFilter))]
+    [ServiceFilter(typeof(RoleAuthorizeFilter))]
     public class TariffController : ControllerBase
     {
         private readonly ITariffManager tariffManager;
@@ -20,7 +20,7 @@ namespace BillingApplication.Controllers
             this.tariffManager = tariffManager;
         }
 
-        //[RoleAuthorize(UserRoles.ADMIN)]
+        [RoleAuthorize(UserRoles.ADMIN)]
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] TariffCreateUpdateModel tariffModel)
         {
