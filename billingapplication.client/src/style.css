@@ -238,4 +238,9 @@ body {
     .confirm:hover {
         background: #B20000;
     }
-
+.error {
+    position: absolute;
+    color: grey;
+    margin: 0px;
+    font-size: 20px;
+}
