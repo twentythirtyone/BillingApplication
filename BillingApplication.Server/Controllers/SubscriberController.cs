@@ -139,18 +139,27 @@ namespace BillingApplication.Controllers
             }
         }
 
+        private async Task<IActionResult> ValidateAccessAndDoFunc(Func<int?, Task<IActionResult>> func, int? userId)
+        {
+            var currentUserId = auth.GetCurrentUserId();
+            var currentUserRoles = auth.GetCurrentUserRoles();
+            if (currentUserId != userId && !currentUserRoles.Contains("Admin") && !currentUserRoles.Contains("Operator"))
+                return Unauthorized("Попытка не авторизованного доступа");
+
+            return await func(userId);
+        }
+
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [HttpPost("getexpensescurrentmonth/{userId}")]
         public async Task<IActionResult> GetExpensesCurrentMonth(int? userId)
         {
             try
             {
-                var currentUserId = auth.GetCurrentUserId();
-                var currentUserRoles = auth.GetCurrentUserRoles();
-                if (currentUserId != userId && !currentUserRoles.Contains("Admin") && !currentUserRoles.Contains("Operator"))
-                    return Unauthorized("Попытка не авторизованного доступа");
-                var result = await subscriberManager.GetExpensesCurrentMonth(userId);
-                return Ok(result);
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesCurrentMonth(id);
+                    return Ok(result);
+                }, userId);
             }
             catch (PackageNotFoundException ex)
             {
@@ -164,12 +173,11 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                var currentUserId = auth.GetCurrentUserId();
-                var currentUserRoles = auth.GetCurrentUserRoles();
-                if (currentUserId != userId && !currentUserRoles.Contains("Admin") && !currentUserRoles.Contains("Operator"))
-                    return Unauthorized("Попытка не авторизованного доступа");
-                var result = await subscriberManager.GetExpensesCurrentYear(userId);
-                return Ok(result);
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesCurrentYear(id);
+                    return Ok(result);
+                }, userId);
             }
             catch (PackageNotFoundException ex)
             {
@@ -183,11 +191,26 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                var currentUserId = auth.GetCurrentUserId();
-                var currentUserRoles = auth.GetCurrentUserRoles();
-                if (currentUserId != model.UserId && !currentUserRoles.Contains("Admin") && !currentUserRoles.Contains("Operator"))
-                    return Unauthorized("Попытка не авторизованного доступа");
-                var result = await subscriberManager.GetExpensesInMonth(model.Month, model.UserId);
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesInMonth(model.Month, model.UserId);
+                    return Ok(result);
+                }, model.UserId);
+            }
+            catch (PackageNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [HttpPost("getcurrentuser")]
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            try
+            {
+                var result = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
                 return Ok(result);
             }
             catch (PackageNotFoundException ex)

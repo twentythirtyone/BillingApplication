@@ -1,4 +1,7 @@
-﻿using NpgsqlTypes;
+﻿using BillingApplication.Services.Models.Subscriber;
+using BillingApplication.Services.Models.Utilites.Tariff;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +24,9 @@ namespace BillingApplication.Services.Models.Roles
         public TimeSpan CallTime { get; set; }
         public int Messages { get; set; }
         public long Internet { get; set; }
+        public PassportInfo PassportInfo { get; set; }
+        public Tariffs Tariff { get; set; }
         public string UniqueId => Id.ToString()!;
+        
     }
 }

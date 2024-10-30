@@ -28,12 +28,7 @@ namespace BillingApplication.Repositories
             this.context = context;
         }
 
-        public async Task<Subscriber?> GetSubscriberById(int? id)
-        {
-            var userEntity = await context.Subscribers.Where(u => u.Id == id).FirstOrDefaultAsync();
-            var user = SubscriberMapper.UserEntityToUserModel(userEntity);
-            return user;
-        }
+        
 
         public async Task<IEnumerable<Subscriber?>> GetAll()
         {
@@ -76,11 +71,17 @@ namespace BillingApplication.Repositories
 
         public async Task<int?> Delete(int? id)
         {
-            var user = await context.Subscribers.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var user = await context.Subscribers.FindAsync(id);
             if(user != null)
                 context.Subscribers.Remove(user);
             await context.SaveChangesAsync();
             return user?.Id;
+        }
+        public async Task<Subscriber?> GetSubscriberById(int? id)
+        {
+            var userEntity = await context.Subscribers.FindAsync(id);
+            var user = SubscriberMapper.UserEntityToUserModel(userEntity);
+            return user;
         }
 
         public async Task<Subscriber?> GetSubscriberByEmail(string email)

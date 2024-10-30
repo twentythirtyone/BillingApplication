@@ -23,7 +23,9 @@ namespace BillingApplication.Mapper
                 Messages = userEntity.MessagesCount,
                 PaymentDate = userEntity.PaymentDate,
                 PassportId = userEntity.PassportId,
-                TariffId = userEntity.TariffId
+                TariffId = userEntity.TariffId,
+                Tariff = TariffMapper.TariftEntityToTarifModel(userEntity.Tariff),
+                PassportInfo = PassportMapper.PassportEntityToPassportModel(userEntity.PassportInfo)!
             };
         }
 
