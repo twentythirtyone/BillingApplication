@@ -55,7 +55,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAllOrigins",
         builder => builder.AllowAnyOrigin()
                           .AllowAnyMethod()
-                          .AllowAnyHeader());
+                          .AllowAnyHeader()
+                          .WithOrigins("http://localhost:5173"));
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
@@ -111,6 +112,7 @@ var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
 app.UseCors("AllowAllOrigins");
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
 app.UseReact(config => { });
 app.UseDefaultFiles();
 app.UseStaticFiles();
