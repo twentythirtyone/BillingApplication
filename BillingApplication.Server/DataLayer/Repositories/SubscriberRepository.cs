@@ -16,6 +16,7 @@ using BillingApplication.Services.Models.Subscriber;
 using BillingApplication.Services.Models.Utilites;
 using System.Reflection.Metadata.Ecma335;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
+using BillingApplication.Server.Services.Models.Subscriber;
 
 namespace BillingApplication.Repositories
 {
@@ -27,17 +28,7 @@ namespace BillingApplication.Repositories
         {
             this.context = context;
         }
-
         
-
-        public async Task<IEnumerable<Subscriber?>> GetAll()
-        {
-            var userEntities = await context.Subscribers
-                .AsNoTracking()
-                .ToListAsync();
-            return userEntities.Select(SubscriberMapper.UserEntityToUserModel).ToList();
-        }
-
         public async Task<int?> Create(Subscriber user, PassportInfo passportInfo, int? tariffId)
         {
             var existingTariff = await context.Tariffs.FindAsync(tariffId);
@@ -77,35 +68,60 @@ namespace BillingApplication.Repositories
             await context.SaveChangesAsync();
             return user?.Id;
         }
-        public async Task<Subscriber?> GetSubscriberById(int? id)
+
+        public async Task<IEnumerable<SubscriberViewModel?>> GetAll()
         {
-            var userEntity = await context.Subscribers.FindAsync(id);
-            var user = SubscriberMapper.UserEntityToUserModel(userEntity);
+            var userEntities = await context.Subscribers
+                .Include(s => s.Tariff)
+                .Include(s => s.PassportInfo)
+                .AsNoTracking()
+                .ToListAsync();
+            return userEntities.Select(SubscriberMapper.UserEntityToUserVModel).ToList();
+        }
+
+
+        public async Task<SubscriberViewModel?> GetSubscriberById(int? id)
+        {
+            var userEntity = await context.Subscribers
+                                .Include(s=>s.Tariff)
+                                .Include(s=>s.PassportInfo)
+                                .FirstOrDefaultAsync(s=>s.Id == id);
+            var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
             return user;
         }
 
-        public async Task<Subscriber?> GetSubscriberByEmail(string email)
+        public async Task<SubscriberViewModel?> GetSubscriberByEmail(string email)
         {
-            var user = await context.Subscribers.Where(u => u.Email == email).FirstOrDefaultAsync();
-            return SubscriberMapper.UserEntityToUserModel(user);
+            var userEntity = await context.Subscribers
+                                .Include(s => s.Tariff)
+                                .Include(s => s.PassportInfo)
+                                .FirstOrDefaultAsync(s => s.Email == email); ;
+            var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
+            return user;
         }
 
-        public async Task<Subscriber?> GetSubscriberByPhone(string phone)
+        public async Task<SubscriberViewModel?> GetSubscriberByPhone(string phone)
         {
-            var user = await context.Subscribers.Where(u => u.Number == phone).FirstOrDefaultAsync();
-            return SubscriberMapper.UserEntityToUserModel(user);
+            var userEntity = await context.Subscribers
+                               .Include(s => s.Tariff)
+                               .Include(s => s.PassportInfo)
+                               .FirstOrDefaultAsync(s => s.Number == phone); ;
+            var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
+            return user;
         }
 
-        public async Task<IEnumerable<Subscriber>> GetSubscribersByTariff(int? tariffId)
+        public async Task<IEnumerable<SubscriberViewModel>> GetSubscribersByTariff(int? tariffId)
         {
             var existingTariff = await context.Tariffs.FindAsync(tariffId);
             if (existingTariff == null) throw new TariffNotFoundException();
             var userEntities = await context.Subscribers
+                .Include(s => s.Tariff)
+                .Include(s => s.PassportInfo)
                 .AsNoTracking()
                 .Where(x=>x.Tariff.Id == tariffId)
                 .ToListAsync();
 
-            return userEntities.Select(SubscriberMapper.UserEntityToUserModel);
+            return userEntities.Select(SubscriberMapper.UserEntityToUserVModel);
         }
 
         public async Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId)

@@ -65,7 +65,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
-    options.UseLazyLoadingProxies().UseNpgsql(configuration["db_connection"]));
+    options.UseNpgsql(configuration["db_connection"]));
 
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<Auth>();
