@@ -19,6 +19,7 @@ using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
 using BillingApplication.Server.Services.Manager.MessagesManager;
 using BillingApplication.Server.Services.Manager.CallsManager;
+using BillingApplication.Server.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
@@ -64,7 +65,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
-    options.UseNpgsql(configuration["db_connection"]));
+    options.UseLazyLoadingProxies().UseNpgsql(configuration["db_connection"]));
 
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<Auth>();
@@ -112,11 +113,13 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IBlacklistService, BlacklistService>();
+
 builder.Services.AddReact();
 builder.Services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
 var app = builder.Build();
-
+app.UseMiddleware<JwtBlacklistMiddleware>();
 app.UseDeveloperExceptionPage();
 app.UseCors("AllowSpecificOrigin");
 app.UseReact(config => { });

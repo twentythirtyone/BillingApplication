@@ -4,6 +4,8 @@ using System.Security.Claims;
 using System.Text;
 using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models.Roles;
+using BillingApplication.Server.Middleware;
+using Newtonsoft.Json.Linq;
 
 
 namespace BillingApplication.Services.Auth
@@ -12,11 +14,13 @@ namespace BillingApplication.Services.Auth
     {
         private readonly IConfiguration configuration;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IBlacklistService blacklistService;
 
-        public Auth(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public Auth(IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IBlacklistService blacklistService)
         {
             this.configuration = configuration;
             this.httpContextAccessor = httpContextAccessor;
+            this.blacklistService = blacklistService;
         }
 
         public int? GetCurrentUserId()
@@ -72,6 +76,11 @@ namespace BillingApplication.Services.Auth
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public void Logout(string token)
+        {
+            blacklistService.AddTokenToBlacklist(token);
         }
     }
 }

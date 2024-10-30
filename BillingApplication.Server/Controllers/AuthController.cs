@@ -7,6 +7,7 @@ using BillingApplication.Attributes;
 using BillingApplication.Exceptions;
 using BillingApplication.Services.Models.Auth;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
+using BillingApplication.Server.Middleware;
 
 namespace BillingApplication.Controllers
 {
@@ -38,6 +39,20 @@ namespace BillingApplication.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
+
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest("Пустой токен.");
+            }
+
+            auth.Logout(token);
+            return Ok("Успешный выход из системы.");
         }
 
         [HttpPost("operator")]
