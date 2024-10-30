@@ -54,11 +54,13 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
-        builder => builder.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader()
-                          .WithOrigins("http://localhost:5173"));
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("https://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
@@ -116,8 +118,7 @@ builder.Services.AddJsEngineSwitcher(options => options.DefaultEngineName = Chak
 var app = builder.Build();
 
 app.UseDeveloperExceptionPage();
-app.UseCors("AllowAllOrigins");
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173"));
+app.UseCors("AllowSpecificOrigin");
 app.UseReact(config => { });
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -136,8 +137,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
