@@ -1,7 +1,7 @@
 ﻿using BillingApplication.Attributes;
 using BillingApplication.Exceptions;
 using BillingApplication.Server.Exceptions;
-using BillingApplication.Server.Services.BundleManager;
+using BillingApplication.Server.Services.Manager.BundleManager;
 using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models.Utilites;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +10,7 @@ namespace BillingApplication.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    //[ServiceFilter(typeof(RoleAuthorizeFilter))]
+    [ServiceFilter(typeof(RoleAuthorizeFilter))]
     public class BundleController : ControllerBase
     {
         private readonly IBundleManager bundleManager;
@@ -20,7 +20,7 @@ namespace BillingApplication.Server.Controllers
             this.bundleManager = bundleManager;
         }
 
-        //[RoleAuthorize(UserRoles.ADMIN)]
+        [RoleAuthorize(UserRoles.ADMIN)]
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] Bundle BundleModel)
         {

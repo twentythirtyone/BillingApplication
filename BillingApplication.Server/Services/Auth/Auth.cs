@@ -11,14 +11,31 @@ namespace BillingApplication.Services.Auth
     public class Auth : IAuth
     {
         private readonly IConfiguration configuration;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public Auth(IConfiguration configuration)
+        public Auth(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             this.configuration = configuration;
+            this.httpContextAccessor = httpContextAccessor;
         }
-       
+
+        public int? GetCurrentUserId()
+        {
+            var claimsIdentity = httpContextAccessor.HttpContext?.User.Identity as ClaimsIdentity;
+            int id = int.Parse(claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "-1");
+            return id;
+        }
+
+
+        public List<string> GetCurrentUserRoles()
+        {
+            var claimsIdentity = httpContextAccessor.HttpContext?.User.Identity as ClaimsIdentity;
+            return claimsIdentity?.FindAll(ClaimTypes.Role).Select(claim => claim.Value).ToList() ?? new List<string>();
+        }
+
         public string GenerateJwtToken<T>(T user)
         {
+            Console.WriteLine($"Generating token for user: {(user as IUser)?.UniqueId}");
             var userRoles = new List<string>();
 
             if (user is Subscriber subscriber)

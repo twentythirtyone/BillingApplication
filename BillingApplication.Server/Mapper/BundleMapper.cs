@@ -15,7 +15,7 @@ namespace BillingApplication.Server.Mapper
             {
                 Id = bundleEntity.Id,
                 Internet = bundleEntity.Internet,
-                Interval = bundleEntity.Interval,
+                Interval = bundleEntity.CallTIme,
                 Messages = bundleEntity.Messages
             };
         }
@@ -27,7 +27,7 @@ namespace BillingApplication.Server.Mapper
             return new BundleEntity()
             {
                 Internet = bundleModel.Internet,
-                Interval = bundleModel.Interval,
+                CallTIme = bundleModel.Interval,
                 Messages = bundleModel.Messages
             };
         }
@@ -37,7 +37,7 @@ namespace BillingApplication.Server.Mapper
             if (bundleModel == null)
                 return null;
             currentBundle.Internet = bundleModel.Internet;
-            currentBundle.Interval = bundleModel.Interval;
+            currentBundle.CallTIme = bundleModel.Interval;
             currentBundle.Messages = bundleModel.Messages;
             return currentBundle;
         }

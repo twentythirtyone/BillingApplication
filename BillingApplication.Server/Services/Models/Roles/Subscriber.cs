@@ -18,7 +18,7 @@ namespace BillingApplication.Services.Models.Roles
         public required string Number { get; set; }
         public decimal Balance { get; set; }
         public DateTime PaymentDate { get; set; }
-        public NpgsqlInterval CallTime { get; set; }
+        public TimeSpan CallTime { get; set; }
         public int Messages { get; set; }
         public long Internet { get; set; }
         public string UniqueId => Id.ToString()!;

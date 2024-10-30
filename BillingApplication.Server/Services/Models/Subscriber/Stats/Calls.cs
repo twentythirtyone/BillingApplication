@@ -9,7 +9,7 @@ namespace BillingApplication.Services.Models.Subscriber.Stats
     public class Calls
     {
         public int? Id { get; set; }
-        public int FromPhoneId { get; set; }
+        public int FromSubscriberId { get; set; }
         public string? ToPhoneNumber { get; set; }
         public DateTime Date { get; set; }
         public int Duration { get; set; }
