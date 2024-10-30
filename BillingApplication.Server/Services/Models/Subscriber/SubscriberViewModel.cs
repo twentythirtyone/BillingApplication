@@ -1,16 +1,9 @@
 ﻿using BillingApplication.Services.Models.Subscriber;
 using BillingApplication.Services.Models.Utilites.Tariff;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using NpgsqlTypes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace BillingApplication.Services.Models.Roles
+namespace BillingApplication.Server.Services.Models.Subscriber
 {
-    public class Subscriber: IUser
+    public class SubscriberViewModel
     {
         public int? Id { get; set; }
         public string Email { get; set; } = "";
@@ -24,7 +17,7 @@ namespace BillingApplication.Services.Models.Roles
         public TimeSpan CallTime { get; set; }
         public int Messages { get; set; }
         public long Internet { get; set; }
-        public string UniqueId => Id.ToString()!;
-        
+        public Tariffs Tariff { get; set; }
+        public PassportInfo PassportInfo { get; set; }
     }
 }

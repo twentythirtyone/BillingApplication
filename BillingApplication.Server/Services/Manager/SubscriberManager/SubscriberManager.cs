@@ -6,6 +6,7 @@ using BillingApplication.Services.Auth;
 using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.Exceptions;
+using BillingApplication.Server.Services.Models.Subscriber;
 
 namespace BillingApplication.Server.Services.Manager.SubscriberManager
 {
@@ -36,8 +37,12 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             int? id = currentUser?.Id;
             if (id is not null)
             {
-                user.Salt = Guid.NewGuid().ToString();
-                user.Password = encrypt.HashPassword(user.Password, user.Salt);
+                if(currentUser.Password != encrypt.HashPassword(user.Password, user.Salt))
+                {
+                    user.Salt = Guid.NewGuid().ToString();
+                    user.Password = encrypt.HashPassword(user.Password, user.Salt);
+                }
+                
                 id = await subscriberRepository.Update(user, passport, tariffId);
             }
             else
@@ -45,7 +50,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             return id;
         }
 
-        public async Task<Subscriber?> ValidateSubscriberCredentials(string phoneNumber, string password)
+        public async Task<SubscriberViewModel?> ValidateSubscriberCredentials(string phoneNumber, string password)
         {
             // Находим пользователя по Телефону
             var user = await subscriberRepository.GetSubscriberByPhone(phoneNumber);
@@ -62,27 +67,27 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             return user; // Возвращаем пользователя, если учетные данные верны
         }
 
-        public async Task<Subscriber?> GetSubscriberById(int? id)
+        public async Task<SubscriberViewModel?> GetSubscriberById(int? id)
         {
             return await subscriberRepository.GetSubscriberById(id);
         }
 
-        public async Task<IEnumerable<Subscriber>> GetSubscribers()
+        public async Task<IEnumerable<SubscriberViewModel>> GetSubscribers()
         {
             return await subscriberRepository.GetAll();
         }
 
-        public async Task<Subscriber> GetSubscriberByPhoneNumber(string phoneNumber)
+        public async Task<SubscriberViewModel> GetSubscriberByPhoneNumber(string phoneNumber)
         {
             return await subscriberRepository.GetSubscriberByPhone(phoneNumber) ?? throw new UserNotFoundException("Номер телефона не найден");
         }
 
-        public async Task<Subscriber> GetSubscriberByEmail(string email)
+        public async Task<SubscriberViewModel> GetSubscriberByEmail(string email)
         {
             return await subscriberRepository.GetSubscriberByEmail(email) ?? throw new UserNotFoundException("Почта не найдена");
         }
 
-        public async Task<IEnumerable<Subscriber>> GetSubscribersByTariff(int? tariffId)
+        public async Task<IEnumerable<SubscriberViewModel>> GetSubscribersByTariff(int? tariffId)
         {
             return await subscriberRepository.GetSubscribersByTariff(tariffId);
         }

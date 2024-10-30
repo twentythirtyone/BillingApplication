@@ -10,6 +10,7 @@ namespace BillingApplication.Entities
     {
         public int? Id { get; set; }
         public string? PassportNumber { get; set; }
+        public string? FullName { get; set; }
         public DateTime? IssueDate { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public string? IssuedBy { get; set; }

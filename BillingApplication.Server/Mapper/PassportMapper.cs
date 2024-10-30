@@ -12,6 +12,7 @@ namespace BillingApplication.Mapper
             return new PassportInfo()
             {
                 Id = passportEntity.Id,
+                FullName = passportEntity.FullName,
                 ExpiryDate = passportEntity.ExpiryDate ?? DateTime.MinValue,
                 IssueDate = passportEntity?.IssueDate ?? DateTime.MinValue,
                 PassportNumber = passportEntity?.PassportNumber ?? "00 00 000 000",
@@ -27,6 +28,7 @@ namespace BillingApplication.Mapper
             return new PassportInfoEntity()
             {
                 ExpiryDate = passportModel.ExpiryDate ?? DateTime.MinValue,
+                FullName = passportModel?.FullName,
                 IssueDate = passportModel?.IssueDate ?? DateTime.MinValue,
                 PassportNumber = passportModel?.PassportNumber ?? "00 00 000 000",
                 IssuedBy = passportModel?.IssuedBy ?? "",
@@ -38,6 +40,7 @@ namespace BillingApplication.Mapper
         {
             if (passportModel == null)
                 return null;
+            passportEntity.FullName = passportModel.FullName;
             passportEntity.ExpiryDate = passportModel.ExpiryDate ?? DateTime.MinValue;
             passportEntity.IssueDate = passportModel?.IssueDate ?? DateTime.MinValue;
             passportEntity.PassportNumber = passportModel?.PassportNumber ?? "00 00 000 000";
