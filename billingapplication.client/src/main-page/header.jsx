@@ -8,7 +8,7 @@ const Header = () => {
                 <span className='header-title'>Alfa-Telecom</span>
             </div>
             <div className='header-right'>
-                <button className='profile-button'>Егоров Евгений</button>
+                <button className='profile-button'>Иванов Иван</button>
             </div>
         </header>
     );
