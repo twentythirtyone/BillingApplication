@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Entities;
+using BillingApplication.Server.Services.Models.Subscriber;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber;
 
@@ -23,7 +24,32 @@ namespace BillingApplication.Mapper
                 Messages = userEntity.MessagesCount,
                 PaymentDate = userEntity.PaymentDate,
                 PassportId = userEntity.PassportId,
-                TariffId = userEntity.TariffId
+                TariffId = userEntity.TariffId,
+
+            };
+        }
+
+        public static SubscriberViewModel? UserEntityToUserVModel(SubscriberEntity? userEntity)
+        {
+            if (userEntity == null)
+                return null;
+            return new SubscriberViewModel()
+            {
+                Id = userEntity.Id,
+                Email = userEntity.Email ?? "",
+                Salt = userEntity.Salt ?? "",
+                Password = userEntity.Password ?? "",
+                Number = userEntity.Number ?? "",
+                Balance = userEntity.Balance,
+                CallTime = userEntity.CallTime,
+                Internet = userEntity.Internet,
+                Messages = userEntity.MessagesCount,
+                PaymentDate = userEntity.PaymentDate,
+                PassportId = userEntity.PassportId,
+                TariffId = userEntity.TariffId,
+                Tariff = TariffMapper.TariftEntityToTarifModel(userEntity.Tariff),
+                PassportInfo = PassportMapper.PassportEntityToPassportModel(userEntity.PassportInfo)!
+
             };
         }
 
