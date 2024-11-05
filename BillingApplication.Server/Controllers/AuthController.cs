@@ -63,7 +63,6 @@ namespace BillingApplication.Controllers
             return NotFound();
         }
 
-
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("register")]
