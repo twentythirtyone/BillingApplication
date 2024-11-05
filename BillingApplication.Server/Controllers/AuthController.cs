@@ -25,45 +25,6 @@ namespace BillingApplication.Controllers
             this.subscriberManager = subscriberManager;
         }
 
-
-        [HttpPost("login")]
-        public async Task<IActionResult> LoginSubscriber([FromBody] SubscriberLoginModel loginModel)
-        {
-            try
-            {
-                var userVM = await subscriberManager.ValidateSubscriberCredentials(loginModel.PhoneNumber, loginModel.Password);
-                if (userVM == null)
-                    return Unauthorized("Неверный номер/пароль");
-                var user = SubscriberMapper.UserVMToUserModel(userVM);
-                var token = auth.GenerateJwtToken(user);
-                return Ok(new { token });
-            }
-            catch (Exception ex) when (ex is ArgumentException || ex is UserNotFoundException)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("logout")]
-        public IActionResult Logout()
-        {
-            var token = HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
-
-            if (string.IsNullOrEmpty(token))
-            {
-                return BadRequest("Пустой токен.");
-            }
-
-            auth.Logout(token);
-            return Ok("Успешный выход из системы.");
-        }
-
-        [HttpPost("operator")]
-        public async Task<IActionResult> LoginOperator([FromBody] SubscriberLoginModel loginModel)
-        {
-            return NotFound();
-        }
-
         [HttpPost("login")]
         public async Task<IActionResult> LoginSubscriber([FromBody] SubscriberLoginModel loginModel)
         {
