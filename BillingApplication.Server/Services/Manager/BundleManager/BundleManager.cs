@@ -2,7 +2,7 @@
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Services.Models.Utilites;
 
-namespace BillingApplication.Server.Services.BundleManager
+namespace BillingApplication.Server.Services.Manager.BundleManager
 {
     public class BundleManager : IBundleManager
     {
@@ -33,6 +33,12 @@ namespace BillingApplication.Server.Services.BundleManager
         {
             var result = await bundleRepository.GetById(id);
             return result ?? throw new BundleNotFoundException();
+        }
+
+        //TODO:
+        public Task<Bundle> GetRemainingUserPackages(int? subscriberId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<int?> UpdateBundle(Bundle bundleModel)

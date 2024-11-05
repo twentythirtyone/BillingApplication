@@ -1,7 +1,6 @@
 using BillingApplication;
 using BillingApplication.DataLayer.Repositories;
 using BillingApplication.Services.Auth;
-using BillingApplication.Services.TariffManager;
 using BillingApplication.Repositories;
 using BillingApplication.Services.Auth.Roles;
 using JavaScriptEngineSwitcher.ChakraCore;
@@ -14,11 +13,7 @@ using Microsoft.OpenApi.Models;
 using React.AspNet;
 using System.Security.Claims;
 using System.Text;
-using BillingApplication.Services.UserManager;
-using BillingApplication.Server.Services.BundleManager;
 using BillingApplication.Server.DataLayer.Repositories;
-<<<<<<< HEAD
-=======
 using BillingApplication.Server.Services.Manager.BundleManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
@@ -26,7 +21,7 @@ using BillingApplication.Server.Services.Manager.MessagesManager;
 using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Middleware;
 using BillingApplication.Server.Services.Manager.ExtrasManager;
->>>>>>> 8b0525e (Merge branch 'master' of https://github.com/twentythirtyone/BillingApplication)
+
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
@@ -62,21 +57,22 @@ builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAllOrigins",
-        builder => builder.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder.WithOrigins("https://localhost:5173")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
+    });
 });
 
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
     options.UseNpgsql(configuration["db_connection"]));
 
-<<<<<<< HEAD
+
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<IEncrypt, Encrypt>();
-=======
 
->>>>>>> 8b0525e (Merge branch 'master' of https://github.com/twentythirtyone/BillingApplication)
 builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 builder.Services.AddScoped<ITariffRepository, TariffRepository>();
 builder.Services.AddScoped<IBundleRepository, BundleRepository>();
@@ -88,6 +84,8 @@ builder.Services.AddScoped<IEncrypt, Encrypt>();
 
 builder.Services.AddScoped<ITariffManager, TariffManager>();
 builder.Services.AddScoped<ISubscriberManager, SubscriberManager>();
+builder.Services.AddScoped<IMessagesManager, MessagesManager>();
+builder.Services.AddScoped<ICallsManager, CallsManager>();
 builder.Services.AddScoped<IBundleManager, BundleManager>();
 builder.Services.AddScoped<IExtrasManager, ExtrasManager>();
 builder.Services.AddScoped<RoleAuthorizeFilter>();
@@ -97,16 +95,16 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "BillingApplication API", Version = "v1" });
 
-    // Îïðåäåëÿåì ñõåìó áåçîïàñíîñòè
+    // ÃŽÃ¯Ã°Ã¥Ã¤Ã¥Ã«Ã¿Ã¥Ã¬ Ã±ÃµÃ¥Ã¬Ã³ Ã¡Ã¥Ã§Ã®Ã¯Ã Ã±Ã­Ã®Ã±Ã²Ã¨
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Ââåäèòå 'Bearer' [ïðîáåë] è çàòåì âàø òîêåí",
+        Description = "Ã‚Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ 'Bearer' [Ã¯Ã°Ã®Ã¡Ã¥Ã«] Ã¨ Ã§Ã Ã²Ã¥Ã¬ Ã¢Ã Ã¸ Ã²Ã®ÃªÃ¥Ã­",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey
     });
 
-    // Äîáàâëÿåì òðåáîâàíèÿ ê áåçîïàñíîñòè
+    // Ã„Ã®Ã¡Ã Ã¢Ã«Ã¿Ã¥Ã¬ Ã²Ã°Ã¥Ã¡Ã®Ã¢Ã Ã­Ã¨Ã¿ Ãª Ã¡Ã¥Ã§Ã®Ã¯Ã Ã±Ã­Ã®Ã±Ã²Ã¨
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -125,13 +123,15 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+builder.Services.AddSingleton<IBlacklistService, BlacklistService>();
+
 builder.Services.AddReact();
 builder.Services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
 
 var app = builder.Build();
-
+app.UseMiddleware<JwtBlacklistMiddleware>();
 app.UseDeveloperExceptionPage();
-app.UseCors("AllowAllOrigins");
+app.UseCors("AllowSpecificOrigin");
 app.UseReact(config => { });
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -150,8 +150,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
 
 app.MapFallbackToFile("/index.html");
 
