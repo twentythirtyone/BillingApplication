@@ -1,7 +1,11 @@
-﻿import { useState } from 'react';
-import logo from './assets/img/logo.svg';
+﻿import { useState, useEffect } from 'react';
+import logo from '../assets/img/logo.svg';
 
 const AdminLoginForm = () => {
+    useEffect(() => {
+        document.title = 'AdminLogin';
+    });
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [token, setToken] = useState('');

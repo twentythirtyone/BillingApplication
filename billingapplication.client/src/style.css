@@ -244,3 +244,170 @@ body {
     margin: 0px;
     font-size: 20px;
 }
+
+/* Главная */
+.main-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: #F4F7F3;
+
+}
+
+
+.main-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-logo {
+    width: 15px;
+    margin-right: 10px;
+    margin-top: 2px;
+    margin-left: 210px;
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 auto;
+}
+
+.profile-button {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-right: 210px;
+}
+
+.content-layout {
+    display: flex;
+    margin-top: 15px;
+
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #fdecec;
+    padding: 20px;
+    height: 87.5vh;
+    margin-left: 350px;
+}
+.sidebar-title {
+    color: #AB3D36;
+    font-size: 14px;
+    font-weight: 400px;
+    padding: 0px;
+    margin-bottom: 15px;
+}
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+    .sidebar-link:hover {
+        background-color: #F5DEDB;
+    }
+
+.navbar-icon {
+    height: 14px;
+    margin-right: 12px;
+}
+
+.navbar-link-text {
+    text-decoration: none;
+    color: black;
+}
+
+.main-page-content {
+    margin-left: 20px;
+
+}
+
+
+/* Панель управления */
+.dashboard {
+    margin-top: 30px;
+}
+
+.phone-number {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.user-info {
+    margin-top: 10px;
+    color: #AB3D36;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.balance-section,
+.monthly-expenses {
+    margin-top: 40px;
+}
+
+    .balance-section h2,
+    .monthly-expenses h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+
+.balance {
+    display: flex;
+    gap: 20px;
+}
+
+    .balance div {
+        flex: 1;
+        padding: 10px 50px;
+        border: 1px solid #EDC7C4;
+        border-radius: 8px;
+        font-size: 18px;
+        color: #333;
+        font-size: 16px;
+    }
+
+        .balance div:first-child {
+            text-align: left;
+        }
+
+        .balance div:last-child {
+            text-align: left;
+            color: #e74c3c;
+        }
+
+
+.monthly-expenses div:first-child {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.expenses-chart {
+    height: 150px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
+
+/* Кошелек */

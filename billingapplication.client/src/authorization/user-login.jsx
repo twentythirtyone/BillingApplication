@@ -1,7 +1,11 @@
-﻿import { useState } from 'react';
-import logo from './assets/img/logo.svg';
+﻿import { useState, useEffect } from 'react';
+import logo from '../assets/img/logo.svg';
 
 const LoginForm = () => {
+    useEffect(() => {
+        document.title = 'Вход';
+    });
+
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -78,6 +82,6 @@ const LoginForm = () => {
             </form>
         </div>
     );
-}; 
+};
 
 export default LoginForm;

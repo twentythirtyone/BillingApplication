@@ -1,7 +1,7 @@
 ﻿import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const HomePage = () => {
+const WelcomePage = () => {
     const [showRoleOptions, setShowRoleOptions] = useState(false);
     const roleOptionsRef = useRef(null);
     const navigate = useNavigate();
@@ -36,10 +36,10 @@ const HomePage = () => {
                     </button>
                     {showRoleOptions && (
                         <div className='role-options' ref={roleOptionsRef}>
-                            <button className='role-option' onClick={() => navigate('Auth/operator', { replace: false })}>
+                            <button className='role-option' onClick={() => navigate('operator', { replace: false })}>
                                 Оператор
                             </button>
-                            <button className='role-option' onClick={() => navigate('Auth/login', { replace: false })}>
+                            <button className='role-option' onClick={() => navigate('login', { replace: false })}>
                                 Пользователь
                             </button>
                         </div>
@@ -56,4 +56,4 @@ const HomePage = () => {
 };
 
 
-export default HomePage;
+export default WelcomePage;
