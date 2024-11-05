@@ -17,6 +17,16 @@ using System.Text;
 using BillingApplication.Services.UserManager;
 using BillingApplication.Server.Services.BundleManager;
 using BillingApplication.Server.DataLayer.Repositories;
+<<<<<<< HEAD
+=======
+using BillingApplication.Server.Services.Manager.BundleManager;
+using BillingApplication.Server.Services.Manager.SubscriberManager;
+using BillingApplication.Server.Services.Manager.TariffManager;
+using BillingApplication.Server.Services.Manager.MessagesManager;
+using BillingApplication.Server.Services.Manager.CallsManager;
+using BillingApplication.Server.Middleware;
+using BillingApplication.Server.Services.Manager.ExtrasManager;
+>>>>>>> 8b0525e (Merge branch 'master' of https://github.com/twentythirtyone/BillingApplication)
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
@@ -61,14 +71,25 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
     options.UseNpgsql(configuration["db_connection"]));
 
+<<<<<<< HEAD
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddScoped<IEncrypt, Encrypt>();
+=======
+
+>>>>>>> 8b0525e (Merge branch 'master' of https://github.com/twentythirtyone/BillingApplication)
 builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 builder.Services.AddScoped<ITariffRepository, TariffRepository>();
 builder.Services.AddScoped<IBundleRepository, BundleRepository>();
+builder.Services.AddScoped<IExtrasRepository, ExtrasRepository>();
+
+builder.Services.AddScoped<IAuth, Auth>();
+builder.Services.AddScoped<Auth>();
+builder.Services.AddScoped<IEncrypt, Encrypt>();
+
 builder.Services.AddScoped<ITariffManager, TariffManager>();
 builder.Services.AddScoped<ISubscriberManager, SubscriberManager>();
 builder.Services.AddScoped<IBundleManager, BundleManager>();
+builder.Services.AddScoped<IExtrasManager, ExtrasManager>();
 builder.Services.AddScoped<RoleAuthorizeFilter>();
 
 builder.Services.AddEndpointsApiExplorer();

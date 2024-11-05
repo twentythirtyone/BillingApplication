@@ -48,8 +48,25 @@ namespace BillingApplication.Mapper
             return userEntity;
         }
 
-
-
-
+        public static Subscriber UserVMToUserModel(SubscriberViewModel user)
+        {
+            if (user == null)
+                return null;
+            return new Subscriber()
+            {
+                Id = user.Id,
+                Email = user.Email ?? "",
+                Salt = user.Salt ?? "",
+                Password = user.Password ?? "",
+                Number = user.Number ?? "",
+                Balance = user.Balance,
+                CallTime = user.CallTime,
+                Internet = user.Internet,
+                Messages = user.Messages,
+                PaymentDate = user.PaymentDate,
+                PassportId = user.PassportId,
+                TariffId = user.TariffId
+            };
+        }
     }
 }
