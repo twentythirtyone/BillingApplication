@@ -22,6 +22,7 @@ using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Middleware;
 using BillingApplication.Server.Services.Manager.ExtrasManager;
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
     .AddUserSecrets<Program>()
@@ -69,6 +70,9 @@ builder.Services.AddDbContext<BillingAppDbContext>(options =>
     options.UseNpgsql(configuration["db_connection"]));
 
 
+builder.Services.AddScoped<IAuth, Auth>();
+builder.Services.AddScoped<IEncrypt, Encrypt>();
+
 builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 builder.Services.AddScoped<ITariffRepository, TariffRepository>();
 builder.Services.AddScoped<IBundleRepository, BundleRepository>();
@@ -91,16 +95,16 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "BillingApplication API", Version = "v1" });
 
-    // Определяем схему безопасности
+    // ГЋГЇГ°ГҐГ¤ГҐГ«ГїГҐГ¬ Г±ГµГҐГ¬Гі ГЎГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГЁ
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Введите 'Bearer' [пробел] и затем ваш токен",
+        Description = "Г‚ГўГҐГ¤ГЁГІГҐ 'Bearer' [ГЇГ°Г®ГЎГҐГ«] ГЁ Г§Г ГІГҐГ¬ ГўГ Гё ГІГ®ГЄГҐГ­",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey
     });
 
-    // Добавляем требования к безопасности
+    // Г„Г®ГЎГ ГўГ«ГїГҐГ¬ ГІГ°ГҐГЎГ®ГўГ Г­ГЁГї ГЄ ГЎГҐГ§Г®ГЇГ Г±Г­Г®Г±ГІГЁ
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
