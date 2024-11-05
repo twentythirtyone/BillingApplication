@@ -25,6 +25,7 @@ namespace BillingApplication.Controllers
             this.subscriberManager = subscriberManager;
         }
 
+
         [HttpPost("login")]
         public async Task<IActionResult> LoginSubscriber([FromBody] SubscriberLoginModel loginModel)
         {
@@ -62,7 +63,6 @@ namespace BillingApplication.Controllers
         {
             return NotFound();
         }
-
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
