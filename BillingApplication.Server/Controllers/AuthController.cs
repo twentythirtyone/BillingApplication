@@ -8,6 +8,7 @@ using BillingApplication.Exceptions;
 using BillingApplication.Services.Models.Auth;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Middleware;
+using BillingApplication.Mapper;
 
 namespace BillingApplication.Controllers
 {
@@ -29,9 +30,10 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                var user = await subscriberManager.ValidateSubscriberCredentials(loginModel.PhoneNumber, loginModel.Password);
-                if (user == null)
+                var userVM = await subscriberManager.ValidateSubscriberCredentials(loginModel.PhoneNumber, loginModel.Password);
+                if (userVM == null)
                     return Unauthorized("Неверный номер/пароль");
+                var user = SubscriberMapper.UserVMToUserModel(userVM);
                 var token = auth.GenerateJwtToken(user);
                 return Ok(new { token });
             }

@@ -20,6 +20,7 @@ using BillingApplication.Server.Services.Manager.TariffManager;
 using BillingApplication.Server.Services.Manager.MessagesManager;
 using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Middleware;
+using BillingApplication.Server.Services.Manager.ExtrasManager;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration
@@ -67,17 +68,22 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<BillingAppDbContext>(options =>
     options.UseNpgsql(configuration["db_connection"]));
 
-builder.Services.AddScoped<IAuth, Auth>();
-builder.Services.AddScoped<Auth>();
-builder.Services.AddScoped<IEncrypt, Encrypt>();
+
 builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
 builder.Services.AddScoped<ITariffRepository, TariffRepository>();
 builder.Services.AddScoped<IBundleRepository, BundleRepository>();
+builder.Services.AddScoped<IExtrasRepository, ExtrasRepository>();
+
+builder.Services.AddScoped<IAuth, Auth>();
+builder.Services.AddScoped<Auth>();
+builder.Services.AddScoped<IEncrypt, Encrypt>();
+
 builder.Services.AddScoped<ITariffManager, TariffManager>();
 builder.Services.AddScoped<ISubscriberManager, SubscriberManager>();
 builder.Services.AddScoped<IMessagesManager, MessagesManager>();
 builder.Services.AddScoped<ICallsManager, CallsManager>();
 builder.Services.AddScoped<IBundleManager, BundleManager>();
+builder.Services.AddScoped<IExtrasManager, ExtrasManager>();
 builder.Services.AddScoped<RoleAuthorizeFilter>();
 
 builder.Services.AddEndpointsApiExplorer();
