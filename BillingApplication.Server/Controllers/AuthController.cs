@@ -25,7 +25,6 @@ namespace BillingApplication.Controllers
             this.subscriberManager = subscriberManager;
         }
 
-
         [HttpPost("login")]
         public async Task<IActionResult> LoginSubscriber([FromBody] SubscriberLoginModel loginModel)
         {
