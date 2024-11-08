@@ -24,6 +24,7 @@ using BillingApplication.Server.Quartz;
 using Microsoft.Extensions.Hosting;
 using BillingApplication.Server.Quartz.Workers;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
+using BillingApplication.Server.Services.Manager.ExtrasManager;
 
 internal class Program
 {
@@ -58,6 +59,7 @@ internal class Program
 
         using (var scope = builder.Services.BuildServiceProvider().CreateScope())
         {
+
             var serviceProvider = scope.ServiceProvider;
             try
             {
@@ -123,9 +125,9 @@ internal class Program
         services.AddScoped<IPaymentsManager, PaymentsManager>();
         services.AddScoped<DataJob>();
         services.AddScoped<IEmailSender, EmailSender>();
-
+        services.AddScoped<IExtrasRepository, ExtrasRepository>();
+        services.AddScoped<IExtrasManager, ExtrasManager>();
         services.AddTransient<JobFactory>();
-
 
         services.AddEndpointsApiExplorer();
         
@@ -169,7 +171,7 @@ internal class Program
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "Введите 'Bearer' [пробел] и затем ваш токен",
+                Description = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅ 'Bearer' [пїЅпїЅпїЅпїЅпїЅпїЅ] пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey

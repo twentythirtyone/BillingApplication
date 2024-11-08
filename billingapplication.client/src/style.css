@@ -1,0 +1,417 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* ДОМАШНЯЯ СТРАНИЦА */
+.home {
+    font-family: 'Inter', sans-serif;
+    background-color: #08070a;
+    background-image: url('assets/img/home_bg.svg');
+    top: 0px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 110vh;
+    background-position: 0 0;
+    animation: moveBackground 1s ease-in-out;
+}
+
+@keyframes moveBackground {
+    0% {
+        background-position: 100px 100px;
+    }
+
+    100% {
+        background-position: 0px 0px;
+    }
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px;
+    background-color: #08070a;
+}
+
+.logo-img {
+    height: 44px;
+    margin-left: 150px;
+}
+
+.logo {
+    font-family: 'Roboto';
+    color: #FFFFFF;
+    font-size: 30px;
+    font-weight: 600;
+    position: absolute;
+    margin-left: 210px;
+}
+
+.login-btn {
+    background-color: #F4F7F3;
+    color: #090708;
+    border: none;
+    border-radius: 15px;
+    font-weight: 700;
+    margin-right: 150px;
+    margin-left: clamp(800px, 25vw, 450px);
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+    .login-btn:hover {
+        background-color: #929491;
+        transition: 0.3s;
+    }
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.role-options {
+    position: absolute;
+    top: 90px;
+    right: 100px;
+    display: flex;
+    flex-direction: column;
+    background-color: #F4F7F3;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 180px;
+    border-radius: 15px;
+}
+
+.role-option {
+    border-radius: 15px;
+    padding: 10px;
+    background-color: #F4F7F3;
+    border: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+}
+
+    .role-option:hover {
+        background-color: #f0f0f0;
+    }
+.content {
+    position: absolute;
+    margin-left: 190px;
+    margin-top: 50px;
+}
+
+    .content h1 {
+        font-size: 120px;
+        font-weight: 800;
+        color: #F4F7F3;
+        max-width: 783px;
+        margin-bottom: 0;
+        animation: fadeInUp 1s ease-out forwards;
+    }
+
+    .content p {
+        margin: 0;
+        font-size: 22px;
+        font-weight: 500;
+        color: #F4F7F370;
+        max-width: 518px;
+        animation: fadeInUp 1.2s ease forwards;
+    }
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(100px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ЛОГИН */
+.login {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1)), url('assets/img/72a857ea84305ceae034c079559d8001.jfif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.center-logo {
+    margin-top: 100px;
+    margin-bottom: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.logo-img1 {
+    height: 55px;
+    margin-left: -30px;
+}
+
+.logo-text1 {
+    margin-left: 60px;
+    font-family: 'Roboto';
+    color: #FFFFFF;
+    font-size: 30px;
+    font-weight: 600;
+}
+
+.log-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 450px;
+    height: 400px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30px;
+    animation: fadeInUp 1.2s ease forwards;
+}
+
+.phone-input, .password-input {
+    
+    width: 80%;
+    height: 45px;
+    padding: 12px;
+    margin: 20px;
+    margin-top: 40px;
+    margin-bottom: -10px;
+    border: none;
+    border-radius: 25px;
+    background: #d1d1d1;
+    color: #000;
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+    text-indent: 25px;
+    border: 2px solid white;
+}
+
+    .phone-input::placeholder,
+    .password-input::placeholder {
+        color: rgba(0, 0, 0, 1); /* Цвет текста-подсказки с прозрачностью 50% */
+        font-weight: 700; /* Можно изменить шрифт или стиль */
+    }
+
+.forget-pass {
+    color: lightgrey;
+    text-decoration: none;
+    margin-left: 200px;
+    font-weight: 700;
+    margin-top: 35px;
+}
+
+    .forget-pass:hover {
+        color: darkgrey;
+        transition: 0.3s;
+    }
+
+.confirm {
+    width: 85%;
+    padding: 12px;
+    height: 75px;
+    margin-top: 25px;
+    background: #CC0000;
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    text-align: left;
+    text-indent: 25px;
+}
+
+    .confirm:hover {
+        background: #B20000;
+    }
+.error {
+    position: absolute;
+    color: grey;
+    margin: 0px;
+    font-size: 20px;
+}
+
+/* Главная */
+.main-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    background-color: #F4F7F3;
+
+}
+
+
+.main-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.header-logo {
+    width: 15px;
+    margin-right: 10px;
+    margin-top: 2px;
+    margin-left: 210px;
+}
+
+.header-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 auto;
+}
+
+.profile-button {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-right: 210px;
+}
+
+.content-layout {
+    display: flex;
+    margin-top: 15px;
+
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #fdecec;
+    padding: 20px;
+    height: 87.5vh;
+    margin-left: 350px;
+}
+.sidebar-title {
+    color: #AB3D36;
+    font-size: 14px;
+    font-weight: 400px;
+    padding: 0px;
+    margin-bottom: 15px;
+}
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 25px;
+    text-decoration: none;
+    color: black;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+    .sidebar-link:hover {
+        background-color: #F5DEDB;
+    }
+
+.navbar-icon {
+    height: 14px;
+    margin-right: 12px;
+}
+
+.navbar-link-text {
+    text-decoration: none;
+    color: black;
+}
+
+.main-page-content {
+    margin-left: 20px;
+
+}
+
+
+/* Панель управления */
+.dashboard {
+    margin-top: 30px;
+}
+
+.phone-number {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.user-info {
+    margin-top: 10px;
+    color: #AB3D36;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.balance-section,
+.monthly-expenses {
+    margin-top: 40px;
+}
+
+    .balance-section h2,
+    .monthly-expenses h2 {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+
+
+.balance {
+    display: flex;
+    gap: 20px;
+}
+
+    .balance div {
+        flex: 1;
+        padding: 10px 50px;
+        border: 1px solid #EDC7C4;
+        border-radius: 8px;
+        font-size: 18px;
+        color: #333;
+        font-size: 16px;
+    }
+
+        .balance div:first-child {
+            text-align: left;
+        }
+
+        .balance div:last-child {
+            text-align: left;
+            color: #e74c3c;
+        }
+
+
+.monthly-expenses div:first-child {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.expenses-chart {
+    height: 150px;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+}
+
+/* Кошелек */
+
+.wallet{
+    margin: 50405405px; /*Test*/
+}
