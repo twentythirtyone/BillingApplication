@@ -17,6 +17,8 @@
       <Version>8.*-*</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="8.0.10" />
+    <PackageReference Include="Quartz" Version="3.13.1" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.13.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 

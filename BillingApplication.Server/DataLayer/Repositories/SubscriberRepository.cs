@@ -121,7 +121,7 @@ namespace BillingApplication.Repositories
                 .Where(x=>x.Tariff.Id == tariffId)
                 .ToListAsync();
 
-            return userEntities.Select(SubscriberMapper.UserEntityToUserVModel);
+            return userEntities.Select(SubscriberMapper.UserEntityToUserVModel)!;
         }
 
         public async Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId)
