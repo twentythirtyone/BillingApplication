@@ -20,127 +20,175 @@ using BillingApplication.Server.Services.Manager.TariffManager;
 using BillingApplication.Server.Services.Manager.MessagesManager;
 using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Middleware;
+using BillingApplication.Server.Quartz;
+using Microsoft.Extensions.Hosting;
+using BillingApplication.Server.Quartz.Workers;
+using BillingApplication.Server.Services.Manager.PaymentsManager;
 
-var builder = WebApplication.CreateBuilder(args);
-builder.Configuration
-    .AddUserSecrets<Program>()
-    .AddEnvironmentVariables();
-
-if (builder.Configuration["db_connection"] == null || builder.Configuration["db_connection"]!.Length == 0) throw new Exception("no_database_connection");
-if (builder.Configuration["secret"] == null || builder.Configuration["secret"]!.Length == 0) throw new Exception("no_secret");
-
-var configuration = builder.Configuration;
-
-builder.Services.AddAuthentication(options =>
+internal class Program
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-    .AddJwtBearer(options =>
+    private static void Main(string[] args)
     {
-        options.TokenValidationParameters = new TokenValidationParameters
+        var builder = WebApplication.CreateBuilder(args);
+        builder.Configuration
+            .AddUserSecrets<Program>()
+            .AddEnvironmentVariables();
+
+        if (builder.Configuration["db_connection"] == null 
+         || builder.Configuration["db_connection"]!.Length == 0) 
+            throw new Exception("no_database_connection");
+        if (builder.Configuration["secret"] == null 
+         || builder.Configuration["secret"]!.Length == 0) 
+            throw new Exception("no_secret");
+
+        var configuration = builder.Configuration;
+
+        AddAuthentication(builder.Services, configuration);
+        ConfigureService(builder.Services, configuration);
+        AddSwagger(builder.Services);
+
+        var app = builder.Build();
+        app.UseMiddleware<JwtBlacklistMiddleware>();
+        app.UseDeveloperExceptionPage();
+        app.UseCors("AllowSpecificOrigin");
+        app.UseReact(config => { });
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
+        app.UseRouting();
+
+        using (var scope = builder.Services.BuildServiceProvider().CreateScope())
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = configuration["Jwt:Issuer"],
-            ValidAudience = configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secret"]!)),
-            RoleClaimType = ClaimTypes.Role
-        };
-    });
-
-builder.Services.AddControllers();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin", builder =>
-    {
-        builder.WithOrigins("https://localhost:5173")
-               .AllowAnyHeader()
-               .AllowAnyMethod()
-               .AllowCredentials();
-    });
-});
-
-builder.Services.AddDbContext<BillingAppDbContext>(options =>
-    options.UseNpgsql(configuration["db_connection"]));
-
-builder.Services.AddScoped<IAuth, Auth>();
-builder.Services.AddScoped<Auth>();
-builder.Services.AddScoped<IEncrypt, Encrypt>();
-builder.Services.AddScoped<ISubscriberRepository, SubscriberRepository>();
-builder.Services.AddScoped<ITariffRepository, TariffRepository>();
-builder.Services.AddScoped<IBundleRepository, BundleRepository>();
-builder.Services.AddScoped<ITariffManager, TariffManager>();
-builder.Services.AddScoped<ISubscriberManager, SubscriberManager>();
-builder.Services.AddScoped<IMessagesManager, MessagesManager>();
-builder.Services.AddScoped<ICallsManager, CallsManager>();
-builder.Services.AddScoped<IBundleManager, BundleManager>();
-builder.Services.AddScoped<RoleAuthorizeFilter>();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BillingApplication API", Version = "v1" });
-
-    // Определяем схему безопасности
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "Введите 'Bearer' [пробел] и затем ваш токен",
-        Name = "Authorization",
-        In = ParameterLocation.Header,
-        Type = SecuritySchemeType.ApiKey
-    });
-
-    // Добавляем требования к безопасности
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
+            var serviceProvider = scope.ServiceProvider;
+            try
             {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
+                DataScheduler.Start(serviceProvider);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
-    });
-});
 
-builder.Services.AddMemoryCache();
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddSingleton<IBlacklistService, BlacklistService>();
+        app.MapControllers();
 
-builder.Services.AddReact();
-builder.Services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
 
-var app = builder.Build();
-app.UseMiddleware<JwtBlacklistMiddleware>();
-app.UseDeveloperExceptionPage();
-app.UseCors("AllowSpecificOrigin");
-app.UseReact(config => { });
-app.UseDefaultFiles();
-app.UseStaticFiles();
-app.UseRouting();
+        app.UseHttpsRedirection();
 
-app.MapControllers();
+        app.UseAuthentication();
+        app.UseAuthorization();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+        app.MapFallbackToFile("/index.html");
+
+        app.Run();
+    }
+
+    private static void ConfigureService(IServiceCollection services, ConfigurationManager configuration)
+    {
+        
+        services.AddControllers();
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin", builder =>
+            {
+                builder.WithOrigins("https://localhost:5173")
+                       .AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowCredentials();
+            });
+        });
+
+        services.AddDbContext<BillingAppDbContext>(options =>
+            options.UseNpgsql(configuration["db_connection"]));
+
+        services.AddScoped<IAuth, Auth>();
+        services.AddScoped<Auth>();
+        services.AddScoped<IEncrypt, Encrypt>();
+        services.AddScoped<ISubscriberRepository, SubscriberRepository>();
+        services.AddScoped<ITariffRepository, TariffRepository>();
+        services.AddScoped<IBundleRepository, BundleRepository>();
+        services.AddScoped<ITariffManager, TariffManager>();
+        services.AddScoped<ISubscriberManager, SubscriberManager>();
+        services.AddScoped<IMessagesManager, MessagesManager>();
+        services.AddScoped<ICallsManager, CallsManager>();
+        services.AddScoped<IBundleManager, BundleManager>();
+        services.AddScoped<RoleAuthorizeFilter>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
+        services.AddScoped<IPaymentsManager, PaymentsManager>();
+        services.AddScoped<DataJob>();
+        services.AddScoped<IEmailSender, EmailSender>();
+
+        services.AddTransient<JobFactory>();
+
+
+        services.AddEndpointsApiExplorer();
+        
+        services.AddMemoryCache();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddSingleton<IBlacklistService, BlacklistService>();
+
+        services.AddReact();
+        services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
+    }
+
+    private static void AddAuthentication(IServiceCollection services, ConfigurationManager configuration)
+    {
+        services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["secret"]!)),
+                    RoleClaimType = ClaimTypes.Role
+                };
+            });
+    }
+
+    private static void AddSwagger(IServiceCollection services)
+    {
+        services.AddSwaggerGen(c =>
+        {
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "BillingApplication API", Version = "v1" });
+
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "Введите 'Bearer' [пробел] и затем ваш токен",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey
+            });
+
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[] {}
+                }
+            });
+        });
+    }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapFallbackToFile("/index.html");
-
-app.Run();

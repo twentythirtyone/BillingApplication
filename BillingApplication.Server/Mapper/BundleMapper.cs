@@ -16,7 +16,7 @@ namespace BillingApplication.Server.Mapper
                 Id = bundleEntity.Id,
                 Internet = bundleEntity.Internet,
                 Interval = bundleEntity.CallTIme,
-                Messages = bundleEntity.Messages
+                Messages = bundleEntity.Messages,
             };
         }
 

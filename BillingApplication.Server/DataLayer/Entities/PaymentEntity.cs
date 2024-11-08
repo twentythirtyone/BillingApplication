@@ -10,7 +10,6 @@ namespace BillingApplication.Entities
     {
         public int? Id { get; set; }
         public int PhoneId { get; set;}
-        public string SenderInfo { get; set; } = "";
         public decimal Amount { get; set; }
         public DateTime Date { get; set; }
         public virtual SubscriberEntity Subscriber { get; set; }
