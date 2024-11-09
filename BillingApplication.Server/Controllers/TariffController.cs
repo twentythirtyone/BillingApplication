@@ -140,5 +140,20 @@ namespace BillingApplication.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("getbundle/{tariffId}")]
+        public async Task<IActionResult> GetBundleByTariffId(int tariffId)
+        {
+            try
+            {
+                var result = await tariffManager.GetBundleByTariffId(tariffId);
+                return Ok(result);
+            }
+            catch (Exception ex) when (ex is TariffNotFoundException)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace BillingApplication.Server.DataLayer.Repositories
         public async Task<int?> AddPayment(Payment entity)
         {
             var paymentEntity = PaymentMapper.BundleModelToBundleEntity(entity);
-
+            paymentEntity.Date = DateTime.UtcNow;
             await context.Payments.AddAsync(paymentEntity!);
             await context.SaveChangesAsync();
 

@@ -1,5 +1,5 @@
 ﻿using BillingApplication.Attributes;
-using BillingApplication.Server.Services.Manager.PaymentsManager;
+using BillingApplication.Server.Services.Manager.TopUpsManager;
 using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using Microsoft.AspNetCore.Mvc;
@@ -8,22 +8,23 @@ namespace BillingApplication.Server.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class PaymentController : ControllerBase
+    [ServiceFilter(typeof(RoleAuthorizeFilter))]
+    public class TopUpsController : ControllerBase
     {
-        public readonly IPaymentsManager paymentsManager;
-        public PaymentController(IPaymentsManager paymentsManager)
+        public readonly ITopUpsManager topUpsManager;
+        public TopUpsController(ITopUpsManager TopUpsManager)
         {
-            this.paymentsManager = paymentsManager;
+            this.topUpsManager = TopUpsManager;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("add")]
-        public async Task<IActionResult> AddPayment([FromBody] Payment model)
+        public async Task<IActionResult> AddTopUp([FromBody] TopUps model)
         {
             try
             {
-                await paymentsManager.AddPayment(model);
+                await topUpsManager.AddTopUp(model);
                 return Ok(model);
             }
             catch (Exception ex)
@@ -35,11 +36,11 @@ namespace BillingApplication.Server.Controllers
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("get")]
-        public async Task<IActionResult> GetPayments()
+        public async Task<IActionResult> GetTopUps()
         {
             try
             {
-                var result = await paymentsManager.GetPayments();
+                var result = await topUpsManager.GetTopUps();
                 return Ok(result);
             }
             catch (Exception ex)
@@ -55,7 +56,7 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                var result = await paymentsManager.GetPaymentById(id);
+                var result = await topUpsManager.GetTopUpById(id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -67,11 +68,11 @@ namespace BillingApplication.Server.Controllers
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("getbyuserid/{id}")]
-        public async Task<IActionResult> GetPaymentsByUserId(int id)
+        public async Task<IActionResult> GetTopUpsByUserId(int id)
         {
             try
             {
-                var result = await paymentsManager.GetPaymentsByUserId(id);
+                var result = await topUpsManager.GetTopUpsByUserId(id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -83,11 +84,11 @@ namespace BillingApplication.Server.Controllers
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("getlastbyuserid/{id}")]
-        public async Task<IActionResult> GetLastPaymentByUserId(int id)
+        public async Task<IActionResult> GetLastTopUpByUserId(int id)
         {
             try
             {
-                var result = await paymentsManager.GetLastPaymentByUserId(id);
+                var result = await topUpsManager.GetLastTopUpByUserId(id);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -9,6 +9,7 @@ using BillingApplication.Server.Services.Models.Utilites;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Services.Auth;
 using BillingApplication.Server.Services.Models.Subscriber.Stats;
+using BillingApplication.Mapper;
 
 namespace BillingApplication.Controllers
 {
@@ -214,6 +215,57 @@ namespace BillingApplication.Controllers
                 return Ok(result);
             }
             catch (PackageNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpPost("paymentfortariff/{userId}")]
+        public async Task<IActionResult> PayForTariff(int userId)
+        {
+            try
+            {
+                var result = await subscriberManager.AddPaymentForTariff(userId);
+                return Ok(result);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpPost("paymentforcurrentusertariff")]
+        public async Task<IActionResult> PayForCurrentUserTariff()
+        {
+            try
+            {
+                var currentUser = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
+                var result = await subscriberManager.AddPaymentForTariff((int)currentUser.Id!);
+                return Ok(result);
+            }
+            catch (UserNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpPost("changetariffto/{tariffId}")]
+        public async Task<IActionResult> ChangeCurrentUserTariff(int tariffId)
+        {
+            try
+            {
+                var currentUser = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
+                currentUser.TariffId = tariffId;
+                await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(currentUser), currentUser.PassportInfo, tariffId);
+                return Ok(currentUser.TariffId);
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
