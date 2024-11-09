@@ -4,6 +4,7 @@ using BillingApplication.Exceptions;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Utilites.Tariff;
 using Microsoft.EntityFrameworkCore;
+using BillingApplication.Services.Models.Utilites;
 
 namespace BillingApplication.DataLayer.Repositories
 {
@@ -87,6 +88,19 @@ namespace BillingApplication.DataLayer.Repositories
             }
             await context.SaveChangesAsync();
             return currentTariff.Id;
+        }
+
+        public async Task<Bundle> GetBundleByTariffId(int? tariffId)
+        {
+            var bundleEntities = context.Tariffs.Select(x => x.Bundle);
+            var bundle = new Bundle();
+            foreach (var bundleEntity in bundleEntities)
+            {
+                bundle.CallTime += bundleEntity.CallTIme;
+                bundle.Messages += bundleEntity.Messages;
+                bundle.Internet += bundleEntity.Internet;
+            }
+            return bundle;
         }
     }
 }

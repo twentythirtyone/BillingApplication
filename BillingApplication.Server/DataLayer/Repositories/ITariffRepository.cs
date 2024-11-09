@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Services.Models.Roles;
+using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.DataLayer.Repositories
@@ -12,5 +13,6 @@ namespace BillingApplication.DataLayer.Repositories
         Task<int?> Delete(int? id);
         Task<Tariffs?> GetByTitle(string title);
         Task<Tariffs?> GetBySubscriber(int userId);
+        Task<Bundle> GetBundleByTariffId(int? tariffId);
     }
 }

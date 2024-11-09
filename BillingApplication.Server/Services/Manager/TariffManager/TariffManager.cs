@@ -3,6 +3,7 @@ using BillingApplication.Services.Auth;
 using BillingApplication.Repositories;
 using BillingApplication.Exceptions;
 using BillingApplication.Services.Models.Utilites.Tariff;
+using BillingApplication.Services.Models.Utilites;
 
 namespace BillingApplication.Server.Services.Manager.TariffManager
 {
@@ -38,6 +39,12 @@ namespace BillingApplication.Server.Services.Manager.TariffManager
         {
             var tariffs = await tariffRepository.Get();
             return tariffs ?? Enumerable.Empty<Tariffs>();
+        }
+
+        public async Task<Bundle> GetBundleByTariffId(int? tariffId)
+        {
+            var bundle = await tariffRepository.GetBundleByTariffId(tariffId);
+            return bundle ?? throw new TariffNotFoundException();
         }
 
         public async Task<Tariffs> GetTariffById(int id)
