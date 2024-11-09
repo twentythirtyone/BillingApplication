@@ -23,7 +23,7 @@ const Dashboard = () => {
           <h2>Месячные расходы</h2>
           <div>10 000Р</div>
           <div className="expenses-chart">
-            {/* Здесь можно использовать Chart.js или другую библиотеку для графика */}
+            {/* Здесь можно использовать Chart.js или другую библиотеку для графика! */}
           </div>
         </div>
         <div className="tariff-section">
