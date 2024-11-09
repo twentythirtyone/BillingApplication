@@ -18,7 +18,8 @@ namespace BillingApplication.Server.Quartz
                 .WithIdentity("MailingTrigger", "default")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                .WithIntervalInMinutes(1)
+                .WithIntervalInHours(24)
+                //.WithIntervalInMinutes(1) для тестирования
                 .RepeatForever())
                 .Build();
 

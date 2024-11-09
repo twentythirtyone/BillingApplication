@@ -105,7 +105,7 @@ namespace BillingApplication.Repositories
             var userEntity = await context.Subscribers
                                .Include(s => s.Tariff)
                                .Include(s => s.PassportInfo)
-                               .FirstOrDefaultAsync(s => s.Number == phone); ;
+                               .FirstOrDefaultAsync(s => s.Number == phone);
             var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
             return user;
         }
@@ -130,6 +130,7 @@ namespace BillingApplication.Repositories
             var bundle = await context.Bundles.FindAsync(extra.Package);
             if (user != null && bundle !=null)
             {
+                //снятие дененег с баланса
                 user.Internet += bundle.Internet;
                 user.MessagesCount += bundle.Messages;
                 user.CallTime += bundle.CallTIme;
@@ -179,6 +180,24 @@ namespace BillingApplication.Repositories
                 return payments.Sum(x => x.Amount);
             }
             return 0;
+        }
+
+        public async Task<int?> AddPaymentForTariff(int subscriberId)
+        {
+            var user = await context.Subscribers
+                            .Include(x => x.Tariff)
+                            .ThenInclude(x => x.Bundle)
+                            .FirstOrDefaultAsync(x => x.Id == subscriberId);
+            if (user != null && user.Balance >= user.Tariff.Price)
+            {
+                user.Balance -= user.Tariff.Price;
+                user.CallTime += user.Tariff.Bundle.CallTIme;
+                user.Internet += user.Tariff.Bundle.Internet;
+                user.MessagesCount += user.Tariff.Bundle.Messages;
+                user.PaymentDate = DateTime.UtcNow;
+                await context.SaveChangesAsync();
+            }
+            return user.Id;
         }
     }
 }

@@ -7,6 +7,7 @@ using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Models.Subscriber;
+using BillingApplication.Server.DataLayer.Repositories;
 
 namespace BillingApplication.Server.Services.Manager.SubscriberManager
 {
@@ -14,10 +15,12 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
     {
         private readonly IEncrypt encrypt;
         private readonly ISubscriberRepository subscriberRepository;
-        public SubscriberManager(IEncrypt encrypt, ISubscriberRepository subscriberRepository)
+        private readonly IPaymentRepository paymentRepository;
+        public SubscriberManager(IEncrypt encrypt, ISubscriberRepository subscriberRepository, IPaymentRepository paymentRepository)
         {
             this.encrypt = encrypt;
             this.subscriberRepository = subscriberRepository;
+            this.paymentRepository = paymentRepository;
         }
         public async Task<int?> CreateSubscriber(Subscriber user, PassportInfo passport, int? tariffId)
         {
@@ -33,16 +36,23 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<int?> UpdateSubscriber(Subscriber user, PassportInfo passport, int? tariffId)
         {
-            var currentUser = await GetSubscriberById(user.Id);
-            int? id = currentUser?.Id;
+            var userUpdate = await GetSubscriberById(user.Id);
+            int? id = userUpdate?.Id;
             if (id is not null)
             {
-                if(currentUser.Password != encrypt.HashPassword(user.Password, user.Salt))
+                if(userUpdate.Password != user.Password)
                 {
                     user.Salt = Guid.NewGuid().ToString();
                     user.Password = encrypt.HashPassword(user.Password, user.Salt);
                 }
-                
+
+                if(userUpdate.Tariff.Id != tariffId)
+                {
+                    userUpdate.CallTime = new TimeSpan(0, 0, 0);
+                    userUpdate.Internet = 0;
+                    userUpdate.Messages = 0;
+                }
+
                 id = await subscriberRepository.Update(user, passport, tariffId);
             }
             else
@@ -74,7 +84,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<IEnumerable<SubscriberViewModel>> GetSubscribers()
         {
-            return await subscriberRepository.GetAll();
+            return await subscriberRepository.GetAll() ?? Enumerable.Empty<SubscriberViewModel>();
         }
 
         public async Task<SubscriberViewModel> GetSubscriberByPhoneNumber(string phoneNumber)
@@ -110,6 +120,20 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         public async Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId)
         {
             return await subscriberRepository.AddExtraToSubscriber(extra, subscriberId) ?? throw new PackageNotFoundException();
+        }
+
+        public async Task<int?> AddPaymentForTariff(int subscriberId)
+        {
+            var user = await subscriberRepository.GetSubscriberById(subscriberId);
+            if (user == null)
+                throw new UserNotFoundException();
+            await paymentRepository.AddPayment(new Payment() 
+            { 
+                Amount = user.Tariff.Price, 
+                Date = DateTime.UtcNow, 
+                PhoneId = (int)user.Id
+            });
+            return await subscriberRepository.AddPaymentForTariff(subscriberId);
         }
     }
 }

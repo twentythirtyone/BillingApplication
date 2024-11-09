@@ -1,7 +1,9 @@
 ﻿using BillingApplication.Exceptions;
+using BillingApplication.Mapper;
 using BillingApplication.Server.DataLayer.Repositories;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
+using BillingApplication.Server.Services.Manager.TariffManager;
 using BillingApplication.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Server.Services.Manager.PaymentsManager
@@ -10,18 +12,24 @@ namespace BillingApplication.Server.Services.Manager.PaymentsManager
     {
         public readonly IPaymentRepository paymentsRepository;
         public readonly ISubscriberManager subscriberManager;
-        public PaymentsManager(IPaymentRepository paymentsRepository, ISubscriberManager subscriberManager)
+        public readonly ITariffManager tariffManager;
+        public PaymentsManager(IPaymentRepository paymentsRepository, ISubscriberManager subscriberManager, ITariffManager tariffManager)
         {
             this.paymentsRepository = paymentsRepository;
             this.subscriberManager = subscriberManager;
+            this.tariffManager = tariffManager;
         }
 
-        public async Task<int?> AddPayment(Payment entity)
+
+        //Единственный метод для снятия денег с баланса, другие не использовать
+        public async Task<int?> AddPayment(Payment payment)
         {
-            var existingUser = await subscriberManager.GetSubscriberById(entity.PhoneId);
+            var existingUser = await subscriberManager.GetSubscriberById(payment.PhoneId);
             if (existingUser == null)
                 throw new UserNotFoundException();
-            return await paymentsRepository.AddPayment(entity);
+            existingUser.Balance -= payment.Amount;
+            await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(existingUser), existingUser.PassportInfo, existingUser.Tariff.Id);
+            return await paymentsRepository.AddPayment(payment);
         }
 
         public async Task<Payment> GetLastPaymentByUserId(int? id)

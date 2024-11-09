@@ -24,6 +24,9 @@ using BillingApplication.Server.Quartz;
 using Microsoft.Extensions.Hosting;
 using BillingApplication.Server.Quartz.Workers;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
+//using BillingApplication.Server.Services.Manager.ExtrasManager;
+using BillingApplication.Server.Services.MailService;
+using BillingApplication.Server.Services.Manager.TopUpsManager;
 
 internal class Program
 {
@@ -46,7 +49,12 @@ internal class Program
         AddAuthentication(builder.Services, configuration);
         ConfigureService(builder.Services, configuration);
         AddSwagger(builder.Services);
-
+        builder.Services.Configure<MailSettings>(
+        builder
+            .Configuration
+            .GetSection(nameof(MailSettings))
+        );
+        builder.Services.AddTransient<IMailService, MailService>();
         var app = builder.Build();
         app.UseMiddleware<JwtBlacklistMiddleware>();
         app.UseDeveloperExceptionPage();
@@ -106,7 +114,7 @@ internal class Program
 
         services.AddDbContext<BillingAppDbContext>(options =>
             options.UseNpgsql(configuration["db_connection"]));
-
+        
         services.AddScoped<IAuth, Auth>();
         services.AddScoped<Auth>();
         services.AddScoped<IEncrypt, Encrypt>();
@@ -121,6 +129,8 @@ internal class Program
         services.AddScoped<RoleAuthorizeFilter>();
         services.AddScoped<IPaymentRepository, PaymentRepository>();
         services.AddScoped<IPaymentsManager, PaymentsManager>();
+        services.AddScoped<ITopUpsRepository, TopUpsRepository>();
+        services.AddScoped<ITopUpsManager, TopUpsManager>();
         services.AddScoped<DataJob>();
         services.AddScoped<IEmailSender, EmailSender>();
 
