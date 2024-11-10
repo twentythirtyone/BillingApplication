@@ -252,7 +252,6 @@ body {
     height: 100vh;
     font-family: 'Roboto', sans-serif;
     background-color: #F4F7F3;
-
 }
 
 
@@ -270,23 +269,34 @@ body {
     width: 15px;
     margin-right: 10px;
     margin-top: 2px;
-    margin-left: 210px;
+    margin-left: 350px;
 }
 
 .header-title {
     font-size: 18px;
     font-weight: 700;
     margin: 0 auto;
+    white-space: nowrap;
 }
 
 .profile-button {
-    background: #f8f8f8;
-    border: 1px solid #ddd;
+    background: #F5DEDB;
+    border: none;
     border-radius: 20px;
     font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
-    padding: 5px 10px;
+    padding: 10px 15px;
+    padding-left: 50px;
     margin-right: 210px;
+    text-align: start;
+}
+
+.profile-button-email {
+    font-size: 11px;
+    font-weight: 400;
+    color: #757575;
+    margin: 0 auto;
 }
 
 .content-layout {
@@ -327,7 +337,7 @@ body {
     }
 
 .navbar-icon {
-    height: 14px;
+    height: 20px;
     margin-right: 12px;
 }
 
@@ -359,43 +369,45 @@ body {
     font-weight: 400;
 }
 
-.balance-section,
-.monthly-expenses {
+.balance-section {
     margin-top: 40px;
+    font-size: 20px;
 }
-
-    .balance-section h2,
-    .monthly-expenses h2 {
-        font-size: 24px;
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
 
 
 .balance {
     display: flex;
     gap: 20px;
+
 }
 
     .balance div {
         flex: 1;
-        padding: 10px 50px;
+        padding: 10px 30px;
         border: 1px solid #F5DEDB;
-        border-radius: 8px;
+        border-radius: 15px;
         font-size: 18px;
         color: #333;
         font-size: 16px;
     }
 
         .balance div:first-child {
+            padding-top: 20px;
             text-align: left;
         }
 
         .balance div:last-child {
+            padding-top: 20px;
             text-align: left;
-            color: #e74c3c;
         }
 
+.balance-sum {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
 .monthly-expenses div:first-child {
     font-size: 24px;

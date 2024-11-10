@@ -15,21 +15,26 @@ export const UserProvider = ({ children }) => {
         }
     }, []);
 
-    const fetchUserData = async (token) => {
+    const fetchUserData = async () => {
         try {
-            const response = await fetch("https://localhost:7262/Subscriber/getcurrentuser", {
+            const response = await fetch('https://localhost:7262/Subscriber/getcurrentuser', {
+                method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+                    'Accept': '*/*',
+                    'Content-Type': 'application/json',  // Укажите нужный тип контента, если требуется
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Добавьте токен, если он необходим для авторизации
+                },
+                body: JSON.stringify({}) // Пустое тело, если сервер не требует данных
             });
-            if (response.ok) {
-                const data = await response.json();
-                setUserData(data);
-                console.log(userData);
+
+            if (!response.ok) {
+                throw new Error(`Ошибка: ${response.status}`);
             }
+
+            const data = await response.json();
+            setUserData(data);
         } catch (error) {
-            console.error("Error fetching user data:", error);
+            console.error("Failed to fetch user data:", error);
         }
     };
 
