@@ -7,7 +7,7 @@ namespace BillingApplication.Server.Mapper
 {
     public static class PaymentMapper
     {
-        public static Payment? BundleEntityToBundleModel(PaymentEntity? paymentEntity)
+        public static Payment? PaymentEntityToPaymentModel(PaymentEntity? paymentEntity)
         {
             if (paymentEntity == null)
                 return null;
@@ -20,7 +20,7 @@ namespace BillingApplication.Server.Mapper
             };
         }
 
-        public static PaymentEntity? BundleModelToBundleEntity(Payment? paymentEntity)
+        public static PaymentEntity? PaymentModelToPaymenEntity(Payment? paymentEntity)
         {
             if (paymentEntity == null)
                 return null;

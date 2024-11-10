@@ -21,7 +21,7 @@ namespace BillingApplication.Repositories
         Task<SubscriberViewModel?> GetSubscriberByEmail(string email);
         Task<SubscriberViewModel?> GetSubscriberByPhone(string phone);
         Task<IEnumerable<SubscriberViewModel>> GetSubscribersByTariff(int? tariffId);
-        Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId);
+        Task<int?> AddExtraToSubscriber(int extraId, int subscriberId);
         Task<decimal> GetExpensesCurrentMonth(int? subscriberId);
         Task<decimal> GetExpensesCurrentYear(int? subscriberId);
         Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId);

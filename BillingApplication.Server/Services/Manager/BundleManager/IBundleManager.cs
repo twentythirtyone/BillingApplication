@@ -9,6 +9,5 @@ namespace BillingApplication.Server.Services.Manager.BundleManager
         Task<IEnumerable<Bundle>> GetAllBundles();
         Task<Bundle?> GetBundleById(int id);
         Task<int?> UpdateBundle(Bundle bundleModel);
-        Task<Bundle> GetRemainingUserPackages(int? subscriberId);
     }
 }

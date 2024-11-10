@@ -48,9 +48,9 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
                 if(userUpdate.Tariff.Id != tariffId)
                 {
-                    userUpdate.CallTime = new TimeSpan(0, 0, 0);
-                    userUpdate.Internet = 0;
-                    userUpdate.Messages = 0;
+                    user.CallTime = new TimeSpan(0, 0, 0);
+                    user.Internet = 0;
+                    user.Messages = 0;
                 }
 
                 id = await subscriberRepository.Update(user, passport, tariffId);
@@ -117,9 +117,9 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             return await subscriberRepository.GetExpensesInMonth(month, subscriberId);
         }
 
-        public async Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId)
+        public async Task<int?> AddExtraToSubscriber(int extraId, int subscriberId)
         {
-            return await subscriberRepository.AddExtraToSubscriber(extra, subscriberId) ?? throw new PackageNotFoundException();
+            return await subscriberRepository.AddExtraToSubscriber(extraId, subscriberId) ?? throw new PackageNotFoundException();
         }
 
         public async Task<int?> AddPaymentForTariff(int subscriberId)

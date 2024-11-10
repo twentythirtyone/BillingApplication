@@ -45,7 +45,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getusersbytariff/{id}")]
+        [HttpGet("get_users_by_tariff/{id}")]
         public async Task<IActionResult> GetSubscribersByTariff(int id)
         {
             try
@@ -61,7 +61,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getuserbyid/{id}")]
+        [HttpGet("get_user_by_id/{id}")]
         public async Task<IActionResult> GetSubscriberById(int? id)
         {
             try
@@ -77,7 +77,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getuserbyphone/{phoneNumber}")]
+        [HttpGet("get_user_by_phone/{phoneNumber}")]
         public async Task<IActionResult> GetSubscriberByPhoneNumber(string phoneNumber)
         {
             try
@@ -93,7 +93,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getuserbyemail/{email}")]
+        [HttpGet("get_user_by_email/{email}")]
         public async Task<IActionResult> GetSubscriberByEmail(string email)
         {
             try
@@ -110,7 +110,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getusers")]
+        [HttpGet("get_users")]
         public async Task<IActionResult> GetSubscribers()
         {
             try
@@ -126,12 +126,29 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("addextratouser/{userId}")]
-        public async Task<IActionResult> AddExtraToSubscriber(AddExtraToUserModel model)
+        [HttpPost("add_extra_to_user/{userId}")]
+        public async Task<IActionResult> AddExtraToSubscriber(int extraId, int userId)
         {
             try
             {
-                var result = await subscriberManager.AddExtraToSubscriber(model.Extra, model.UserId);
+                var result = await subscriberManager.AddExtraToSubscriber(extraId, userId);
+                return Ok(result);
+            }
+            catch (PackageNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpPost("add_extra_to_current_user")]
+        public async Task<IActionResult> AddExtraToCurrentSubscriber(int extraId)
+        {
+            try
+            {
+                var currentUserId = auth.GetCurrentUserId();
+                var result = await subscriberManager.AddExtraToSubscriber(extraId, (int)currentUserId!);
                 return Ok(result);
             }
             catch (PackageNotFoundException ex)
@@ -151,7 +168,8 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [HttpPost("getexpensescurrentmonth/{userId}")]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("get_expenses_current_month/{userId}")]
         public async Task<IActionResult> GetExpensesCurrentMonth(int? userId)
         {
             try
@@ -169,7 +187,8 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [HttpPost("getexpensescurrentyear/{userId}")]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("get_expenses_current_year/{userId}")]
         public async Task<IActionResult> GetExpensesCurrentYear(int? userId)
         {
             try
@@ -187,16 +206,17 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [HttpPost("getexpensesinmonth")]
-        public async Task<IActionResult> GetExpensesInMonth(GetExpensesInMonthModel model)
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("get_expenses_in_month/{month}/user{userId}")]
+        public async Task<IActionResult> GetExpensesInMonth(int month, int userId)
         {
             try
             {
                 return await ValidateAccessAndDoFunc(async id =>
                 {
-                    var result = await subscriberManager.GetExpensesInMonth(model.Month, model.UserId);
+                    var result = await subscriberManager.GetExpensesInMonth((Monthes)month, id);
                     return Ok(result);
-                }, model.UserId);
+                }, userId);
             }
             catch (PackageNotFoundException ex)
             {
@@ -204,9 +224,63 @@ namespace BillingApplication.Controllers
             }
         }
 
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpGet("get_expenses_current_user_current_month")]
+        public async Task<IActionResult> GetExpensesCurrentUserCurrentMonth()
+        {
+            try
+            {
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesCurrentMonth(id);
+                    return Ok(result);
+                }, auth.GetCurrentUserId());
+            }
+            catch (PackageNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [HttpPost("getcurrentuser")]
+        [HttpGet("get_expenses_current_user_current_year/{userId}")]
+        public async Task<IActionResult> GetExpensesCurrentUserCurrentYear()
+        {
+            try
+            {
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesCurrentYear(id);
+                    return Ok(result);
+                }, auth.GetCurrentUserId());
+            }
+            catch (PackageNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [HttpGet("get_expenses_current_user_in_month/{month}")]
+        public async Task<IActionResult> GetExpensesCurrentUserInMonth(int month)
+        {
+            try
+            {
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesInMonth((Monthes)month, id);
+                    return Ok(result);
+                }, auth.GetCurrentUserId());
+            }
+            catch (PackageNotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [HttpGet("get_current_user")]
         public async Task<IActionResult> GetCurrentUser()
         {
             try
@@ -222,7 +296,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("paymentfortariff/{userId}")]
+        [HttpPost("payment_for_tariff/{userId}")]
         public async Task<IActionResult> PayForTariff(int userId)
         {
             try
@@ -238,13 +312,13 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpPost("paymentforcurrentusertariff")]
+        [HttpPost("payment_for_current_user_tariff")]
         public async Task<IActionResult> PayForCurrentUserTariff()
         {
             try
             {
-                var currentUser = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
-                var result = await subscriberManager.AddPaymentForTariff((int)currentUser.Id!);
+                var id = auth.GetCurrentUserId();
+                var result = await subscriberManager.AddPaymentForTariff((int)id);
                 return Ok(result);
             }
             catch (UserNotFoundException ex)
@@ -255,7 +329,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpPost("changetariffto/{tariffId}")]
+        [HttpPost("change_tariff_to/{tariffId}")]
         public async Task<IActionResult> ChangeCurrentUserTariff(int tariffId)
         {
             try
