@@ -1,4 +1,5 @@
-﻿using BillingApplication.Services.Models.Utilites.Tariff;
+﻿using BillingApplication.Services.Models.Utilites;
+using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.Server.Services.Manager.TariffManager
 {
@@ -12,6 +13,7 @@ namespace BillingApplication.Server.Services.Manager.TariffManager
         Task<string> DeleteTariff(int id);
         Task<IEnumerable<Tariffs?>> GetAllTariffs();
         Task<Tariffs> GetTariffBySubscriberId(int userId);
+        Task<Bundle> GetBundleByTariffId(int? tariffId);
 
     }
 }
