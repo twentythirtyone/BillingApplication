@@ -10,6 +10,7 @@ using BillingApplication.Server.Exceptions;
 using BillingApplication.Services.Auth;
 using BillingApplication.Server.Services.Models.Subscriber.Stats;
 using BillingApplication.Mapper;
+using BillingApplication.Server.Controllers;
 
 namespace BillingApplication.Controllers
 {
@@ -19,10 +20,13 @@ namespace BillingApplication.Controllers
     {
         private readonly ISubscriberManager subscriberManager;
         private readonly IAuth auth;
-        public SubscriberController(ISubscriberManager subscriberManager, IAuth auth)
+        private readonly ILogger<SubscriberController> logger;
+
+        public SubscriberController(ISubscriberManager subscriberManager, IAuth auth, ILogger<SubscriberController> logger)
         {
             this.subscriberManager = subscriberManager;
             this.auth = auth;
+            this.logger = logger;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
@@ -50,7 +54,7 @@ namespace BillingApplication.Controllers
                 var result = await subscriberManager.GetSubscriberById(userId);
                 return Ok(result);
             }
-            catch (TariffNotFoundException ex)
+            catch (UserNotFoundException ex)
             {
                 return BadRequest(ex.Message);
             }

@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Attributes;
+using BillingApplication.Controllers;
 using BillingApplication.Server.Services.Manager.TopUpsManager;
 using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models.Subscriber.Stats;
@@ -12,9 +13,11 @@ namespace BillingApplication.Server.Controllers
     public class TopUpsController : ControllerBase
     {
         public readonly ITopUpsManager topUpsManager;
-        public TopUpsController(ITopUpsManager TopUpsManager)
+        public readonly ILogger<TopUpsController> logger;
+        public TopUpsController(ITopUpsManager topUpsManager, ILogger<TopUpsController> logger)
         {
-            this.topUpsManager = TopUpsManager;
+            this.topUpsManager = topUpsManager;
+            this.logger = logger;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]

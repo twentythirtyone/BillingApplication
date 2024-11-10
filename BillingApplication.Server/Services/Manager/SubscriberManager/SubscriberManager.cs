@@ -24,7 +24,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         }
         public async Task<int?> CreateSubscriber(Subscriber user, PassportInfo passport, int? tariffId)
         {
-            var currentUser = await GetSubscriberByPhoneNumber(user.Number);
+            var currentUser = await subscriberRepository.GetSubscriberById(user.Id);
             int? id = currentUser?.Id;
             if (id != null)
                 throw new UserNotFoundException("Такой телефон уже существует");
@@ -36,7 +36,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<int?> UpdateSubscriber(Subscriber user, PassportInfo passport, int? tariffId)
         {
-            var userUpdate = await GetSubscriberById(user.Id);
+            var userUpdate = await subscriberRepository.GetSubscriberById(user.Id);
             int? id = userUpdate?.Id;
             if (id is not null)
             {
@@ -79,7 +79,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<SubscriberViewModel?> GetSubscriberById(int? id)
         {
-            return await subscriberRepository.GetSubscriberById(id);
+            return await subscriberRepository.GetSubscriberById(id) ?? throw new UserNotFoundException("Пользователь не найден"); ;
         }
 
         public async Task<IEnumerable<SubscriberViewModel>> GetSubscribers()
@@ -89,7 +89,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<SubscriberViewModel> GetSubscriberByPhoneNumber(string phoneNumber)
         {
-            return await subscriberRepository.GetSubscriberByPhone(phoneNumber) ?? throw new UserNotFoundException("Номер телефона не найден");
+            return await subscriberRepository.GetSubscriberByPhone(phoneNumber) ?? throw new UserNotFoundException("Телефон не найден");
         }
 
         public async Task<SubscriberViewModel> GetSubscriberByEmail(string email)

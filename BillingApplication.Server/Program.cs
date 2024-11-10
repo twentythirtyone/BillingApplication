@@ -26,35 +26,70 @@ using BillingApplication.Server.Services.Manager.PaymentsManager;
 using BillingApplication.Server.Services.MailService;
 using BillingApplication.Server.Services.Manager.TopUpsManager;
 using BillingApplication.Server.Services.Manager.ExtrasManager;
+using NLog.Web;
+using NLog;
 
 internal class Program
 {
     private static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
-        builder.Configuration
-            .AddUserSecrets<Program>()
-            .AddEnvironmentVariables();
+        var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+        logger.Debug("Initialize");
+        try
+        {
+            var builder = WebApplication.CreateBuilder(args);
+            ConfigureLogging(builder);
 
-        if (builder.Configuration["db_connection"] == null 
-         || builder.Configuration["db_connection"]!.Length == 0) 
+            builder.Configuration
+                .AddUserSecrets<Program>()
+                .AddEnvironmentVariables();
+
+            CheckSecretsAndDbConnection(builder);
+
+            var configuration = builder.Configuration;
+
+            AddAuthentication(builder.Services, configuration);
+            ConfigureService(builder.Services, configuration);
+            AddSwagger(builder.Services);
+
+            var app = builder.Build();
+
+            ConfigureMiddleWare(app);
+
+            app.Run();
+            
+        }
+        catch(Exception exception)
+        {
+            logger.Error(exception, "Stopped program because of exception");
+            throw;
+        }
+        finally
+        {
+            NLog.LogManager.Shutdown();
+        }
+        
+    }
+    
+    private static void ConfigureLogging(WebApplicationBuilder builder)
+    {
+        builder.Logging.ClearProviders();
+        builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+        builder.Host.UseNLog();
+    }
+
+    private static void CheckSecretsAndDbConnection(WebApplicationBuilder builder)
+    {
+        if (builder.Configuration["db_connection"] == null
+         || builder.Configuration["db_connection"]!.Length == 0)
             throw new Exception("no_database_connection");
-        if (builder.Configuration["secret"] == null 
-         || builder.Configuration["secret"]!.Length == 0) 
+        if (builder.Configuration["secret"] == null
+         || builder.Configuration["secret"]!.Length == 0)
             throw new Exception("no_secret");
+    }
 
-        var configuration = builder.Configuration;
-
-        AddAuthentication(builder.Services, configuration);
-        ConfigureService(builder.Services, configuration);
-        AddSwagger(builder.Services);
-        builder.Services.Configure<MailSettings>(
-        builder
-            .Configuration
-            .GetSection(nameof(MailSettings))
-        );
-        builder.Services.AddTransient<IMailService, MailService>();
-        var app = builder.Build();
+    private static void ConfigureMiddleWare(WebApplication app)
+    {
         app.UseMiddleware<JwtBlacklistMiddleware>();
         app.UseDeveloperExceptionPage();
         app.UseCors("AllowSpecificOrigin");
@@ -62,20 +97,6 @@ internal class Program
         app.UseDefaultFiles();
         app.UseStaticFiles();
         app.UseRouting();
-
-        using (var scope = builder.Services.BuildServiceProvider().CreateScope())
-        {
-
-            var serviceProvider = scope.ServiceProvider;
-            try
-            {
-                DataScheduler.Start(serviceProvider);
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-        }
 
         app.MapControllers();
 
@@ -92,8 +113,6 @@ internal class Program
         app.UseAuthorization();
 
         app.MapFallbackToFile("/index.html");
-
-        app.Run();
     }
 
     private static void ConfigureService(IServiceCollection services, ConfigurationManager configuration)
@@ -114,7 +133,11 @@ internal class Program
 
         services.AddDbContext<BillingAppDbContext>(options =>
             options.UseNpgsql(configuration["db_connection"]));
-        
+
+        services.Configure<MailSettings>(
+            configuration.GetSection(nameof(MailSettings))
+        );
+
         services.AddScoped<IAuth, Auth>();
         services.AddScoped<Auth>();
         services.AddScoped<IEncrypt, Encrypt>();
@@ -135,7 +158,11 @@ internal class Program
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IExtrasRepository, ExtrasRepository>();
         services.AddScoped<IExtrasManager, ExtrasManager>();
+        
         services.AddTransient<JobFactory>();
+        services.AddTransient<IMailService, MailService>();
+
+        services.AddHostedService<DataSchedulerService>();
 
         services.AddEndpointsApiExplorer();
         
@@ -144,7 +171,9 @@ internal class Program
         services.AddSingleton<IBlacklistService, BlacklistService>();
 
         services.AddReact();
-        services.AddJsEngineSwitcher(options => options.DefaultEngineName = ChakraCoreJsEngine.EngineName).AddChakraCore();
+        services.AddJsEngineSwitcher(options => 
+            options.DefaultEngineName = ChakraCoreJsEngine.EngineName)
+            .AddChakraCore();
     }
 
     private static void AddAuthentication(IServiceCollection services, ConfigurationManager configuration)
@@ -179,7 +208,7 @@ internal class Program
 
             c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                Description = "������� 'Bearer' [������] � ����� ��� �����",
+                Description = "Введите 'Bearer' [пробел] для авторизации",
                 Name = "Authorization",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey

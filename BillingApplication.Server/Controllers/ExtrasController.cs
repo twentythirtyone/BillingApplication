@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Attributes;
+using BillingApplication.Server.Controllers;
 using BillingApplication.Server.Services.Manager.ExtrasManager;
 using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models.Utilites;
@@ -11,10 +12,11 @@ namespace BillingApplication.Controllers
     public class ExtrasController : ControllerBase
     {
         private readonly IExtrasManager extrasManager;
-
-        public ExtrasController(IExtrasManager extrasManager)
+        private readonly ILogger<ExtrasController> logger;
+        public ExtrasController(IExtrasManager extrasManager, ILogger<ExtrasController> logger)
         {
             this.extrasManager = extrasManager;
+            this.logger = logger;
         }
 
         [HttpGet]

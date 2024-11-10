@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Attributes;
+using BillingApplication.Controllers;
 using BillingApplication.Exceptions;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Manager.BundleManager;
@@ -14,10 +15,12 @@ namespace BillingApplication.Server.Controllers
     public class BundleController : ControllerBase
     {
         private readonly IBundleManager bundleManager;
+        private readonly ILogger<BundleController> logger;
 
-        public BundleController(IBundleManager bundleManager)
+        public BundleController(IBundleManager bundleManager, ILogger<BundleController> logger)
         {
             this.bundleManager = bundleManager;
+            this.logger = logger;
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]

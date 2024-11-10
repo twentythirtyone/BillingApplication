@@ -11,9 +11,11 @@ namespace BillingApplication.Server.Controllers
     public class PaymentController : ControllerBase
     {
         public readonly IPaymentsManager paymentsManager;
-        public PaymentController(IPaymentsManager paymentsManager)
+        private readonly ILogger<MailController> logger;
+        public PaymentController(IPaymentsManager paymentsManager, ILogger<MailController> logger)
         {
             this.paymentsManager = paymentsManager;
+            this.logger = logger;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]

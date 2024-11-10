@@ -14,10 +14,12 @@ namespace BillingApplication.Controllers
     public class TariffController : ControllerBase
     {
         private readonly ITariffManager tariffManager;
+        private readonly ILogger<SubscriberController> logger;
 
-        public TariffController(ITariffManager tariffManager)
+        public TariffController(ITariffManager tariffManager, ILogger<SubscriberController> logger)
         {
             this.tariffManager = tariffManager;
+            this.logger = logger;
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
