@@ -20,6 +20,7 @@ namespace BillingApplication.Server.Services.Manager.BundleManager
         public async Task<int?> DeleteBundle(int id)
         {
             var result = await bundleRepository.Delete(id);
+            if (id == 2) throw new BundleNotFoundException("Нельзя удалять стандартный пакет.");
             return result ?? throw new BundleNotFoundException();
         }
 
@@ -33,12 +34,6 @@ namespace BillingApplication.Server.Services.Manager.BundleManager
         {
             var result = await bundleRepository.GetById(id);
             return result ?? throw new BundleNotFoundException();
-        }
-
-        //TODO:
-        public Task<Bundle> GetRemainingUserPackages(int? subscriberId)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<int?> UpdateBundle(Bundle bundleModel)

@@ -1,5 +1,7 @@
 ﻿using BillingApplication.Entities;
+using BillingApplication.Mapper;
 using BillingApplication.Server.Mapper;
+using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using BillingApplication.Services.Models.Utilites;
 using Microsoft.EntityFrameworkCore;
@@ -15,20 +17,25 @@ namespace BillingApplication.Server.DataLayer.Repositories
             this.context = context;
         }
 
-        public async Task<int?> AddPayment(Payment entity)
+        public async Task<int?> AddPayment(Payment payment)
         {
-            var paymentEntity = PaymentMapper.BundleModelToBundleEntity(entity);
-            paymentEntity.Date = DateTime.UtcNow;
-            await context.Payments.AddAsync(paymentEntity!);
-            await context.SaveChangesAsync();
+            var paymentEntity = PaymentMapper.PaymentModelToPaymenEntity(payment);
+            paymentEntity!.Date = DateTime.UtcNow;
+            var existingUser = await context.Subscribers.FindAsync(paymentEntity.PhoneId);
+            if (existingUser != null)
+            {
+                existingUser!.Balance -= payment.Amount;
+                await context.Payments.AddAsync(paymentEntity!);
+                await context.SaveChangesAsync();
+            }
 
-            return paymentEntity?.Id;
+            return existingUser?.Id;
         }
 
         public async Task<Payment> GetPaymentById(int id)
         {
             var payment = await context.Payments.FindAsync(id);
-            return PaymentMapper.BundleEntityToBundleModel(payment)!;
+            return PaymentMapper.PaymentEntityToPaymentModel(payment)!;
         }
 
         public async Task<IEnumerable<Payment>> GetPaymentsByUserId(int? id)
@@ -39,7 +46,7 @@ namespace BillingApplication.Server.DataLayer.Repositories
 
             return payments
                     .Where(x => x.PhoneId == id)
-                    .Select(PaymentMapper.BundleEntityToBundleModel)!;
+                    .Select(PaymentMapper.PaymentEntityToPaymentModel)!;
         }
 
         public async Task<IEnumerable<Payment>> GetPayments()
@@ -49,7 +56,7 @@ namespace BillingApplication.Server.DataLayer.Repositories
                 .ToListAsync();
 
             return payments
-                    .Select(PaymentMapper.BundleEntityToBundleModel)!;
+                    .Select(PaymentMapper.PaymentEntityToPaymentModel)!;
         }
 
         public async Task<Payment> GetLastPaymentByUserId(int? id)
@@ -58,7 +65,7 @@ namespace BillingApplication.Server.DataLayer.Repositories
                 .AsNoTracking()
                 .ToListAsync();
 
-            var payment = PaymentMapper.BundleEntityToBundleModel(payments.LastOrDefault(x=>x.PhoneId == id));
+            var payment = PaymentMapper.PaymentEntityToPaymentModel(payments.LastOrDefault(x=>x.PhoneId == id));
 
             return payment;
         }

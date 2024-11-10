@@ -16,7 +16,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         Task<int?> UpdateSubscriber(Subscriber user, PassportInfo passport, int? tariffId);
         Task<IEnumerable<SubscriberViewModel>> GetSubscribers();
         Task<SubscriberViewModel?> ValidateSubscriberCredentials(string number, string password);
-        Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId);
+        Task<int?> AddExtraToSubscriber(int extraId, int subscriberId);
         Task<decimal> GetExpensesCurrentMonth(int? subscriberId);
         Task<decimal> GetExpensesCurrentYear(int? subscriberId);
         Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId);

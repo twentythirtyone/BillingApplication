@@ -2,6 +2,7 @@
 using BillingApplication.Server.Services.Models.Subscriber;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber;
+using BillingApplication.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Mapper
 {
@@ -49,7 +50,6 @@ namespace BillingApplication.Mapper
                 TariffId = userEntity.TariffId,
                 Tariff = TariffMapper.TariftEntityToTarifModel(userEntity.Tariff),
                 PassportInfo = PassportMapper.PassportEntityToPassportModel(userEntity.PassportInfo)!
-
             };
         }
 
@@ -64,6 +64,11 @@ namespace BillingApplication.Mapper
                 Password = userModel.Password ?? "",
                 Number = userModel.Number ?? "",
                 Tariff = tariff,
+                Balance = userModel.Balance,
+                CallTime = userModel.CallTime,
+                Internet = userModel.Internet,
+                MessagesCount = userModel.Messages,
+                PaymentDate = userModel.PaymentDate,
                 PassportInfo = PassportMapper.PassportModelToPassportEntity(passportInfo)
             };
         }
@@ -78,6 +83,10 @@ namespace BillingApplication.Mapper
             userEntity.Number = userModel.Number ?? "";
             userEntity.Tariff = tariff;
             userEntity.PassportInfo = passportInfo;
+            userEntity.CallTime = userModel.CallTime;
+            userEntity.Internet = userModel.Internet;
+            userEntity.MessagesCount = userModel.Messages;
+
             return userEntity;
         }
 

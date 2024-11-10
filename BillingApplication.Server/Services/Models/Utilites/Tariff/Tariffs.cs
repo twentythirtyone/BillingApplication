@@ -12,6 +12,7 @@ namespace BillingApplication.Services.Models.Utilites.Tariff
         public required string Title { get; set; }
         public string Description { get; set; } = "";
         public decimal Price { get; set; }
+        public Bundle Bundle { get; set; }
 
     }
 }

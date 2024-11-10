@@ -17,16 +17,21 @@ using BillingApplication.Services.Models.Utilites;
 using System.Reflection.Metadata.Ecma335;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Models.Subscriber;
+using BillingApplication.Server.Services.Manager.PaymentsManager;
+using BillingApplication.Services.Models.Subscriber.Stats;
+using BillingApplication.Server.DataLayer.Repositories;
 
 namespace BillingApplication.Repositories
 {
     public class SubscriberRepository : ISubscriberRepository
     {
         private readonly BillingAppDbContext context;
+        private readonly IPaymentRepository paymentsRepository;
 
-        public SubscriberRepository(BillingAppDbContext context)
+        public SubscriberRepository(BillingAppDbContext context, IPaymentRepository paymentsRepository)
         {
             this.context = context;
+            this.paymentsRepository = paymentsRepository;
         }
         
         public async Task<int?> Create(Subscriber user, PassportInfo passportInfo, int? tariffId)
@@ -73,6 +78,7 @@ namespace BillingApplication.Repositories
         {
             var userEntities = await context.Subscribers
                 .Include(s => s.Tariff)
+                .ThenInclude(x=>x.Bundle)
                 .Include(s => s.PassportInfo)
                 .AsNoTracking()
                 .ToListAsync();
@@ -86,7 +92,6 @@ namespace BillingApplication.Repositories
                                 .Include(s=>s.Tariff)
                                 .ThenInclude(x=>x.Bundle)
                                 .Include(s=>s.PassportInfo)
-
                                 .FirstOrDefaultAsync(s=>s.Id == id);
             var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
             return user;
@@ -94,21 +99,15 @@ namespace BillingApplication.Repositories
 
         public async Task<SubscriberViewModel?> GetSubscriberByEmail(string email)
         {
-            var userEntity = await context.Subscribers
-                                .Include(s => s.Tariff)
-                                .Include(s => s.PassportInfo)
-                                .FirstOrDefaultAsync(s => s.Email == email); ;
-            var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
+            var users = await GetAll();
+            var user = users.FirstOrDefault(x => x!.Email == email);
             return user;
         }
 
         public async Task<SubscriberViewModel?> GetSubscriberByPhone(string phone)
         {
-            var userEntity = await context.Subscribers
-                               .Include(s => s.Tariff)
-                               .Include(s => s.PassportInfo)
-                               .FirstOrDefaultAsync(s => s.Number == phone);
-            var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
+            var users = await GetAll();
+            var user = users.FirstOrDefault(x => x!.Number == phone);
             return user;
         }
 
@@ -116,26 +115,29 @@ namespace BillingApplication.Repositories
         {
             var existingTariff = await context.Tariffs.FindAsync(tariffId);
             if (existingTariff == null) throw new TariffNotFoundException();
-            var userEntities = await context.Subscribers
-                .Include(s => s.Tariff)
-                .Include(s => s.PassportInfo)
-                .AsNoTracking()
-                .Where(x=>x.Tariff.Id == tariffId)
-                .ToListAsync();
+            var users = await GetAll();
+            var userEntities = users.Where(x => x!.Tariff.Id == tariffId);
 
-            return userEntities.Select(SubscriberMapper.UserEntityToUserVModel)!;
+            return userEntities!;
         }
 
-        public async Task<int?> AddExtraToSubscriber(Extras extra, int subscriberId)
+        public async Task<int?> AddExtraToSubscriber(int extraId, int subscriberId)
         {
             var user = await context.Subscribers.FindAsync(subscriberId);
-            var bundle = await context.Bundles.FindAsync(extra.Package);
-            if (user != null && bundle !=null)
+            var existingExtra = await context.Extras
+                .Include(x=>x.Bundle)
+                .FirstOrDefaultAsync(x=>x.Id == extraId);
+            if (user != null && existingExtra != null)
             {
-                //снятие дененег с баланса
-                user.Internet += bundle.Internet;
-                user.MessagesCount += bundle.Messages;
-                user.CallTime += bundle.CallTIme;
+                await paymentsRepository.AddPayment(new Payment()
+                {
+                    Date = DateTime.UtcNow,
+                    Amount = existingExtra.Price,
+                    PhoneId = subscriberId
+                });
+                user.Internet += existingExtra.Bundle.Internet;
+                user.MessagesCount += existingExtra.Bundle.Messages;
+                user.CallTime += existingExtra.Bundle.CallTIme;
                 return await context.SaveChangesAsync();
             }
             return null;
@@ -186,16 +188,13 @@ namespace BillingApplication.Repositories
 
         public async Task<int?> AddPaymentForTariff(int subscriberId)
         {
-            var user = await context.Subscribers
-                            .Include(x => x.Tariff)
-                            .ThenInclude(x => x.Bundle)
-                            .FirstOrDefaultAsync(x => x.Id == subscriberId);
+            var user = await GetSubscriberById(subscriberId);
             if (user != null && user.Balance >= user.Tariff.Price)
             {
                 user.Balance -= user.Tariff.Price;
-                user.CallTime += user.Tariff.Bundle.CallTIme;
+                user.CallTime += user.Tariff.Bundle.CallTime;
                 user.Internet += user.Tariff.Bundle.Internet;
-                user.MessagesCount += user.Tariff.Bundle.Messages;
+                user.Messages += user.Tariff.Bundle.Messages;
                 user.PaymentDate = DateTime.UtcNow;
                 await context.SaveChangesAsync();
             }

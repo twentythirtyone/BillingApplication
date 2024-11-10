@@ -24,12 +24,7 @@ namespace BillingApplication.Server.Services.Manager.PaymentsManager
         //Единственный метод для снятия денег с баланса, другие не использовать
         public async Task<int?> AddPayment(Payment payment)
         {
-            var existingUser = await subscriberManager.GetSubscriberById(payment.PhoneId);
-            if (existingUser == null)
-                throw new UserNotFoundException();
-            existingUser.Balance -= payment.Amount;
-            await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(existingUser), existingUser.PassportInfo, existingUser.Tariff.Id);
-            return await paymentsRepository.AddPayment(payment);
+            return await paymentsRepository.AddPayment(payment) ?? throw new UserNotFoundException();
         }
 
         public async Task<Payment> GetLastPaymentByUserId(int? id)

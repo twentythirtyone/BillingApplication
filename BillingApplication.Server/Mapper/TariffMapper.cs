@@ -1,5 +1,6 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Entities;
+using BillingApplication.Server.Mapper;
 using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.Mapper
@@ -28,7 +29,8 @@ namespace BillingApplication.Mapper
                 Id = tariffModel.Id,
                 Title = tariffModel.Title ?? "None",
                 Description = tariffModel.Description ?? "None",
-                Price = tariffModel.Price
+                Price = tariffModel.Price,
+                Bundle = BundleMapper.BundleEntityToBundleModel(tariffModel.Bundle)
             };
         }
 
