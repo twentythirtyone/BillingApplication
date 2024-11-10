@@ -4,6 +4,7 @@ using BillingApplication.Server.Services.Manager.BundleManager;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
+using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using Quartz;
 

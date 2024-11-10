@@ -8,16 +8,18 @@ using BillingApplication.Server.Services.Manager.TariffManager;
 
 namespace BillingApplication.Controllers
 {
-    [Route("[controller]")]
+    [Route("tariff")]
     [ApiController]
     [ServiceFilter(typeof(RoleAuthorizeFilter))]
     public class TariffController : ControllerBase
     {
         private readonly ITariffManager tariffManager;
+        private readonly ILogger<SubscriberController> logger;
 
-        public TariffController(ITariffManager tariffManager)
+        public TariffController(ITariffManager tariffManager, ILogger<SubscriberController> logger)
         {
             this.tariffManager = tariffManager;
+            this.logger = logger;
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
@@ -51,7 +53,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("deletebytitle/{title}")]
+        [HttpDelete("delete/title/{title}")]
         public async Task<IActionResult> DeleteByTitle(string title)
         {
             try
@@ -66,7 +68,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("deletebyid/{id}")]
+        [HttpDelete("delete/id/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
             try
@@ -81,7 +83,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getall")]
+        [HttpGet("get")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -97,7 +99,7 @@ namespace BillingApplication.Controllers
 
         
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getbytitle/{title}")]
+        [HttpGet("get/title/{title}")]
         public async Task<IActionResult> GetByTitle(string title)
         {
             try
@@ -112,7 +114,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getbyid/{id}")]
+        [HttpGet("get/id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -127,7 +129,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getbyuser/{id}")]
+        [HttpGet("get/tariff/user/{id}")]
         public async Task<IActionResult> GetByUser(int id)
         {
             try
@@ -142,7 +144,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getbundle/{tariffId}")]
+        [HttpGet("get/tariff/{tariffId}/bundle")]
         public async Task<IActionResult> GetBundleByTariffId(int tariffId)
         {
             try

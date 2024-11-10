@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Attributes;
+using BillingApplication.Controllers;
 using BillingApplication.Exceptions;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Manager.BundleManager;
@@ -8,16 +9,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Server.Controllers
 {
-    [Route("[controller]")]
+    [Route("bundle")]
     [ApiController]
     [ServiceFilter(typeof(RoleAuthorizeFilter))]
     public class BundleController : ControllerBase
     {
         private readonly IBundleManager bundleManager;
+        private readonly ILogger<BundleController> logger;
 
-        public BundleController(IBundleManager bundleManager)
+        public BundleController(IBundleManager bundleManager, ILogger<BundleController> logger)
         {
             this.bundleManager = bundleManager;
+            this.logger = logger;
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
@@ -51,7 +54,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("deletebyid/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
             try
@@ -66,7 +69,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getall")]
+        [HttpGet("get")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -82,7 +85,7 @@ namespace BillingApplication.Server.Controllers
 
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getbyid/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try

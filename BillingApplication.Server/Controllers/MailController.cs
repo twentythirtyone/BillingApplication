@@ -1,20 +1,22 @@
-﻿using BillingApplication.Server.Services.MailService;
+﻿using BillingApplication.Controllers;
+using BillingApplication.Server.Services.MailService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("mail")]
     [ApiController]
     public class MailController : ControllerBase
     {
         private readonly IMailService _mail;
-
-        public MailController(IMailService mail)
+        private readonly ILogger<MailController> logger;
+        public MailController(IMailService mail, ILogger<MailController> logger)
         {
             _mail = mail;
+            this.logger = logger;
         }
 
-        [HttpPost("sendmail")]
+        [HttpPost("send")]
         public async Task<IActionResult> SendMailAsync(MailData mailData)
         {
             bool result = await _mail.SendAsync(mailData);

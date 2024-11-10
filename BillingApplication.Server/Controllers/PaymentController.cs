@@ -6,14 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Server.Controllers
 {
-    [Route("[controller]")]
+    [Route("payment")]
     [ApiController]
     public class PaymentController : ControllerBase
     {
         public readonly IPaymentsManager paymentsManager;
-        public PaymentController(IPaymentsManager paymentsManager)
+        private readonly ILogger<MailController> logger;
+        public PaymentController(IPaymentsManager paymentsManager, ILogger<MailController> logger)
         {
             this.paymentsManager = paymentsManager;
+            this.logger = logger;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
@@ -34,7 +36,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("get")]
+        [HttpGet("get")]
         public async Task<IActionResult> GetPayments()
         {
             try
@@ -50,7 +52,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getbyid/{id}")]
+        [HttpGet("get/id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -66,12 +68,12 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getbyuserid/{id}")]
-        public async Task<IActionResult> GetPaymentsByUserId(int id)
+        [HttpGet("get/user/{userId}")]
+        public async Task<IActionResult> GetPaymentsByUserId(int userId)
         {
             try
             {
-                var result = await paymentsManager.GetPaymentsByUserId(id);
+                var result = await paymentsManager.GetPaymentsByUserId(userId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -82,12 +84,12 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getlastbyuserid/{id}")]
-        public async Task<IActionResult> GetLastPaymentByUserId(int id)
+        [HttpGet("get/last/user/{userId}")]
+        public async Task<IActionResult> GetLastPaymentByUserId(int userId)
         {
             try
             {
-                var result = await paymentsManager.GetLastPaymentByUserId(id);
+                var result = await paymentsManager.GetLastPaymentByUserId(userId);
                 return Ok(result);
             }
             catch (Exception ex)
