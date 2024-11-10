@@ -1,11 +1,12 @@
-﻿import { useState, useEffect } from 'react';
+﻿import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import logo from '../assets/img/logo.svg';
 
 const LoginForm = () => {
     useEffect(() => {
         document.title = 'Вход';
     });
-
+    const navigate = useNavigate();
     const [phoneNumber, setPhoneNumber] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -42,11 +43,15 @@ const LoginForm = () => {
 
             const data = await response.json();
             console.log('Авторизация успешна:', data);
+            // Сохранение токена
+            const token = data.token; // Предполагается, что сервер возвращает объект с токеном
+            localStorage.setItem('token', token);
 
+            // Перенаправление на страницу /main
+            navigate('/main', { state: { token } });
             // Дополнительные действия при успешной авторизации
-        } catch (error) {
-            setErrorMessage(error.message);
-        } finally {
+        }
+        finally {
             setIsLoading(false);
         }
     };
