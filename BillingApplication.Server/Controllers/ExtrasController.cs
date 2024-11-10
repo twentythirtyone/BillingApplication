@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Controllers
 {
-    [Route("[controller]")]
+    [Route("extras")]
     [ApiController]
     public class ExtrasController : ControllerBase
     {

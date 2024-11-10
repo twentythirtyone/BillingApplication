@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("mail")]
     [ApiController]
     public class MailController : ControllerBase
     {
@@ -14,7 +14,7 @@ namespace BillingApplication.Server.Controllers
             _mail = mail;
         }
 
-        [HttpPost("sendmail")]
+        [HttpPost("send")]
         public async Task<IActionResult> SendMailAsync(MailData mailData)
         {
             bool result = await _mail.SendAsync(mailData);

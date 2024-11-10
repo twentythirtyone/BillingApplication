@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Server.Controllers
 {
-    [Route("[controller]")]
+    [Route("bundle")]
     [ApiController]
     [ServiceFilter(typeof(RoleAuthorizeFilter))]
     public class BundleController : ControllerBase
@@ -51,7 +51,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("deletebyid/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
             try
@@ -66,7 +66,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getall")]
+        [HttpGet("get")]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -82,7 +82,7 @@ namespace BillingApplication.Server.Controllers
 
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("getbyid/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try

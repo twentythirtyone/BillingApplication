@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BillingApplication.Server.Controllers
 {
-    [Route("[controller]")]
+    [Route("topups")]
     [ApiController]
     [ServiceFilter(typeof(RoleAuthorizeFilter))]
     public class TopUpsController : ControllerBase
@@ -51,7 +51,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getbyid/{id}")]
+        [HttpGet("get/id/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -67,7 +67,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getbyuserid/{id}")]
+        [HttpGet("get/topups/user/id/{id}")]
         public async Task<IActionResult> GetTopUpsByUserId(int id)
         {
             try
@@ -83,7 +83,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("getlastbyuserid/{id}")]
+        [HttpGet("get/topups/last/user/id/{id}")]
         public async Task<IActionResult> GetLastTopUpByUserId(int id)
         {
             try

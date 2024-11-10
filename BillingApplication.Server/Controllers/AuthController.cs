@@ -12,7 +12,7 @@ using BillingApplication.Mapper;
 
 namespace BillingApplication.Controllers
 {
-    [Route("[controller]")]
+    [Route("auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -57,7 +57,7 @@ namespace BillingApplication.Controllers
             return Ok("Успешный выход из системы.");
         }
 
-        [HttpPost("operator")]
+        [HttpPost("operator/login")]
         public async Task<IActionResult> LoginOperator([FromBody] SubscriberLoginModel loginModel)
         {
             return NotFound();
@@ -65,7 +65,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("register")]
+        [HttpPost("register/subscriber")]
         public async Task<IActionResult> RegisterSubscriber([FromBody] SubscriberRegisterModel model)
         {
             int? result = 0;
@@ -82,7 +82,7 @@ namespace BillingApplication.Controllers
             }
         }
 
-        [HttpGet("currentuser")]
+        [HttpGet("current")]
         public IActionResult GetCurrentUser()
         {
             try
