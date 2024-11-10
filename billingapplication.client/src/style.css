@@ -380,7 +380,7 @@ body {
     .balance div {
         flex: 1;
         padding: 10px 50px;
-        border: 1px solid #EDC7C4;
+        border: 1px solid #F5DEDB;
         border-radius: 8px;
         font-size: 18px;
         color: #333;
@@ -410,8 +410,89 @@ body {
     border-radius: 8px;
 }
 
+.tariff-section {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.tariff-options {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px 0;
+}
+
+.tariff-card {
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    border: 1px solid #F5DEDB;
+    border-radius: 20px;
+    padding: 15px;
+    margin-right: 100px;
+}
+
+.chart {
+    width: 90px !important;
+    height: 90px !important;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+
+.chart-value {
+    margin-top: 8px;
+    font-weight: 400;
+    font-size: 12px;
+    z-index: 1;
+    margin-top: -65px;
+}
+
+.chart-value-top {
+    font-size: 22px;
+}
+
+.chart-name {
+    font-size: 28px;
+    font-weight: 400;
+    color: #1F0A0A;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.additional-services {
+    display: flex;
+
+    margin: 20px;
+    padding-right: 30px;
+}
+
+.service-card {
+    width: 120px;
+    height: 70px;
+    padding: 15px;
+    background: #fdd;
+    border-radius: 10px;
+    text-align: center;
+    margin-right: 15px;
+}
+
+    .service-card span {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+    }
+
+.service-price {
+    background-color: #ff3b30;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
 /* Кошелек */
 
 .wallet{
-    margin: 50405405px; /*Test*/
 }

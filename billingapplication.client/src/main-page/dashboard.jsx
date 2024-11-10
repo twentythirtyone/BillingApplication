@@ -1,10 +1,33 @@
 import { useEffect } from 'react'
+import { Doughnut } from "react-chartjs-2";
+import "chart.js/auto";
 
 const Dashboard = () => {
     useEffect(() => {
         document.title = 'Панель управления';
     });
 
+    const dataOptions = [
+        { label: "Минуты", value: 235, max: 500 },
+        { label: "Интернет", value: 15, max: 50, unit: "ГБ" },
+        { label: "SMS", value: 45, max: 50 },
+    ];
+
+    const additionalServices = [
+        { label: "+100 минут", price: "99₽" },
+        { label: "+2 ГБ", price: "99₽" },
+        { label: "+50 SMS", price: "199₽" },
+    ];
+
+    const generateChartData = (value, max) => ({
+        datasets: [
+            {
+                data: [value, max - value],
+                backgroundColor: ["#FF3B30", "#E0E0E0"],
+                borderWidth: 0,
+            },
+        ],
+    });
 
     return (
       <div className="dashboard">
@@ -19,27 +42,41 @@ const Dashboard = () => {
             <div>Расходы:</div>
           </div>
         </div>
-        <div className="monthly-expenses">
-          <h2>Месячные расходы</h2>
-          <div>10 000Р</div>
-          <div className="expenses-chart">
-            {/* Здесь можно использовать Chart.js или другую библиотеку для графика! */}
-          </div>
-        </div>
-        <div className="tariff-section">
-          <h2>Мой тариф</h2>
-          <div className="tariff-options">
-            <div>Минуты: 235 мин</div>
-            <div>Интернет: 15 ГБ</div>
-            <div>SMS: 45 шт</div>
-          </div>
-        </div>
-        <div className="additional-services">
-          <h2>Дополнительные услуги</h2>
-          <div className="service-card">+100 минут за 99Р</div>
-          <div className="service-card">+2 ГБ за 99Р</div>
-          <div className="service-card">+50 SMS за 199Р</div>
-        </div>
+            <div className="tariff-section">
+                <h2>Мой тариф</h2>
+                <div className="tariff-options">
+                    {dataOptions.map((option, index) => (
+                        <div className="tariff-card" key={index}>
+                            <p className='chart-name'>{option.label}</p>
+                            <Doughnut
+                                data={generateChartData(option.value, option.max)}
+                                options={{
+                                    cutout: "90%",
+                                    plugins: {
+                                        tooltip: { enabled: false },
+                                        legend: { display: false },
+                                    },
+                                }}
+                                className="chart"
+                            />
+                            <div className="chart-value">
+                                <div className='chart-value-top'>{option.value}{option.unit || ""}</div> из {option.max}{option.unit || ""}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <h2>Дополнительные услуги</h2>
+            <div className="additional-services">
+                {additionalServices.map((service, index) => (
+                    <div className="service-card" key={index}>
+                        
+                        <span>{service.label}</span>
+                        <button className="service-price">{service.price}</button>
+                    </div>
+                ))}
+            </div>
+
       </div>
     );
   }
