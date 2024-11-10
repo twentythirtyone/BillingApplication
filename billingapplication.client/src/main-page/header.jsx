@@ -1,8 +1,8 @@
 ﻿import logo from '../assets/img/logo.svg';
 import { useUser } from '../user-context.jsx';
-
 const Header = () => {
     const userData = useUser();
+    const splittedUserName = userData.passportInfo.fullName.split(' ');
     return (
 
         <header className='main-page-header'>
@@ -11,7 +11,7 @@ const Header = () => {
                 <span className='header-title'>Alfa-Telecom</span>
             </div>
             <div className='header-right'>
-                <button className='profile-button'>Иван</button>
+                <button className='profile-button'>{splittedUserName[0] + ' ' + splittedUserName[1]} <div className='profile-button-email'>{userData.email}</div></button>
             </div>
         </header>
     );

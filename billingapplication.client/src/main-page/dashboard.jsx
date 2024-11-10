@@ -1,8 +1,11 @@
 import { useEffect } from 'react'
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
+import { useUser } from '../user-context.jsx';
 
 const Dashboard = () => {
+    const userData = useUser();
+    const prettyNumber = userData.number.replace(/(\+7)(\d{3})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3-$4-$5");
     useEffect(() => {
         document.title = 'Панель управления';
     });
@@ -32,14 +35,14 @@ const Dashboard = () => {
     return (
       <div className="dashboard">
         <div className="header">
-          <span className="phone-number">+7 777 777-77-77</span>
+          <span className="phone-number">{ prettyNumber }</span>
           <div className="user-info">Мой номер</div>
         </div>
         <div className="balance-section">
           <h2>Баланс</h2>
           <div className="balance">
-            <div>Мои средства: </div>
-            <div>Расходы:</div>
+                    <div>Мои средства <p className='balance-sum'>{userData.balance}₽</p></div>
+                    <div>Расходы: <p className='balance-sum'>{1000}₽</p></div>
           </div>
         </div>
             <div className="tariff-section">
