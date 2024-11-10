@@ -84,7 +84,9 @@ namespace BillingApplication.Repositories
         {
             var userEntity = await context.Subscribers
                                 .Include(s=>s.Tariff)
+                                .ThenInclude(x=>x.Bundle)
                                 .Include(s=>s.PassportInfo)
+
                                 .FirstOrDefaultAsync(s=>s.Id == id);
             var user = SubscriberMapper.UserEntityToUserVModel(userEntity);
             return user;
