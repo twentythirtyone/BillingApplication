@@ -1,4 +1,11 @@
-﻿function Wallet() {
+﻿import {useEffect } from 'react'
+
+
+function Wallet() {
+    useEffect(() => {
+        document.title = 'Кошелек';
+    });
+
     return (
         <div className="wallet">
             <h2>Кошелек</h2>

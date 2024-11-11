@@ -251,7 +251,7 @@ body {
     min-height: 100vh;
     min-width: 150vh;
     flex-direction: column;
-    font-family: 'Roboto', sans-serif;
+    font-family: "Plus Jakarta Sans", sans-serif;
     background-color: #F4F7F3;
     position: center;
 }
@@ -519,21 +519,22 @@ body {
 .service-card-bottom {
     display: block;
     font-weight: 400;
-    font-size: 20px;
+    font-size: 18px;
     margin-left: 8px;
     margin-top: -8px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .service-card-top {
-    font-size: 34px;
+    font-size: 30px;
     font-weight: 400;
 }
 .service-price {
+    font-family: "Plus Jakarta Sans", sans-serif;
     background-color: #EF3124;
     color: white;
     border: none;
-    padding: 5px 0;
+    padding: 3px 0;
     min-width: 110px;
     font-size: 16px;
     border-radius: 20px;

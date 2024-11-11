@@ -5,7 +5,7 @@ const WelcomePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        document.title = 'Главная';
+        document.title = 'Добро пожаловать!';
     });
 
     return (
