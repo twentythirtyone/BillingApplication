@@ -1,19 +1,26 @@
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 import { Doughnut } from "react-chartjs-2";
 import "chart.js/auto";
 import { useUser } from '../user-context.jsx';
 
 const Dashboard = () => {
     const userData = useUser();
+
+    // Проверка на наличие данных пользователя
+    if (!userData) {
+        return <div>Загрузка данных...</div>;
+    }
+
     const prettyNumber = userData.number.replace(/(\+7)(\d{3})(\d{3})(\d{2})(\d{2})/, "$1 $2 $3-$4-$5");
+
     useEffect(() => {
         document.title = 'Панель управления';
-    });
+    }, []);  // Добавляем пустой массив зависимостей для вызова один раз
 
     const timeToMinutes = (time) => {
         const [hours, minutes, seconds] = time.split(":").map(Number);
         return hours * 60 + minutes + Math.floor(seconds / 60);
-    }
+    };
 
     const dataOptions = [
         { label: "Минуты", value: timeToMinutes(userData.callTime), max: timeToMinutes(userData.tariff.bundle.callTime) },
@@ -38,18 +45,18 @@ const Dashboard = () => {
     });
 
     return (
-      <div className="dashboard">
-        <div className="header">
-          <span className="phone-number">{ prettyNumber }</span>
-          <div className="user-info">Мой номер</div>
-        </div>
-        <div className="balance-section">
-          <h2>Баланс</h2>
-          <div className="balance">
+        <div className="dashboard">
+            <div className="header">
+                <span className="phone-number">{prettyNumber}</span>
+                <div className="user-info">Мой номер</div>
+            </div>
+            <div className="balance-section">
+                <h2>Баланс</h2>
+                <div className="balance">
                     <div>Мои средства <p className='balance-sum'>{userData.balance}₽</p></div>
                     <div>Расходы: <p className='balance-sum'>{1000}₽</p></div>
-          </div>
-        </div>
+                </div>
+            </div>
             <div className="tariff-section">
                 <h2>Мой тариф</h2>
                 <div className="tariff-options">
@@ -78,16 +85,14 @@ const Dashboard = () => {
             <div className="additional-services">
                 {additionalServices.map((service, index) => (
                     <div className="service-card" key={index}>
-                        
                         <span className="service-card-top">{service.label}</span>
                         <span className="service-card-bottom">{service.unit}</span>
                         <button className="service-price">{service.price}₽</button>
                     </div>
                 ))}
             </div>
-
-      </div>
+        </div>
     );
-  }
-  
-  export default Dashboard;
+}
+
+export default Dashboard;

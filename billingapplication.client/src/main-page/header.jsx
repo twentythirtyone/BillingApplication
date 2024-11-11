@@ -4,7 +4,10 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-    const userData = useUser();
+    const userData = useUser();  // Получаем данные пользователя через хук
+    if (!userData) {
+        return <div>Загрузка...</div>;  // Пока данные не загружены, показываем индикатор загрузки
+    }
     const splittedUserName = userData.passportInfo.fullName.split(' ');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
@@ -15,6 +18,7 @@ const Header = () => {
     };
 
     const handleEditProfile = () => {
+        // Функция редактирования профиля
     };
 
     const handleLogout = async () => {
@@ -74,4 +78,4 @@ const Header = () => {
     );
 };
 
-export default Header;
+export default Header
