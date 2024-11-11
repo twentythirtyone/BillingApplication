@@ -6,6 +6,8 @@ import { useUser } from '../user-context.jsx';
 const Dashboard = () => {
     const userData = useUser();
 
+
+    // Проверка на наличие данных пользователя
     if (!userData) {
         return <div>Загрузка данных...</div>;
     }
@@ -16,11 +18,11 @@ const Dashboard = () => {
         document.title = 'Панель управления';
     }, []);
 
+
     const timeToMinutes = (time) => {
         const [hours, minutes, seconds] = time.split(":").map(Number);
         return hours * 60 + minutes + Math.floor(seconds / 60);
     };
-
     const getMaxValue = (currentValue, maxValue) => {
         return Math.max(currentValue, maxValue);
     }
@@ -108,5 +110,6 @@ const Dashboard = () => {
         </div>
     );
 };
+
 
 export default Dashboard;
