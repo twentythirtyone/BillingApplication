@@ -2,7 +2,13 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const UserContext = createContext();
 
-export const useUser = () => useContext(UserContext);
+export const useUser = () => {
+    const context = useContext(UserContext);
+    if (context === undefined) {
+        throw new Error('useUser must be used within a UserProvider');
+    }
+    return context;  // Просто возвращаем данные из контекста
+};
 
 export const UserProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
@@ -30,7 +36,7 @@ export const UserProvider = ({ children }) => {
             }
 
             const data = await response.json();
-            setUserData(data);
+            setUserData(data); // Обновляем данные
         } catch (error) {
             console.error("Failed to fetch user data:", error);
         }

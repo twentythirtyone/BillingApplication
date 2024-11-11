@@ -43,13 +43,10 @@ const LoginForm = () => {
 
             const data = await response.json();
             console.log('Авторизация успешна:', data);
-            // Сохранение токена
-            const token = data.token; // Предполагается, что сервер возвращает объект с токеном
+            const token = data.token;
             localStorage.setItem('token', token);
-
-            // Перенаправление на страницу /main
             navigate('/main', { state: { token } });
-            // Дополнительные действия при успешной авторизации
+            location.reload();
         }
         finally {
             setIsLoading(false);
