@@ -10,16 +10,21 @@ const Dashboard = () => {
         document.title = 'Панель управления';
     });
 
+    const timeToMinutes = (time) => {
+        const [hours, minutes, seconds] = time.split(":").map(Number);
+        return hours * 60 + minutes + Math.floor(seconds / 60);
+    }
+
     const dataOptions = [
-        { label: "Минуты", value: 235, max: 500 },
-        { label: "Интернет", value: 15, max: 50, unit: "ГБ" },
-        { label: "SMS", value: 45, max: 50 },
+        { label: "Минуты", value: timeToMinutes(userData.callTime), max: timeToMinutes(userData.tariff.bundle.callTime) },
+        { label: "Интернет", value: userData.internet, max: userData.tariff.bundle.internet, unit: "ГБ" },
+        { label: "SMS", value: userData.messages, max: userData.tariff.bundle.messages },
     ];
 
     const additionalServices = [
-        { label: "+100 минут", price: "99₽" },
-        { label: "+2 ГБ", price: "99₽" },
-        { label: "+50 SMS", price: "199₽" },
+        { label: '+100', unit: 'минут', price: "99" },
+        { label: '+2', unit: 'ГБ', price: "99" },
+        { label: '+50', unit: 'SMS', price: "199" },
     ];
 
     const generateChartData = (value, max) => ({
@@ -74,8 +79,9 @@ const Dashboard = () => {
                 {additionalServices.map((service, index) => (
                     <div className="service-card" key={index}>
                         
-                        <span>{service.label}</span>
-                        <button className="service-price">{service.price}</button>
+                        <span className="service-card-top">{service.label}</span>
+                        <span className="service-card-bottom">{service.unit}</span>
+                        <button className="service-price">{service.price}₽</button>
                     </div>
                 ))}
             </div>

@@ -248,10 +248,12 @@ body {
 /* Главная */
 .main-page {
     display: flex;
+    min-height: 100vh;
+    min-width: 150vh;
     flex-direction: column;
-    height: 100vh;
     font-family: 'Roboto', sans-serif;
     background-color: #F4F7F3;
+    position: center;
 }
 
 
@@ -259,7 +261,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 10px;
     border-bottom: 1px solid #ddd;
     width: 100%;
     box-sizing: border-box;
@@ -299,6 +301,32 @@ body {
     margin: 0 auto;
 }
 
+
+.profile-menu {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #F5DEDB;
+    border-radius: 15px;
+    z-index: 2;
+    margin-top: 10px;
+    width: 200px;
+}
+
+.profile-menu-item {
+    font-size: 15px;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    border-radius: 15px;
+}
+
+    .profile-menu-item:hover {
+        background-color: #f5f5f5;
+    }
+
 .content-layout {
     display: flex;
     margin-top: 15px;
@@ -307,10 +335,11 @@ body {
 
 .sidebar {
     width: 250px;
+    min-width: 250px;
     background-color: #fdecec;
     padding: 20px;
     height: 87.5vh;
-    margin-left: 350px;
+    margin-left: 15%;
 }
 .sidebar-title {
     color: #AB3D36;
@@ -348,7 +377,7 @@ body {
 
 .main-page-content {
     margin-left: 20px;
-
+    background-color: #F4F7F3;
 }
 
 
@@ -473,38 +502,46 @@ body {
 
 .additional-services {
     display: flex;
-
     margin: 20px;
     padding-right: 30px;
 }
 
 .service-card {
-    width: 120px;
-    height: 70px;
+    width: 140px;
+    height: 90px;
     padding: 15px;
-    background: #fdd;
+    background-color: #EDC7C4;
     border-radius: 10px;
     text-align: center;
-    margin-right: 15px;
+    margin-right: 100px;
 }
 
-    .service-card span {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-    }
+.service-card-bottom {
+    display: block;
+    font-weight: 400;
+    font-size: 20px;
+    margin-left: 8px;
+    margin-top: -8px;
+    margin-bottom: 10px;
+}
 
+.service-card-top {
+    font-size: 34px;
+    font-weight: 400;
+}
 .service-price {
-    background-color: #ff3b30;
+    background-color: #EF3124;
     color: white;
     border: none;
-    padding: 8px 16px;
-    font-size: 14px;
+    padding: 5px 0;
+    min-width: 110px;
+    font-size: 16px;
     border-radius: 20px;
     cursor: pointer;
 }
-
-/* Кошелек */
-
-.wallet{
-}
+    .service-price:hover {
+        background-color: #E13124;
+    }
+    /* Кошелек */
+    .wallet {
+    }
