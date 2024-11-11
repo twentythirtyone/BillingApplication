@@ -8,23 +8,21 @@ export const UserProvider = ({ children }) => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        // Загрузка данных пользователя при первой загрузке контекста
         const token = localStorage.getItem('token');
         if (token) {
             fetchUserData(token);
         }
     }, []);
 
-    const fetchUserData = async () => {
+    const fetchUserData = async (token) => {
         try {
-            const response = await fetch('https://localhost:7262/Subscriber/getcurrentuser', {
-                method: 'POST',
+            const response = await fetch('https://localhost:7262/subscriber/current', {
+                method: 'GET',
                 headers: {
                     'Accept': '*/*',
-                    'Content-Type': 'application/json',  // Укажите нужный тип контента, если требуется
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Добавьте токен, если он необходим для авторизации
-                },
-                body: JSON.stringify({}) // Пустое тело, если сервер не требует данных
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
             });
 
             if (!response.ok) {
