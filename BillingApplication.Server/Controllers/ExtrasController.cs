@@ -4,6 +4,7 @@ using BillingApplication.Server.Services.Manager.ExtrasManager;
 using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models.Utilites;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace BillingApplication.Controllers
 {
@@ -23,6 +24,7 @@ namespace BillingApplication.Controllers
         public async Task<IActionResult> GetExtras()
         {
             var result = await extrasManager.GetExtras();
+            logger.LogInformation($"GETTING: Extras has been recieved.");
             return Ok(result);
         }
 
@@ -30,6 +32,7 @@ namespace BillingApplication.Controllers
         public async Task<IActionResult> GetExtras(int id)
         {
             var result = await extrasManager.GetExtrasById(id);
+            logger.LogInformation($"GETTING: Extra {id} has been recieved.");
             return Ok(result);
         }
 
@@ -38,6 +41,7 @@ namespace BillingApplication.Controllers
         public async Task<IActionResult> Create([FromBody] Extras extrasModel)
         {
             var result = await extrasManager.AddNewExtra(extrasModel);
+            logger.LogInformation($"ADDING: new Extra has been added.\nModel: {JsonSerializer.Serialize(extrasModel)}\n");
             return Ok(result);
         }
     }

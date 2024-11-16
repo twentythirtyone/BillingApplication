@@ -40,7 +40,7 @@ namespace BillingApplication.Controllers
             }
             catch (Exception ex) when (ex is ArgumentException || ex is UserNotFoundException)
             {
-                logger.LogInformation($"LOGIN FAILED: Failed subscriber login.");
+                logger.LogError($"LOGIN FAILED: Failed subscriber login.");
                 return BadRequest(ex.Message);
             }
         }
@@ -77,14 +77,14 @@ namespace BillingApplication.Controllers
                 var result = await subscriberManager.CreateSubscriber(model.User, model.Passport, model.TariffId);
                 if (result == null)
                     return BadRequest("Ошибка при регистрации пользователя");
-                logger.LogInformation($"REGISTER: A new User with id \"{result}\" has been created.");
+                logger.LogError($"REGISTER: A new User with id \"{result}\" has been created.");
                 return Ok(result);
             }
             catch(Exception ex)
             {
-                logger.LogInformation($"\nREGISTER FAILED: Failed register subscriber." +
-                                      $"\nMESSAGE: {ex.Message}"+
-                                      $"\nINFO: {JsonSerializer.Serialize(model)}\n");
+                logger.LogError($"\nREGISTER FAILED: Failed register subscriber." +
+                                      $"\nMessage: {ex.Message}"+
+                                      $"\nModel: {JsonSerializer.Serialize(model)}\n");
                 return BadRequest(ex.Message);
             }
         }
@@ -102,8 +102,8 @@ namespace BillingApplication.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogInformation($"\nREQUEST FAILED: Failed get user data." +
-                                      $"\nMESSAGE: {ex.Message}\n");
+                logger.LogError($"\nREQUEST FAILED: Failed get user data." +
+                                      $"\nMessage: {ex.Message}\n");
                 return BadRequest(ex.Message);
             }
         }
