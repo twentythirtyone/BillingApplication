@@ -23,10 +23,12 @@ namespace BillingApplication.Server.Controllers
 
             if (result)
             {
+                logger.LogInformation($"MAIL: Message has been recieved.");
                 return StatusCode(StatusCodes.Status200OK, "Сообщение успешно отправлено.");
             }
             else
             {
+                logger.LogError($"ERROR MAIL: Message has not been recieved.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "Ошибка, сообщение не отправлено");
             }
         }

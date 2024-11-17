@@ -3,6 +3,7 @@ using BillingApplication.Server.Services.Manager.PaymentsManager;
 using BillingApplication.Services.Auth.Roles;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace BillingApplication.Server.Controllers
 {
@@ -26,10 +27,14 @@ namespace BillingApplication.Server.Controllers
             try
             {
                 await paymentsManager.AddPayment(model);
+                logger.LogInformation($"ADDING: new Payment has been added: \nModel: {JsonSerializer.Serialize(model)}\n");
                 return Ok(model);
             }
             catch (Exception ex)
             {
+                logger.LogError($"ERROR ADDING: new Payment has not been added." +
+                                      $"\nMessage:{ex.Message}" +
+                                      $"\nModel: {JsonSerializer.Serialize(model)}\n");
                 return BadRequest(ex.Message);
             }
         }
@@ -42,10 +47,13 @@ namespace BillingApplication.Server.Controllers
             try
             {
                 var result = await paymentsManager.GetPayments();
+                logger.LogInformation($"GETTING: Payments has been recieved");
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                logger.LogError($"ERROR GETTING: Payments has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
                 return BadRequest(ex.Message);
             }
         }
@@ -58,10 +66,13 @@ namespace BillingApplication.Server.Controllers
             try
             {
                 var result = await paymentsManager.GetPaymentById(id);
+                logger.LogInformation($"GETTING: Payment {id} has been recieved");
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                logger.LogError($"ERROR GETTING: Payment {id} has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
                 return BadRequest(ex.Message);
             }
         }
@@ -74,10 +85,13 @@ namespace BillingApplication.Server.Controllers
             try
             {
                 var result = await paymentsManager.GetPaymentsByUserId(userId);
+                logger.LogInformation($"GETTING: User {userId} Payments has been recieved");
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                logger.LogError($"ERROR GETTING:  User {userId} Payments has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
                 return BadRequest(ex.Message);
             }
         }
@@ -89,11 +103,15 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
+
                 var result = await paymentsManager.GetLastPaymentByUserId(userId);
+                logger.LogInformation($"GETTING: last User {userId} Payment has been recieved");
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                logger.LogError($"ERROR GETTING: last User {userId} Payment has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
                 return BadRequest(ex.Message);
             }
         }
