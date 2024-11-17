@@ -13,6 +13,9 @@ using BillingApplication.Mapper;
 using BillingApplication.Server.Controllers;
 using BillingApplication.Services.Models.Utilites.Tariff;
 using System.Text.Json;
+using BillingApplication.Server.Quartz.Workers;
+using BillingApplication.Server.Services.Models.Subscriber;
+using BillingApplication.Server.Services.MailService;
 
 namespace BillingApplication.Controllers
 {
@@ -23,12 +26,18 @@ namespace BillingApplication.Controllers
         private readonly ISubscriberManager subscriberManager;
         private readonly IAuth auth;
         private readonly ILogger<SubscriberController> logger;
+        private readonly IEmailSender emailSender;
+        private readonly IEmailChangeService emailChangeService;
+        private readonly IEncrypt encrypt;
 
-        public SubscriberController(ISubscriberManager subscriberManager, IAuth auth, ILogger<SubscriberController> logger)
+        public SubscriberController(ISubscriberManager subscriberManager, IAuth auth, ILogger<SubscriberController> logger, IEmailSender emailSender, IEncrypt encrypt, IEmailChangeService emailChangeService)
         {
             this.subscriberManager = subscriberManager;
             this.auth = auth;
             this.logger = logger;
+            this.emailSender = emailSender;
+            this.emailChangeService = emailChangeService;
+            this.encrypt = encrypt;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
@@ -395,6 +404,96 @@ namespace BillingApplication.Controllers
                 logger.LogError($"ERROR UPDATE TARIFF: User can't change his tariff to {tariffId}" +
                       $"\nMessage:{ex.Message}" +
                       $"\nModel: tariffId: {tariffId}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpPost("email/change/request/")]
+        public async Task<IActionResult> RequestEmailChange()
+        {
+            try
+            {
+                var currentUser = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
+                var changeCode = GenerateChangeCode();
+
+                await emailChangeService.StoreEmailChangeCode((int)currentUser.Id, changeCode);
+
+                await emailSender.SendEmailAsync(currentUser.Email, "Смена почты",
+                                                 $"Для смены почты введите следующий код в приложении: {changeCode}");
+
+                logger.LogInformation($"EMAIL CHANGE REQUEST: User {currentUser.Id} requested email change");
+                return Ok("Код для смены почты отправлен на вашу текущую почту.");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"ERROR EMAIL CHANGE REQUEST: User can't request email change" +
+                    $"\nMessage: {ex.Message}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        private string GenerateChangeCode()
+        {
+            var random = new Random();
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, 6)
+                                        .Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpPost("email/change/confirm")]
+        public async Task<IActionResult> ConfirmEmailChange([FromBody] EmailChangeRequest request)
+        {
+            try
+            {
+                var currentUser = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
+
+                // Verify the change code (implementation needed)
+                var isCodeValid = await emailChangeService.VerifyEmailChangeCode((int)currentUser.Id, request.Code);
+                if (!isCodeValid)
+                {
+                    return BadRequest("Неверный код для смены почты.");
+                }
+
+                currentUser.Email = request.NewEmail;
+                await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(currentUser), currentUser.PassportInfo, currentUser.Tariff.Id);
+
+                logger.LogInformation($"CONFIRM EMAIL CHANGE: User {currentUser.Id} successfully changed email to {request.NewEmail}");
+                return Ok(currentUser.TariffId);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"ERROR CONFIRM EMAIL CHANGE: User can't change his email to {request.NewEmail}" +
+                    $"\nMessage: {ex.Message}" +
+                    $"\nModel: email: {request.NewEmail}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpPost("change/password")]
+        public async Task<IActionResult> ChangeCurrentUserPassword(string lastPassword, string password)
+        {
+            try
+            {
+                var currentUser = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
+                if (currentUser.Password != encrypt.HashPassword(lastPassword, currentUser.Salt))
+                    throw new Exception("Предыдущий пароль не совпадает.");
+                currentUser.Password = password;
+                
+                await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(currentUser), currentUser.PassportInfo, currentUser.Tariff.Id);
+                logger.LogInformation($"UPDATE USER: User {currentUser.Id} changed his password.");
+                return Ok(currentUser.TariffId);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"ERROR UPDATE USER: User can't change his password." +
+                      $"\nMessage:{ex.Message}\n");
                 return BadRequest(ex.Message);
             }
         }

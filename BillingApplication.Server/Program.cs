@@ -169,6 +169,7 @@ internal class Program
         services.AddMemoryCache();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddSingleton<IBlacklistService, BlacklistService>();
+        services.AddSingleton<IEmailChangeService, EmailChangeService>();
 
         services.AddReact();
         services.AddJsEngineSwitcher(options => 

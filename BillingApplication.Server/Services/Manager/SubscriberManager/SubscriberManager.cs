@@ -16,6 +16,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         private readonly IEncrypt encrypt;
         private readonly ISubscriberRepository subscriberRepository;
         private readonly IPaymentRepository paymentRepository;
+
         public SubscriberManager(IEncrypt encrypt, ISubscriberRepository subscriberRepository, IPaymentRepository paymentRepository)
         {
             this.encrypt = encrypt;
@@ -135,5 +136,6 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             });
             return await subscriberRepository.AddPaymentForTariff(subscriberId);
         }
+
     }
 }
