@@ -59,8 +59,10 @@ const Header = () => {
                 <img src={logo} className='header-logo' alt="Logo" />
                 <span className='header-title'>Alfa-Telecom</span>
             </div>
+
             <div className='header-right' ref={menuRef}>
                 <button className='profile-button' onClick={toggleMenu}>
+                    <img className ='profile-pic' src='..\src\assets\img\avatar.svg'></img>
                     {splittedUserName[0] + ' ' + splittedUserName[1]}
                     <div className='profile-button-email'>{userData.email}</div>
                 </button>

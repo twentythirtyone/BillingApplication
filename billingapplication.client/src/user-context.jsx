@@ -25,8 +25,6 @@ export const UserProvider = ({ children }) => {
             const response = await fetch('https://localhost:7262/subscriber/current', {
                 method: 'GET',
                 headers: {
-                    'Accept': '*/*',
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 }
             });

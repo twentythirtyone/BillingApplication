@@ -1,52 +1,102 @@
 ﻿import { AdditionalServices } from './additional-services.jsx';
 import { useEffect, useState } from 'react';
+import { getRandomObjects, timeToMinutes } from './functions.js';
+import { getTariff, changeTariff, payTariff } from '../requests.jsx';
 
 const Tariff = () => {
     const [tariffs, setTariffs] = useState([]);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        const fetchTariff = async (token) => {
+            const tarif = await getTariff(token);
+            setTariffs(tarif);
+        };
         if (token) {
-            getTariff(token);
+            fetchTariff(token);
         }
     }, []);
 
-    const getTariff = async (token) => {
-        try {
-            const response = await fetch('https://localhost:7262/tariff/get', {
-                method: 'GET',
-                headers: {
-                    'Accept': '*/*',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-            });
+    const handleTariffChange = async (tariff) => {
+        const userConfirmed = window.confirm(
+            `Вы действительно хотите сменить тариф на "${tariff.title}"? 
+Учтите, что с вашего счета будет списана плата ${tariff.price}₽.`
+        );
 
-            if (!response.ok) {
-                throw new Error(`Ошибка: ${response.status}`);
+        if (userConfirmed) {
+            try {
+                setIsProcessing(true);
+                await changeTariff(tariff.id);
+                await payTariff(tariff.id);
+                alert('Тариф успешно изменен и оплачен!');
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                setIsProcessing(false);
             }
-            const data = await response.json();
-            setTariffs(data);
-        } catch (error) {
-            console.error('Failed to get tariff data', error);
         }
     };
 
+    const slicedTariffsArray = getRandomObjects(tariffs, 3);
+    const mainTariff = getRandomObjects(tariffs, 1)[0];
+
+    if (!tariffs.length) {
+        return <div>Загрузка...</div>;
+    }
     return (
         <div className="tariff">
-            <h1>Оптимальный трафик для вас</h1>
-            <div className="tariff-services">
-                <AdditionalServices />
-            </div>
-            <div className='tariff-cards'>
-                {tariffs.map((tariff) => (
-                    <div className='tariff-card' key={tariff.id}>
-                        <h3 className='tariff-title'>{tariff.title}</h3>
-                        <p className='tariff-price'>
+            <h2>Оптимальный тариф для вас</h2>
+            <section className='tariff-optimal'>
+                <div className="main-tariff">
+                    <div key={mainTariff.id}>
+                        <h3>{mainTariff.title}</h3>
+                        <p className="tariff-price">
+                            {mainTariff.price}₽ <span>в месяц</span>
+                        </p>
+                        <button
+                            className="main-tariff-button"
+                            onClick={() => handleTariffChange(mainTariff)}
+                            disabled={isProcessing}
+                        >
+                            Выбрать тариф
+                        </button>
+                        {mainTariff.bundle && (
+                            <ul className="tariff-features">
+                                <li>{mainTariff.bundle.internet} ГБ</li>
+                                <li>{timeToMinutes(mainTariff.bundle.callTime)} Минут</li>
+                                <li>{mainTariff.bundle.messages} SMS</li>
+                            </ul>
+                        )}
+                    </div>
+                </div>
+
+                <div className="tariff-services">
+                    <AdditionalServices cutValue={1} />
+                </div>
+            </section>
+            <img className='img-plug' src='..\src\assets\img\plug.png' alt='пока просто заглушка'></img>
+            <div className="tariff-cards">
+                {slicedTariffsArray.map((tariff) => (
+                    <div className="tariff-card-section" key={tariff.id}>
+                        <h3 className="tariff-title">{tariff.title}</h3>
+                        <p className="tariff-price">
                             {tariff.price}₽ <span>в месяц</span>
                         </p>
-                        <p className='tariff-description'>{tariff.description}</p>
-                        <button className='tariff-button'>Выбрать тариф</button>
+                        <button
+                            className="tariff-button"
+                            onClick={() => handleTariffChange(tariff)}
+                            disabled={isProcessing}
+                        >
+                            Выбрать тариф
+                        </button>
+                        {tariff.bundle && (
+                            <ul className="tariff-features">
+                                <li>{tariff.bundle.internet} ГБ</li>
+                                <li>{timeToMinutes(tariff.bundle.callTime)} Минут</li>
+                                <li>{tariff.bundle.messages} SMS</li>
+                            </ul>
+                        )}
                     </div>
                 ))}
             </div>

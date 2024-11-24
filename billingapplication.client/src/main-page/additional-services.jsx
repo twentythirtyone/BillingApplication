@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 
-export const AdditionalServices = () => {
+export const AdditionalServices = ({cutValue}) => {
     const [additionalServices, setAdditionalServices] = useState([]);
 
     const manualOverrides = {
@@ -56,7 +56,7 @@ export const AdditionalServices = () => {
         fetchServices();
     }, []);
 
-    const latestServices = additionalServices.slice(-3);
+    const latestServices = additionalServices.slice(-cutValue);
 
     return (
         <div className="additional-services">
