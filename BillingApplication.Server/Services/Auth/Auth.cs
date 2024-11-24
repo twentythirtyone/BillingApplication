@@ -53,8 +53,6 @@ namespace BillingApplication.Services.Auth
             else
                 throw new ArgumentException("Неподдерживаемый тип пользователя");
 
-            userRoles.Add(UserRoles.ADMIN); // для тестирования, 
-            userRoles.Add(UserRoles.OPERATOR);// потом удалить
 
             var claims = new List<Claim>
             {
