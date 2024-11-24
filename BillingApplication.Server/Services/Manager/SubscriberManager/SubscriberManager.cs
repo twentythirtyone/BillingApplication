@@ -25,7 +25,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         }
         public async Task<int?> CreateSubscriber(Subscriber user, PassportInfo passport, int? tariffId)
         {
-            var currentUser = await subscriberRepository.GetSubscriberById(user.Id);
+            var currentUser = await subscriberRepository.GetSubscriberByPhone(user.Number);
             int? id = currentUser?.Id;
             if (id != null)
                 throw new UserNotFoundException("Такой телефон уже существует");
@@ -134,7 +134,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
                 Date = DateTime.UtcNow, 
                 PhoneId = (int)user.Id
             });
-            return await subscriberRepository.AddPaymentForTariff(subscriberId);
+            return await subscriberRepository.AddUserTraffic(subscriberId);
         }
 
     }

@@ -25,6 +25,6 @@ namespace BillingApplication.Repositories
         Task<decimal> GetExpensesCurrentMonth(int? subscriberId);
         Task<decimal> GetExpensesCurrentYear(int? subscriberId);
         Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId);
-        Task<int?> AddPaymentForTariff(int subscriberId);
+        Task<int?> AddUserTraffic(int subscriberId);
     }
 }
