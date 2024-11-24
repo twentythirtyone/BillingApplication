@@ -42,6 +42,7 @@ namespace BillingApplication.DataLayer.Repositories
         public async Task<IEnumerable<Tariffs?>> Get()
         {
             var tariffEntities = await context.Tariffs
+                .Include(x=>x.Bundle)
                 .AsNoTracking()
                 .ToListAsync();
             return tariffEntities.Select(TariffMapper.TariftEntityToTarifModel);
