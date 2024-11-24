@@ -186,15 +186,18 @@ namespace BillingApplication.Repositories
             return 0;
         }
 
-        public async Task<int?> AddPaymentForTariff(int subscriberId)
+        public async Task<int?> AddUserTraffic(int subscriberId)
         {
-            var user = await GetSubscriberById(subscriberId);
+            var user = await context.Subscribers
+                                .Include(s => s.Tariff)
+                                .ThenInclude(x => x.Bundle)
+                                .Include(s => s.PassportInfo)
+                                .FirstOrDefaultAsync(s => s.Id == subscriberId);
             if (user != null && user.Balance >= user.Tariff.Price)
             {
-                user.Balance -= user.Tariff.Price;
-                user.CallTime += user.Tariff.Bundle.CallTime;
+                user.CallTime += user.Tariff.Bundle.CallTIme;
                 user.Internet += user.Tariff.Bundle.Internet;
-                user.Messages += user.Tariff.Bundle.Messages;
+                user.MessagesCount += user.Tariff.Bundle.Messages;
                 user.PaymentDate = DateTime.UtcNow;
                 await context.SaveChangesAsync();
             }
