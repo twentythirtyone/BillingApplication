@@ -2,26 +2,18 @@ import { useEffect, useState } from 'react'
 import { useUser } from '../user-context.jsx'
 import { AdditionalServices } from './additional-services.jsx'
 import { TariffOptions } from './tariff-options.jsx'
-import getUserExpenses from './expences.jsx'
+import { fetchExpenses }  from '../requests.jsx'
 
 const Dashboard = () => {
     const userData = useUser();
     const [userExpenses, setUserExpenses] = useState(null);
 
     useEffect(() => {
-        const fetchExpenses = async () => {
-            const token = localStorage.getItem('token');
-            if (token) {
-                try {
-                    const expenses = await getUserExpenses(token);
-                    setUserExpenses(expenses);
-                } catch (error) {
-                    console.error("Failed to fetch user expenses:", error);
-                }
-            }
+        const loadExpenses = async () => {
+            const expenses = await fetchExpenses();
+            setUserExpenses(expenses);
         };
-
-        fetchExpenses();
+        loadExpenses();
     }, []);
 
     useEffect(() => {
@@ -52,7 +44,7 @@ const Dashboard = () => {
                 <TariffOptions userData={ userData } />
             </div>
             <h2>Дополнительные услуги</h2>
-            <AdditionalServices />
+            <AdditionalServices cutValue={3} />
         </div>
     );
 };

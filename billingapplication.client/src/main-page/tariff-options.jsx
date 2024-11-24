@@ -1,17 +1,9 @@
 ﻿/* eslint-disable react/prop-types */
 import { Doughnut } from "react-chartjs-2";
+import { timeToMinutes, getMaxValue } from './functions.js'
 import "chart.js/auto";
 
 export const TariffOptions = ({ userData }) => {
-
-    const timeToMinutes = (time) => {
-        const [hours, minutes, seconds] = time.split(":").map(Number);
-        return hours * 60 + minutes + Math.floor(seconds / 60);
-    };
-    const getMaxValue = (currentValue, maxValue) => {
-        return Math.max(currentValue, maxValue);
-    }
-
     let currentTime = timeToMinutes(userData.callTime);
     let maxTime = getMaxValue(currentTime, timeToMinutes(userData.tariff.bundle.callTime));
 
