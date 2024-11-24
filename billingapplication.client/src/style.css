@@ -344,7 +344,7 @@ body {
 .sidebar-title {
     color: #AB3D36;
     font-size: 14px;
-    font-weight: 400px;
+    font-weight: 400;
     padding: 0px;
     margin-bottom: 15px;
 }
@@ -543,6 +543,23 @@ body {
     .service-price:hover {
         background-color: #E13124;
     }
-    /* Кошелек */
-    .wallet {
-    }
+
+
+
+/* Тариф */
+
+.tariff-services .service-card{
+    background-color: white;
+}
+
+
+
+
+/* Кошелек */
+.wallet {
+}
+
+
+
+
+

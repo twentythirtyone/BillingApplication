@@ -37,8 +37,12 @@ const LoginForm = () => {
                 }),
             });
 
+            if (response.status === 401) {
+                throw new Error('Неверный логин или пароль');
+            }
+
             if (!response.ok) {
-                throw new Error('Неправильный номер телефона или пароль');
+                throw new Error('Не удалось отправить запрос на сервер');
             }
 
             const data = await response.json();
@@ -47,8 +51,9 @@ const LoginForm = () => {
             localStorage.setItem('token', token);
             navigate('/main', { state: { token } });
             location.reload();
-        }
-        finally {
+        } catch (error) {
+            setErrorMessage(error.message);
+        } finally {
             setIsLoading(false);
         }
     };
@@ -56,7 +61,7 @@ const LoginForm = () => {
     return (
         <div className='login'>
             <div className='center-logo'>
-                <img className='logo-img1' src={logo} />
+                <img className='logo-img1' src={logo} alt="Логотип" />
                 <div className='logo-text1'>Alfa-Telecom</div>
             </div>
             <form className='log-form' onSubmit={handleSubmit}>
@@ -80,7 +85,7 @@ const LoginForm = () => {
                 <button className='confirm' type="submit" disabled={isLoading}>
                     {isLoading ? 'Загрузка...' : 'Войти'}
                 </button>
-                {errorMessage && <p className="error">{"Не удалось отправить запрос на сервер"}</p>}
+                {errorMessage && <p className="error">{errorMessage}</p>}
             </form>
         </div>
     );
