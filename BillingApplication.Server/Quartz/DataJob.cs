@@ -60,7 +60,7 @@ namespace BillingApplication.Server.Quartz
                             await SendEmail(emailSender!, user.Email, "Уведомление о недостатке средств",
                                             "На вашем счету недостаточно средств, для работы тарифа пополните счёт и перейдите в приложение," +
                                             "чтобы обновить тариф.");
-                            user.TariffId = 1;
+                            user.TariffId = 12;
                         }
 
                         await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), user.PassportInfo, user.Tariff.Id);

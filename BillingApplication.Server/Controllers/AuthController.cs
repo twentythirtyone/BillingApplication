@@ -135,8 +135,8 @@ namespace BillingApplication.Controllers
             return NotFound();
         }
 
-        [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        //[ServiceFilter(typeof(RoleAuthorizeFilter))]
+        //[RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPost("register/subscriber")]
         public async Task<IActionResult> RegisterSubscriber([FromBody] SubscriberRegisterModel model)
         {
