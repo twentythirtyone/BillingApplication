@@ -52,11 +52,11 @@ namespace BillingApplication.Server.Controllers
                         {
                             Number = "89089102520",
                             Balance = 5000,
-                            CallTime = new TimeSpan(30),
+                            CallTime = new TimeSpan(0),
                             Email = "testmail@yandex.ru",
                             Internet = 0,
                             Messages = 0,
-                            TariffId = 1,
+                            TariffId = 12,
                             Password = "Test123!"
                         },
                         new PassportInfo()
@@ -69,7 +69,7 @@ namespace BillingApplication.Server.Controllers
                             Registration = "Екатеринбург"
                         },
 
-                        1
+                        12
                     );
                 }
                 catch (UserNotFoundException ex)
@@ -90,7 +90,7 @@ namespace BillingApplication.Server.Controllers
                 var expensesBefore = await subscriberManager.GetExpensesCurrentMonth(currentUserId);
 
                 // 4. Changing tariff
-                int? tariffId = new Random().Next(5, 7); //Random tariff ID
+                int? tariffId = new Random().Next(7, 11); //Random tariff ID
                 userBefore.TariffId = (int)tariffId;
                 await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(userBefore), userBefore.PassportInfo, tariffId);
                 logger.LogInformation($"TARIFF CHANGE: User {currentUserId} changed tariff to {tariffId}");
@@ -108,7 +108,7 @@ namespace BillingApplication.Server.Controllers
                 logger.LogInformation($"USER UPDATE: User {currentUserId} spend his traffic");
 
                 // 7. Add a mock extra service to the user
-                var extraId = new Random().Next(4, 6); // Random extra ID
+                var extraId = new Random().Next(9, 13); // Random extra ID
                 await subscriberManager.AddExtraToSubscriber(extraId, (int)currentUserId!);
                 logger.LogInformation($"Added extra service {extraId} to user {currentUserId}.");
 
