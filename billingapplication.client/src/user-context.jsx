@@ -7,7 +7,7 @@ export const useUser = () => {
     if (context === undefined) {
         throw new Error('useUser must be used within a UserProvider');
     }
-    return context;  // Просто возвращаем данные из контекста
+    return context;
 };
 
 export const UserProvider = ({ children }) => {
@@ -36,7 +36,7 @@ export const UserProvider = ({ children }) => {
             }
 
             const data = await response.json();
-            setUserData(data); // Обновляем данные
+            setUserData(data);
         } catch (error) {
             console.error("Failed to fetch user data:", error);
         }

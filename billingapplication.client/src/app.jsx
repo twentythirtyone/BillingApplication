@@ -7,6 +7,7 @@ import LoginForm from './authorization/user-login.jsx'
 import AdminLoginForm from './authorization/admin-login.jsx'
 import MainPage from './main-page/main-page.jsx'
 import Dashboard from './main-page/dashboard.jsx'
+import Tariff from './main-page/tariff.jsx'
 import Wallet from './main-page/wallet.jsx'
 import './style.css'
 
@@ -21,7 +22,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path="main" element={<MainPage />}>
                         <Route index element={<Navigate to="control" />} />
                         <Route path="control" element={<Dashboard />} />
-                        <Route path="tariff" element={<Dashboard />} />
+                        <Route path="tariff" element={<Tariff />} />
                         <Route path="wallet" element={<Wallet />} />
                         <Route path="add-services" element={<Dashboard />} />
                         <Route path="history" element={<Dashboard />} />
