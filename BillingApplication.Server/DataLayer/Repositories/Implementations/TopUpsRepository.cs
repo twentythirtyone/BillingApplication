@@ -1,8 +1,9 @@
-﻿using BillingApplication.Server.Mapper;
+﻿using BillingApplication.Server.DataLayer.Repositories.Abstractions;
+using BillingApplication.Server.Mapper;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using Microsoft.EntityFrameworkCore;
 
-namespace BillingApplication.Server.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class TopUpsRepository : ITopUpsRepository
     {

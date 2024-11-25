@@ -1,4 +1,4 @@
-﻿using BillingApplication.DataLayer.Repositories;
+﻿using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Services.Models.Utilites;
 
 namespace BillingApplication.Server.Services.Manager.ExtrasManager

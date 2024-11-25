@@ -21,7 +21,7 @@ namespace BillingApplication.Mapper
                 Number = userEntity.Number ?? "",
                 Balance = userEntity.Balance,
                 CallTime = userEntity.CallTime,
-                Internet = userEntity.Internet,
+                Internet = userEntity.InternetAmount,
                 Messages = userEntity.MessagesCount,
                 PaymentDate = userEntity.PaymentDate,
                 PassportId = userEntity.PassportId,
@@ -43,7 +43,7 @@ namespace BillingApplication.Mapper
                 Number = userEntity.Number ?? "",
                 Balance = userEntity.Balance,
                 CallTime = userEntity.CallTime,
-                Internet = userEntity.Internet,
+                Internet = userEntity.InternetAmount,
                 Messages = userEntity.MessagesCount,
                 PaymentDate = userEntity.PaymentDate,
                 PassportId = userEntity.PassportId,
@@ -66,7 +66,7 @@ namespace BillingApplication.Mapper
                 Tariff = tariff,
                 Balance = userModel.Balance,
                 CallTime = userModel.CallTime,
-                Internet = userModel.Internet,
+                InternetAmount = userModel.Internet,
                 MessagesCount = userModel.Messages,
                 PaymentDate = userModel.PaymentDate,
                 PassportInfo = PassportMapper.PassportModelToPassportEntity(passportInfo)
@@ -84,7 +84,7 @@ namespace BillingApplication.Mapper
             userEntity.Tariff = tariff;
             userEntity.PassportInfo = passportInfo;
             userEntity.CallTime = userModel.CallTime;
-            userEntity.Internet = userModel.Internet;
+            userEntity.InternetAmount = userModel.Internet;
             userEntity.MessagesCount = userModel.Messages;
 
             return userEntity;

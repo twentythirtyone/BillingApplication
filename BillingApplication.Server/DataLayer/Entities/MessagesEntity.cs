@@ -13,7 +13,7 @@ namespace BillingApplication.Entities
         public string? ToPhoneNumber { get; set; }
         public DateTime Date { get; set; }
         public decimal Price { get; set; }
-        public string MessageText { get; set; } = "";
+        public string MessageText {  get; set; }
         public virtual SubscriberEntity Subscriber { get; set; }
     }
 }

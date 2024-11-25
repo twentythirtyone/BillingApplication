@@ -1,4 +1,4 @@
-﻿using BillingApplication.Server.DataLayer.Repositories;
+﻿using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Server.Services.Manager.MessagesManager
@@ -15,7 +15,7 @@ namespace BillingApplication.Server.Services.Manager.MessagesManager
             return await messagesRepository.AddMessage(message);
         }
 
-        public async Task<IEnumerable<Messages>> GetAllMessages()
+        public async Task<IEnumerable<Messages>> Get()
         {
             return await messagesRepository.GetMessages() ?? Enumerable.Empty<Messages>();
         }
@@ -25,7 +25,7 @@ namespace BillingApplication.Server.Services.Manager.MessagesManager
             return await messagesRepository.GetMessageById(id);
         }
 
-        public async Task<IEnumerable<Messages>> GetMessagesByUserId(int? subscriberId)
+        public async Task<IEnumerable<Messages>> GetByUserId(int? subscriberId)
         {
             return await messagesRepository.GetMessagesByUserId(subscriberId) ?? Enumerable.Empty<Messages>();
         }

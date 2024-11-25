@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Exceptions;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Mapper;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
 using BillingApplication.Server.Services.Models.Utilites;
@@ -6,7 +7,7 @@ using BillingApplication.Services.Auth;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using Microsoft.EntityFrameworkCore;
 
-namespace BillingApplication.Server.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class MessagesRepository : IMessagesRepository
     {
@@ -24,9 +25,10 @@ namespace BillingApplication.Server.DataLayer.Repositories
         {
             var user = await context.Subscribers.FindAsync(message.FromPhoneId) ?? throw new UserNotFoundException();
 
-            if (user.MessagesCount >= 0)
+            if (user.MessagesCount > 0)
             {
                 user.MessagesCount--;
+                message.Price = 0;
             }
             else
             {

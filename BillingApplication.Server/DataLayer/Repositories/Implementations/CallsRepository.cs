@@ -1,5 +1,6 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Exceptions;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Mapper;
 using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
@@ -8,14 +9,14 @@ using BillingApplication.Services.Models.Subscriber.Stats;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Prng;
 
-namespace BillingApplication.Server.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class CallsRepository : ICallsRepository
     {
         private readonly BillingAppDbContext context;
         private readonly IPaymentsManager paymentsManager;
 
-        public CallsRepository(BillingAppDbContext context, IPaymentsManager paymentsManager) 
+        public CallsRepository(BillingAppDbContext context, IPaymentsManager paymentsManager)
         {
             this.context = context;
             this.paymentsManager = paymentsManager;
@@ -27,13 +28,14 @@ namespace BillingApplication.Server.DataLayer.Repositories
             if (user.CallTime.Minutes >= call.Duration)
             {
                 user.CallTime -= TimeSpan.FromMinutes(call.Duration);
+                call.Price = 0;
             }
             else
             {
                 await paymentsManager.AddPayment(
                     new Payment()
                     {
-                        Name = "Плата за СМС",
+                        Name = "Плата за звонок",
                         Date = DateTime.UtcNow,
                         Amount = call.Price,
                         PhoneId = (int)user.Id!

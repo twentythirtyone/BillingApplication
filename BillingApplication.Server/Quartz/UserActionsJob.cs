@@ -1,9 +1,11 @@
 ﻿using BillingApplication.Mapper;
 using BillingApplication.Server.Services.Manager.CallsManager;
+using BillingApplication.Server.Services.Manager.InternetManager;
 using BillingApplication.Server.Services.Manager.MessagesManager;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
+using BillingApplication.Server.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.Services.Models.Utilites;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using Quartz;
@@ -26,7 +28,7 @@ namespace BillingApplication.Server.Quartz
                 var subscriberManager = scope.ServiceProvider.GetService<ISubscriberManager>();
                 var callsManager = scope.ServiceProvider.GetService<ICallsManager>();
                 var messagesManager = scope.ServiceProvider.GetService<IMessagesManager>();
-                var paymentsManager = scope.ServiceProvider.GetService<IPaymentsManager>();
+                var internetManager = scope.ServiceProvider.GetService<IInternetManager>();
 
                 var subscribers = await subscriberManager!.GetSubscribers();
 
@@ -58,22 +60,15 @@ namespace BillingApplication.Server.Quartz
                             }
                         );
 
-                    if (user.Internet >= gbytes)
-                    {
-                        user.Internet -= gbytes;
-                    }
-                    else
-                    {
-                        await paymentsManager!.AddPayment(
-                            new Payment
-                            {
+                    await internetManager!.AddTraffic(
+                            new Internet 
+                            { 
                                 Date = DateTime.UtcNow,
-                                Amount = ((gbytes * 1024) / 100) * Constants.INTERNET_PER_100MB_PRICE,
-                                Name = $"Оплата за потраченные гигабайты ({gbytes} ГБ)",
-                                PhoneId = (int)user.Id!
+                                PhoneId = (int)user.Id!,
+                                SpentInternet = gbytes * 1024,
+                                Price = ((gbytes * 1024) / 100) * Constants.INTERNET_PER_100MB_PRICE
                             }
                         );
-                    }
 
 
                     await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), user.PassportInfo, user.Tariff.Id);

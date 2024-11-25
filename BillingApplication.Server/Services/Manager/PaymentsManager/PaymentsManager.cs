@@ -1,6 +1,6 @@
 ﻿using BillingApplication.Exceptions;
 using BillingApplication.Mapper;
-using BillingApplication.Server.DataLayer.Repositories;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;

@@ -2,7 +2,7 @@
 using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Services.Models.Utilites.Tariff;
 
-namespace BillingApplication.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
 {
     public interface ITariffRepository
     {

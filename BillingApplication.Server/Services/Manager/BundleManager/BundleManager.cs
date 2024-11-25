@@ -1,4 +1,4 @@
-﻿using BillingApplication.Server.DataLayer.Repositories;
+﻿using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Services.Models.Utilites;
 

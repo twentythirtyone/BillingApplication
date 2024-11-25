@@ -1,5 +1,6 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Entities;
+using BillingApplication.Server.DataLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication
@@ -22,9 +23,10 @@ namespace BillingApplication
         public DbSet<TopUpsEntity> TopUps { get; set; }
         public DbSet<CallsEntity> Calls { get; set; }
         public DbSet<MessagesEntity> Messages { get; set; }
+        public DbSet<InternetEntity> Internet { get; set; }
         public DbSet<OwnerChangeEntity> OwnerChanges { get; set; }
         public DbSet<TariffChangeEntity> TariffChanges { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -58,6 +60,12 @@ namespace BillingApplication
                 .HasMany(s => s.Messages) // Один подписчик имеет много сообщений
                 .WithOne(m => m.Subscriber) // У сообщения есть один подписчик
                 .HasForeignKey(m => m.FromPhoneId); // Внешний ключ в таблице сообщений
+
+            // Связь между Subscriber и Internet
+            modelBuilder.Entity<SubscriberEntity>()
+                .HasMany(s => s.Internet) // Один подписчик имеет много трафика
+                .WithOne(i => i.Subscriber) // У потраченного трафика есть один подписчик
+                .HasForeignKey(i => i.PhoneId); // Внешний ключ в таблице трафика
 
             // Связь между Subscriber и OwnerChange
             modelBuilder.Entity<SubscriberEntity>()

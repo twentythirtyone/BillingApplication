@@ -1,6 +1,6 @@
 ﻿using BillingApplication.Services.Models.Subscriber.Stats;
 
-namespace BillingApplication.Server.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
 {
     public interface ICallsRepository
     {
