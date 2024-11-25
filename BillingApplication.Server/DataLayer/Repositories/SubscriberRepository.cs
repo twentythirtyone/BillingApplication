@@ -131,6 +131,7 @@ namespace BillingApplication.Repositories
             {
                 await paymentsRepository.AddPayment(new Payment()
                 {
+                    Name = $"Покупка дополнительного пакета \"{existingExtra.Title}\"",
                     Date = DateTime.UtcNow,
                     Amount = existingExtra.Price,
                     PhoneId = subscriberId
@@ -193,7 +194,7 @@ namespace BillingApplication.Repositories
                                 .ThenInclude(x => x.Bundle)
                                 .Include(s => s.PassportInfo)
                                 .FirstOrDefaultAsync(s => s.Id == subscriberId);
-            if (user != null && user.Balance >= user.Tariff.Price)
+            if (user != null)
             {
                 user.CallTime += user.Tariff.Bundle.CallTIme;
                 user.Internet += user.Tariff.Bundle.Internet;

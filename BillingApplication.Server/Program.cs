@@ -154,11 +154,14 @@ internal class Program
         services.AddScoped<IPaymentsManager, PaymentsManager>();
         services.AddScoped<ITopUpsRepository, TopUpsRepository>();
         services.AddScoped<ITopUpsManager, TopUpsManager>();
-        services.AddScoped<DataJob>();
+        services.AddScoped<BillingJob>();
+        services.AddScoped<UserActionsJob>();
         services.AddScoped<IEmailSender, EmailSender>();
         services.AddScoped<IExtrasRepository, ExtrasRepository>();
         services.AddScoped<IExtrasManager, ExtrasManager>();
-        
+        services.AddScoped<ICallsRepository, CallsRepository>();
+        services.AddScoped<IMessagesRepository, MessagesRepository>();
+
         services.AddTransient<JobFactory>();
         services.AddTransient<IMailService, MailService>();
 

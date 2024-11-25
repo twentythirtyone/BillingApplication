@@ -3,7 +3,7 @@ using BillingApplication.Services.Models.Utilites;
 
 namespace BillingApplication.Server.Mapper
 {
-    public class ExtrasMapper
+    public static class ExtrasMapper
     {
         public static Extras? ExtrasEntityToExtrasModel(ExtrasEntity? extrasEntity)
         {
