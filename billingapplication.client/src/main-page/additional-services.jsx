@@ -3,12 +3,6 @@
 export const AdditionalServices = ({cutValue}) => {
     const [additionalServices, setAdditionalServices] = useState([]);
 
-    const manualOverrides = {
-        4: { title: '+30', description: 'минут' },
-        5: { title: '+50', description: 'SMS' },
-        6: { title: '+100 +30', description: 'SMS и ГБ' },
-    };
-
     const fetchServices = async () => {
         try {
             const response = await fetch('https://localhost:7262/extras');
@@ -16,21 +10,13 @@ export const AdditionalServices = ({cutValue}) => {
                 throw new Error('Ошибка при загрузке данных');
             }
             const data = await response.json();
-
-            const updatedServices = data.map((service) => {
-                if (manualOverrides[service.id]) {
-                    return { ...service, ...manualOverrides[service.id] };
-                }
-                return service;
-            });
-
-            setAdditionalServices(updatedServices);
+            setAdditionalServices(data);
         } catch (error) {
             console.error('Ошибка:', error);
         }
     };
 
-    const handleServicePurchase = async (serviceId) => {
+    const handleServicePurchase = async (serviceId, serviceTitle) => {
         const token = localStorage.getItem('token');
         try {
             const response = await fetch(`https://localhost:7262/subscriber/add/extra/${serviceId}`, {
@@ -45,11 +31,15 @@ export const AdditionalServices = ({cutValue}) => {
                 throw new Error('Ошибка при покупке услуги');
             }
             const result = await response.json();
-            alert(`Услуга "${result.title}" успешно подключена!`);
+            alert(`Услуга "${serviceTitle}" успешно подключена!`);
             console.log(result);
         } catch (error) {
             console.error('Ошибка при подключении услуги:', error);
         }
+    };
+
+    const parseAdditionalDesc = (description) => {
+        return description.split(' ');
     };
 
     useEffect(() => {
@@ -62,11 +52,11 @@ export const AdditionalServices = ({cutValue}) => {
         <div className="additional-services">
             {latestServices.map((service) => (
                 <div className="service-card" key={service.id}>
-                    <span className="service-card-top">{service.title}</span>
-                    <span className="service-card-bottom">{service.description}</span>
+                    <span className="service-card-title"> +{parseAdditionalDesc(service.description)[0]}</span>
+                    <span className="service-card-desc">{parseAdditionalDesc(service.description)[1]}</span>
                     <button
                         className="service-price"
-                        onClick={() => handleServicePurchase(service.id)}>
+                        onClick={() => handleServicePurchase(service.id, service.title)}>
                         {service.price}₽
                     </button>
                 </div>

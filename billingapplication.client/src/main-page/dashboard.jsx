@@ -44,7 +44,7 @@ const Dashboard = () => {
                 <TariffOptions userData={ userData } />
             </div>
             <h2>Дополнительные услуги</h2>
-            <AdditionalServices cutValue={3} />
+            <AdditionalServices />
         </div>
     );
 };
