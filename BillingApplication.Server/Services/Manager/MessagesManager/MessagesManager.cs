@@ -1,26 +1,33 @@
-﻿using BillingApplication.Services.Models.Subscriber.Stats;
+﻿using BillingApplication.Server.DataLayer.Repositories;
+using BillingApplication.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Server.Services.Manager.MessagesManager
 {
     public class MessagesManager : IMessagesManager
     {
-        public MessagesManager()
+        private readonly IMessagesRepository messagesRepository;
+        public MessagesManager(IMessagesRepository messagesRepository)
         {
-                
+            this.messagesRepository = messagesRepository;
         }
-        public Task<int?> AddNewMessage(Messages calls)
+        public async Task<int?> AddNewMessage(Messages message)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<IEnumerable<Messages>> GetAllMessages()
-        {
-            throw new NotImplementedException();
+            return await messagesRepository.AddMessage(message);
         }
 
-        public Task<IEnumerable<Messages>> GetMessagesHistory(int? subscriberId)
+        public async Task<IEnumerable<Messages>> GetAllMessages()
         {
-            throw new NotImplementedException();
+            return await messagesRepository.GetMessages() ?? Enumerable.Empty<Messages>();
+        }
+
+        public async Task<Messages> GetById(int id)
+        {
+            return await messagesRepository.GetMessageById(id);
+        }
+
+        public async Task<IEnumerable<Messages>> GetMessagesByUserId(int? subscriberId)
+        {
+            return await messagesRepository.GetMessagesByUserId(subscriberId) ?? Enumerable.Empty<Messages>();
         }
     }
 }

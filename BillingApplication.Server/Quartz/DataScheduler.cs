@@ -7,15 +7,15 @@ namespace BillingApplication.Server.Quartz
     public static class DataScheduler
     {
 
-        public static async void Start(IServiceProvider serviceProvider)
+        public static async Task Start(IServiceProvider serviceProvider)
         {
             IScheduler scheduler = await StdSchedulerFactory.GetDefaultScheduler();
             scheduler.JobFactory = serviceProvider.GetService<JobFactory>()!;
             await scheduler.Start();
 
-            IJobDetail jobDetail = JobBuilder.Create<DataJob>().Build();
-            ITrigger trigger = TriggerBuilder.Create()
-                .WithIdentity("MailingTrigger", "default")
+            IJobDetail jobDetailBilling = JobBuilder.Create<BillingJob>().Build();
+            ITrigger triggerBilling = TriggerBuilder.Create()
+                .WithIdentity("BillingTrigger", "default")
                 .StartNow()
                 .WithSimpleSchedule(x => x
                 .WithIntervalInHours(24)
@@ -23,7 +23,19 @@ namespace BillingApplication.Server.Quartz
                 .RepeatForever())
                 .Build();
 
-            await scheduler.ScheduleJob(jobDetail, trigger);
+            IJobDetail jobDetailUserActions = JobBuilder.Create<UserActionsJob>().Build();
+            ITrigger triggerUserActions = TriggerBuilder.Create()
+                .WithIdentity("UserActionsTrigger", "default")
+                .StartNow()
+                .WithSimpleSchedule(x => x
+                //.WithIntervalInHours(24)
+                .WithIntervalInMinutes(1)// для тестирования
+                .RepeatForever())
+                .Build();
+
+
+            await scheduler.ScheduleJob(jobDetailBilling, triggerBilling);
+            await scheduler.ScheduleJob(jobDetailUserActions, triggerUserActions);
         }
     }
 }

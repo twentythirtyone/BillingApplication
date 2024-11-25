@@ -3,7 +3,7 @@ using BillingApplication.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Server.Mapper
 {
-    public class TopUpsMapper
+    public static class TopUpsMapper
     {
         public static TopUps? BundleEntityToBundleModel(TopUpsEntity? topUpsEntity)
         {

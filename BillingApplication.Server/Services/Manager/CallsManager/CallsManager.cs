@@ -1,22 +1,34 @@
-﻿using BillingApplication.Services.Models.Subscriber.Stats;
+﻿using BillingApplication.Server.DataLayer.Repositories;
+using BillingApplication.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Server.Services.Manager.CallsManager
 {
     public class CallsManager : ICallsManager
     {
-        public Task<int?> AddNewCall(Calls calls)
+        private readonly ICallsRepository callsRepository;
+        public CallsManager(ICallsRepository callsRepository)
         {
-            throw new NotImplementedException();
+            this.callsRepository = callsRepository;
         }
 
-        public Task<IEnumerable<Calls>> GetAllCalls()
+        public async Task<int?> AddNewCall(Calls calls)
         {
-            throw new NotImplementedException();
+            return await callsRepository.AddCall(calls) ?? 0;
         }
 
-        public Task<IEnumerable<Calls>> GetCallsHistory(int? subscriberId)
+        public async Task<IEnumerable<Calls>> GetAllCalls()
         {
-            throw new NotImplementedException();
+            return await callsRepository.GetCalls() ?? Enumerable.Empty<Calls>();
+        }
+
+        public async Task<IEnumerable<Calls>> GetByUserId(int? subscriberId)
+        {
+            return await callsRepository.GetCallsByUserId(subscriberId) ?? Enumerable.Empty<Calls>();
+        }
+
+        public async Task<Calls> GetCallById(int id)
+        {
+            return await callsRepository.GetCallById(id);
         }
     }
 }

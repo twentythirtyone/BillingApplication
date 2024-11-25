@@ -16,7 +16,7 @@ namespace BillingApplication.Server.Services.MailService
             using (var scope = _serviceProvider.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
-                DataScheduler.Start(serviceProvider);
+                await DataScheduler.Start(serviceProvider);
             }
             await Task.CompletedTask;
         }

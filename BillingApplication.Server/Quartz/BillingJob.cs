@@ -4,16 +4,17 @@ using BillingApplication.Server.Services.Manager.BundleManager;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
+using BillingApplication.Server.Services.Models.Utilites;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using Quartz;
 
 namespace BillingApplication.Server.Quartz
 {
-    public class DataJob : IJob
+    public class BillingJob : IJob
     {
         private readonly IServiceScopeFactory serviceScopeFactory;
-        public DataJob(IServiceScopeFactory serviceScopeFactory)
+        public BillingJob(IServiceScopeFactory serviceScopeFactory)
         {
             this.serviceScopeFactory = serviceScopeFactory;
         }
@@ -50,6 +51,7 @@ namespace BillingApplication.Server.Quartz
                             user.PaymentDate = DateTime.UtcNow;
                             await paymentsManager!.AddPayment(new Payment()
                             {
+                                Name = "Ежемесячное списание средств по тарифу",
                                 Amount = user.Tariff.Price,
                                 Date = DateTime.UtcNow,
                                 PhoneId = (int)user.Id!
@@ -60,7 +62,7 @@ namespace BillingApplication.Server.Quartz
                             await SendEmail(emailSender!, user.Email, "Уведомление о недостатке средств",
                                             "На вашем счету недостаточно средств, для работы тарифа пополните счёт и перейдите в приложение," +
                                             "чтобы обновить тариф.");
-                            user.TariffId = 12;
+                            user.TariffId = Constants.DEFAULT_TARIFF_ID;
                         }
 
                         await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), user.PassportInfo, user.Tariff.Id);
@@ -73,7 +75,7 @@ namespace BillingApplication.Server.Quartz
 
         public async Task SendEmail(IEmailSender emailSender, string to, string title, string message)
         {
-                await emailSender.SendEmailAsync(to, title, message);
+           await emailSender.SendEmailAsync(to, title, message);
         }
     }
 }

@@ -129,7 +129,8 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             if (user == null)
                 throw new UserNotFoundException();
             await paymentRepository.AddPayment(new Payment() 
-            { 
+            {
+                Name = "Оплата тарифа",
                 Amount = user.Tariff.Price, 
                 Date = DateTime.UtcNow, 
                 PhoneId = (int)user.Id

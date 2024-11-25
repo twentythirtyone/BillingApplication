@@ -14,22 +14,24 @@ namespace BillingApplication.Server.Mapper
             return new Payment()
             {
                 Id = paymentEntity.Id,
+                Name = paymentEntity.Name,
                 Amount = paymentEntity.Amount,
                 Date = paymentEntity.Date,
                 PhoneId = paymentEntity.PhoneId
             };
         }
 
-        public static PaymentEntity? PaymentModelToPaymenEntity(Payment? paymentEntity)
+        public static PaymentEntity? PaymentModelToPaymenEntity(Payment? paymentModel)
         {
-            if (paymentEntity == null)
+            if (paymentModel == null)
                 return null;
             return new PaymentEntity()
             {
-                Id = paymentEntity.Id,
-                Amount = paymentEntity.Amount,
-                Date = paymentEntity.Date,
-                PhoneId = paymentEntity.PhoneId,
+                Id = paymentModel.Id,
+                Name = paymentModel.Name,
+                Amount = paymentModel.Amount,
+                Date = paymentModel.Date,
+                PhoneId = paymentModel.PhoneId,
             };
         }
     }
