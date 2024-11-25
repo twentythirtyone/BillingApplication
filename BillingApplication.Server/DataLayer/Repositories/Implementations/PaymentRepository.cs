@@ -1,5 +1,6 @@
 ﻿using BillingApplication.Entities;
 using BillingApplication.Mapper;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Mapper;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Services.Models.Subscriber.Stats;
@@ -7,7 +8,7 @@ using BillingApplication.Services.Models.Utilites;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace BillingApplication.Server.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class PaymentRepository : IPaymentRepository
     {
@@ -65,7 +66,7 @@ namespace BillingApplication.Server.DataLayer.Repositories
                 .AsNoTracking()
                 .ToListAsync();
 
-            var payment = PaymentMapper.PaymentEntityToPaymentModel(payments.LastOrDefault(x=>x.PhoneId == id));
+            var payment = PaymentMapper.PaymentEntityToPaymentModel(payments.LastOrDefault(x => x.PhoneId == id));
 
             return payment;
         }

@@ -1,10 +1,11 @@
 ﻿using BillingApplication.Mapper;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Mapper;
 using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Services.Models.Utilites.Tariff;
 using Microsoft.EntityFrameworkCore;
 
-namespace BillingApplication.Server.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class BundleRepository : IBundleRepository
     {
@@ -13,7 +14,7 @@ namespace BillingApplication.Server.DataLayer.Repositories
         {
             this.context = context;
         }
-        
+
         public async Task<int?> Create(Bundle bundle)
         {
             var bundleEntity = BundleMapper.BundleModelToBundleEntity(bundle);

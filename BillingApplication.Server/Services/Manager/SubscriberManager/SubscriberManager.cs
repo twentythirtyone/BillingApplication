@@ -1,5 +1,4 @@
 ﻿using BillingApplication.Exceptions;
-using BillingApplication.Repositories;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber;
 using BillingApplication.Services.Auth;
@@ -7,7 +6,7 @@ using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Models.Subscriber;
-using BillingApplication.Server.DataLayer.Repositories;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 
 namespace BillingApplication.Server.Services.Manager.SubscriberManager
 {

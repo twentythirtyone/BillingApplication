@@ -1,6 +1,6 @@
 ﻿using BillingApplication.Services.Models.Utilites;
 
-namespace BillingApplication.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
 {
     public interface IExtrasRepository
     {

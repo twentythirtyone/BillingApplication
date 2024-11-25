@@ -5,8 +5,9 @@ using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Utilites.Tariff;
 using Microsoft.EntityFrameworkCore;
 using BillingApplication.Services.Models.Utilites;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 
-namespace BillingApplication.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class TariffRepository : ITariffRepository
     {
@@ -42,7 +43,7 @@ namespace BillingApplication.DataLayer.Repositories
         public async Task<IEnumerable<Tariffs?>> Get()
         {
             var tariffEntities = await context.Tariffs
-                .Include(x=>x.Bundle)
+                .Include(x => x.Bundle)
                 .AsNoTracking()
                 .ToListAsync();
             return tariffEntities.Select(TariffMapper.TariftEntityToTarifModel);
@@ -65,11 +66,11 @@ namespace BillingApplication.DataLayer.Repositories
         public async Task<Tariffs?> GetBySubscriber(int id)
         {
             var existingSubscriber = await context.Subscribers.FindAsync(id);
-            if(existingSubscriber == null) 
+            if (existingSubscriber == null)
             {
                 throw new UserNotFoundException();
             }
-           
+
             var tariffEntity = await context.Tariffs.Where(t => t.Id == existingSubscriber.TariffId).FirstOrDefaultAsync();
             var tariff = TariffMapper.TariftEntityToTarifModel(tariffEntity);
             return tariff;

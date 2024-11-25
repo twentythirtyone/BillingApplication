@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using BillingApplication.Server.DataLayer.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace BillingApplication.Entities
@@ -28,7 +29,7 @@ namespace BillingApplication.Entities
         [Column("messages")]
         public int MessagesCount { get; set; }
         [Column("internet")]
-        public long Internet { get; set; }
+        public long InternetAmount { get; set; }
 
         public virtual PassportInfoEntity PassportInfo { get; set; }
         public virtual TariffEntity Tariff { get; set; }
@@ -36,6 +37,7 @@ namespace BillingApplication.Entities
         public virtual ICollection<TopUpsEntity> TopUps { get; set; }
         public virtual ICollection<CallsEntity> Calls { get; set; }
         public virtual ICollection<MessagesEntity> Messages { get; set; }
+        public virtual ICollection<InternetEntity> Internet { get; set; }
         public virtual ICollection<OwnerChangeEntity> OwnerChanges { get; set; }
         public virtual ICollection<TariffChangeEntity> TariffChanges { get; set; }
     }

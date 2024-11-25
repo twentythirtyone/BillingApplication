@@ -1,7 +1,5 @@
 using BillingApplication;
-using BillingApplication.DataLayer.Repositories;
 using BillingApplication.Services.Auth;
-using BillingApplication.Repositories;
 using BillingApplication.Services.Auth.Roles;
 using JavaScriptEngineSwitcher.ChakraCore;
 using JavaScriptEngineSwitcher.Extensions.MsDependencyInjection;
@@ -13,7 +11,6 @@ using Microsoft.OpenApi.Models;
 using React.AspNet;
 using System.Security.Claims;
 using System.Text;
-using BillingApplication.Server.DataLayer.Repositories;
 using BillingApplication.Server.Services.Manager.BundleManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
@@ -28,6 +25,9 @@ using BillingApplication.Server.Services.Manager.TopUpsManager;
 using BillingApplication.Server.Services.Manager.ExtrasManager;
 using NLog.Web;
 using NLog;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
+using BillingApplication.Server.DataLayer.Repositories.Implementations;
+using BillingApplication.Server.Services.Manager.InternetManager;
 
 internal class Program
 {
@@ -161,6 +161,8 @@ internal class Program
         services.AddScoped<IExtrasManager, ExtrasManager>();
         services.AddScoped<ICallsRepository, CallsRepository>();
         services.AddScoped<IMessagesRepository, MessagesRepository>();
+        services.AddScoped<IInternetRepository, InternetRepository>();
+        services.AddScoped<IInternetManager, InternetManager>();
 
         services.AddTransient<JobFactory>();
         services.AddTransient<IMailService, MailService>();

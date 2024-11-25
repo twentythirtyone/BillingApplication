@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BillingApplication.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
 {
     public interface ISubscriberRepository
     {

@@ -3,6 +3,7 @@ using System;
 using BillingApplication;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BillingApplication.Migrations
 {
     [DbContext(typeof(BillingAppDbContext))]
-    partial class BillingAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241125164618_InternetTableAdd")]
+    partial class InternetTableAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -416,10 +419,11 @@ namespace BillingApplication.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("PhoneId")
-                        .HasColumnType("integer");
+                    b.Property<string>("MessageText")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int>("Price")
+                    b.Property<int>("PhoneId")
                         .HasColumnType("integer");
 
                     b.Property<long>("SpentInternet")

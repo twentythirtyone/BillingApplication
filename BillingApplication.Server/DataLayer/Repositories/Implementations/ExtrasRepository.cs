@@ -1,9 +1,10 @@
 ﻿using BillingApplication.DataLayer.Entities;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Mapper;
 using BillingApplication.Services.Models.Utilites;
 using Microsoft.EntityFrameworkCore;
 
-namespace BillingApplication.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class ExtrasRepository : IExtrasRepository
     {
@@ -14,7 +15,7 @@ namespace BillingApplication.DataLayer.Repositories
         }
         public async Task<int?> Create(Extras extras)
         {
-            BundleEntity bundle = await context.Bundles.FindAsync(extras.Package) ?? throw new InvalidOperationException("bundle_does_not_exists"); 
+            BundleEntity bundle = await context.Bundles.FindAsync(extras.Package) ?? throw new InvalidOperationException("bundle_does_not_exists");
 
             ExtrasEntity extrasEntity = ExtrasMapper.ExtrasModelToExtrasEntity(extras);
             await context.Extras.AddAsync(extrasEntity);

@@ -1,4 +1,4 @@
-﻿using BillingApplication.Server.DataLayer.Repositories;
+﻿using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Server.Services.Manager.CallsManager
@@ -16,7 +16,7 @@ namespace BillingApplication.Server.Services.Manager.CallsManager
             return await callsRepository.AddCall(calls) ?? 0;
         }
 
-        public async Task<IEnumerable<Calls>> GetAllCalls()
+        public async Task<IEnumerable<Calls>> Get()
         {
             return await callsRepository.GetCalls() ?? Enumerable.Empty<Calls>();
         }

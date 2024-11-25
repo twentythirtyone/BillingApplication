@@ -1,9 +1,8 @@
-﻿using BillingApplication.DataLayer.Repositories;
-using BillingApplication.Services.Auth;
-using BillingApplication.Repositories;
+﻿using BillingApplication.Services.Auth;
 using BillingApplication.Exceptions;
 using BillingApplication.Services.Models.Utilites.Tariff;
 using BillingApplication.Services.Models.Utilites;
+using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 
 namespace BillingApplication.Server.Services.Manager.TariffManager
 {

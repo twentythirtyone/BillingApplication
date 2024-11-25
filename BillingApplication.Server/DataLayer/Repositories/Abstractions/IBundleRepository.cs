@@ -1,6 +1,6 @@
 ﻿using BillingApplication.Services.Models.Utilites;
 
-namespace BillingApplication.Server.DataLayer.Repositories
+namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
 {
     public interface IBundleRepository
     {
@@ -9,7 +9,7 @@ namespace BillingApplication.Server.DataLayer.Repositories
         Task<int?> Create(Bundle bundle);
         Task<int?> Update(Bundle bundle);
         Task<int?> Delete(int? id);
-        
+
     }
 
 }
