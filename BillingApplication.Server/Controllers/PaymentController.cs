@@ -41,7 +41,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get")]
+        [HttpGet]
         public async Task<IActionResult> GetPayments()
         {
             try
@@ -60,7 +60,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -79,7 +79,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/user/{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetPaymentsByUserId(int userId)
         {
             try
@@ -91,26 +91,6 @@ namespace BillingApplication.Server.Controllers
             catch (Exception ex)
             {
                 logger.LogError($"ERROR GETTING:  User {userId} Payments has not been recieved." +
-                                      $"\nMessage:{ex.Message}\n");
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/last/user/{userId}")]
-        public async Task<IActionResult> GetLastPaymentByUserId(int userId)
-        {
-            try
-            {
-
-                var result = await paymentsManager.GetLastPaymentByUserId(userId);
-                logger.LogInformation($"GETTING: last User {userId} Payment has been recieved");
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                logger.LogError($"ERROR GETTING: last User {userId} Payment has not been recieved." +
                                       $"\nMessage:{ex.Message}\n");
                 return BadRequest(ex.Message);
             }

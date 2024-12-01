@@ -19,7 +19,7 @@ using BillingApplication.Server.Services.MailService;
 
 namespace BillingApplication.Controllers
 {
-    [Route("subscriber")]
+    [Route("subscribers")]
     [ApiController]
     public class SubscriberController : Controller
     {
@@ -60,7 +60,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/user/id/{userId}")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetSubscriberById(int? userId)
         {
             try
@@ -80,7 +80,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/user/phone/{phoneNumber}")]
+        [HttpGet("phone/{phoneNumber}")]
         public async Task<IActionResult> GetSubscriberByPhoneNumber(string phoneNumber)
         {
             try
@@ -100,7 +100,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/user/email/{email}")]
+        [HttpGet("email/{email}")]
         public async Task<IActionResult> GetSubscriberByEmail(string email)
         {
             try
@@ -120,7 +120,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/users")]
+        [HttpGet]
         public async Task<IActionResult> GetSubscribers()
         {
             try
@@ -139,7 +139,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/users/{tariffId}")]
+        [HttpGet("tariff/{tariffId}")]
         public async Task<IActionResult> GetSubscribersByTariff(int tariffId)
         {
             try
@@ -158,7 +158,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/expenses/month/user/id/{userId}")]
+        [HttpGet("{userId}/expenses/month/current")]
         public async Task<IActionResult> GetExpensesCurrentMonth(int? userId)
         {
             try
@@ -180,52 +180,8 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/expenses/year/id/{userId}")]
-        public async Task<IActionResult> GetExpensesCurrentYear(int? userId)
-        {
-            try
-            {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesCurrentYear(id);
-                    logger.LogInformation($"GETTING: User {userId} Expenses has been recieved");
-                    return Ok(result);
-                }, userId);
-            }
-            catch (PackageNotFoundException ex)
-            {
-                logger.LogError($"ERROR GETTING:  User {userId} Expenses has has not been recieved." +
-                                      $"\nMessage:{ex.Message}\n");
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/expenses/month/{month}/user/{userId}")]
-        public async Task<IActionResult> GetExpensesInMonth(int month, int userId)
-        {
-            try
-            {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesInMonth((Monthes)month, id);
-                    logger.LogInformation($"GETTING: User {userId} Expenses in month {month} has been recieved");
-                    return Ok(result);
-                }, userId);
-            }
-            catch (PackageNotFoundException ex)
-            {
-                logger.LogError($"ERROR GETTING:  User {userId} Expenses in month {month} has has not been recieved." +
-                                      $"\nMessage:{ex.Message}\n");
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/expenses/month")]
+        [HttpGet("expenses/month/current")]
         public async Task<IActionResult> GetExpensesCurrentUserCurrentMonth()
         {
             try
@@ -246,7 +202,53 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [HttpGet("get/expenses/year")]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("{userId}/expenses/month/{month}")]
+        public async Task<IActionResult> GetExpensesInMonth(int month, int userId)
+        {
+            try
+            {
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesInMonth((Months)month, id);
+                    logger.LogInformation($"GETTING: User {userId} Expenses in month {month} has been recieved");
+                    return Ok(result);
+                }, userId);
+            }
+            catch (PackageNotFoundException ex)
+            {
+                logger.LogError($"ERROR GETTING:  User {userId} Expenses in month {month} has has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("{userId}/expenses/year/current")]
+        public async Task<IActionResult> GetExpensesCurrentYear(int? userId)
+        {
+            try
+            {
+                return await ValidateAccessAndDoFunc(async id =>
+                {
+                    var result = await subscriberManager.GetExpensesCurrentYear(id);
+                    logger.LogInformation($"GETTING: User {userId} Expenses has been recieved");
+                    return Ok(result);
+                }, userId);
+            }
+            catch (PackageNotFoundException ex)
+            {
+                logger.LogError($"ERROR GETTING:  User {userId} Expenses has has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [HttpGet("expenses/year/current")]
         public async Task<IActionResult> GetExpensesCurrentUserCurrentYear()
         {
             try
@@ -267,14 +269,14 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [HttpGet("get/expenses/month/{month}")]
+        [HttpGet("expenses/month/{month}")]
         public async Task<IActionResult> GetExpensesCurrentUserInMonth(int month)
         {
             try
             {
                 return await ValidateAccessAndDoFunc(async id =>
                 {
-                    var result = await subscriberManager.GetExpensesInMonth((Monthes)month, id);
+                    var result = await subscriberManager.GetExpensesInMonth((Months)month, id);
                     logger.LogInformation($"GETTING: Current User Expenses has been recieved");
                     return Ok(result);
                 }, auth.GetCurrentUserId());
@@ -304,7 +306,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPut("update")]
+        [HttpPatch("update")]
         public async Task<IActionResult> UpdateSubscriber([FromBody] SubscriberRegisterModel model)
         {
             try
@@ -327,7 +329,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("add/extra/{extraId}/user/{userId}")]
+        [HttpPost("{userId}/extras/add/{extraId}")]
         public async Task<IActionResult> AddExtraToSubscriber(int extraId, int userId)
         {
             try
@@ -347,7 +349,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpPost("add/extra/{extraId}")]
+        [HttpPost("extras/add/{extraId}")]
         public async Task<IActionResult> AddExtraToCurrentSubscriber(int extraId)
         {
             try
@@ -368,7 +370,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpPost("{userId}/pay/tariff")]
+        [HttpPost("{userId}/tariff/pay")]
         public async Task<IActionResult> PayForTariff(int userId)
         {
             try
@@ -410,7 +412,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpPost("email/change/request/")]
+        [HttpPost("change/email")]
         public async Task<IActionResult> RequestEmailChange()
         {
             try
@@ -445,7 +447,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpPost("email/change/confirm")]
+        [HttpPost("change/email/confirm")]
         public async Task<IActionResult> ConfirmEmailChange([FromBody] EmailChangeRequest request)
         {
             try
@@ -500,7 +502,7 @@ namespace BillingApplication.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpPost("pay/tariff")]
+        [HttpPost("tariff/pay")]
         public async Task<IActionResult> PayForCurrentUserTariff()
         {
             try

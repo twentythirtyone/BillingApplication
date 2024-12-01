@@ -24,7 +24,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
         Task<int?> AddExtraToSubscriber(int extraId, int subscriberId);
         Task<decimal> GetExpensesCurrentMonth(int? subscriberId);
         Task<decimal> GetExpensesCurrentYear(int? subscriberId);
-        Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId);
+        Task<decimal> GetExpensesInMonth(Months month, int? subscriberId);
         Task<int?> AddUserTraffic(int subscriberId);
     }
 }

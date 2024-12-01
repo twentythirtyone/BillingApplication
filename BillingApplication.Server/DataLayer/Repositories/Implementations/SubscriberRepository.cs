@@ -160,7 +160,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             return 0;
         }
 
-        public async Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId)
+        public async Task<decimal> GetExpensesInMonth(Months month, int? subscriberId)
         {
             var user = await context.Subscribers.FindAsync(subscriberId);
             if (user != null)

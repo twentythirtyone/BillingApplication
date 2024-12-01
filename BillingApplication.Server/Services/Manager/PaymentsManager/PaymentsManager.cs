@@ -27,11 +27,6 @@ namespace BillingApplication.Server.Services.Manager.PaymentsManager
             return await paymentsRepository.AddPayment(payment) ?? throw new UserNotFoundException();
         }
 
-        public async Task<Payment> GetLastPaymentByUserId(int? id)
-        {
-            return await paymentsRepository.GetLastPaymentByUserId(id) ?? throw new PaymentNotFoundException();
-        }
-
         public async Task<Payment> GetPaymentById(int id)
         {
             return await paymentsRepository.GetPaymentById(id) ?? throw new PaymentNotFoundException();

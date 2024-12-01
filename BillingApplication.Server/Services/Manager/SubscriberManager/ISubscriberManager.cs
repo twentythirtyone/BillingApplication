@@ -19,7 +19,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         Task<int?> AddExtraToSubscriber(int extraId, int subscriberId);
         Task<decimal> GetExpensesCurrentMonth(int? subscriberId);
         Task<decimal> GetExpensesCurrentYear(int? subscriberId);
-        Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId);
+        Task<decimal> GetExpensesInMonth(Months month, int? subscriberId);
         Task<int?> AddPaymentForTariff(int subscriberId);
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace BillingApplication.Server.Services.Manager.SubscriberManager
 {
-    public enum Monthes
+    public enum Months
     {
         January = 1,
         February = 2,

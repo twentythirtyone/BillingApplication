@@ -43,7 +43,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpPut("update")]
+        [HttpPatch("update")]
         public async Task<IActionResult> Update([FromBody] TariffCreateUpdateModel tariffModel)
         {
             try
@@ -62,7 +62,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("delete/title/{title}")]
+        [HttpDelete("{title}/delete")]
         public async Task<IActionResult> DeleteByTitle(string title)
         {
             try
@@ -81,7 +81,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("delete/id/{id}")]
+        [HttpDelete("{id}/delete")]
         public async Task<IActionResult> DeleteById(int id)
         {
             try
@@ -100,7 +100,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -119,7 +119,7 @@ namespace BillingApplication.Controllers
 
         
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/title/{title}")]
+        [HttpGet("{title}")]
         public async Task<IActionResult> GetByTitle(string title)
         {
             try
@@ -138,7 +138,7 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/id/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
@@ -157,12 +157,12 @@ namespace BillingApplication.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/tariff/user/{id}")]
-        public async Task<IActionResult> GetByUser(int id)
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetByUser(int userId)
         {
             try
             {
-                var result = await tariffManager.GetTariffBySubscriberId(id);
+                var result = await tariffManager.GetTariffBySubscriberId(userId);
                 logger.LogInformation($"GETTING: Tariff {result} has been recieved");
                 return Ok(result);
             }
@@ -170,26 +170,26 @@ namespace BillingApplication.Controllers
             {
                 logger.LogError($"ERROR GETTING: Tariff has not been recieved" +
                      $"\nMessage:{ex.Message}" +
-                     $"\nModel: userId: {id}");
+                     $"\nModel: userId: {userId}");
                 return BadRequest(ex.Message);
             }
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/tariff/{tariffId}/bundle")]
-        public async Task<IActionResult> GetBundleByTariffId(int tariffId)
+        [HttpGet("{id}/bundle")]
+        public async Task<IActionResult> GetBundleByTariffId(int id)
         {
             try
             {
-                var result = await tariffManager.GetBundleByTariffId(tariffId);
-                logger.LogInformation($"GETTING: Bundle {result} from tariff {tariffId} has been recieved");
+                var result = await tariffManager.GetBundleByTariffId(id);
+                logger.LogInformation($"GETTING: Bundle {result} from tariff {id} has been recieved");
                 return Ok(result);
             }
             catch (Exception ex) when (ex is TariffNotFoundException)
             {
                 logger.LogError($"ERROR GETTING: Bundle has not been recieved" +
                      $"\nMessage:{ex.Message}" +
-                     $"\nModel: tariffId: {tariffId}");
+                     $"\nModel: tariffId: {id}");
                 return BadRequest(ex.Message);
             }
         }

@@ -34,7 +34,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/internet")]
+        [HttpGet("internet")]
         public async Task<IActionResult> GetInternet()
         {
             try
@@ -52,7 +52,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/messages")]
+        [HttpGet("messages")]
         public async Task<IActionResult> GetMessages()
         {
             try
@@ -70,7 +70,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/calls")]
+        [HttpGet("calls")]
         public async Task<IActionResult> GetCalls()
         {
             try
@@ -88,8 +88,8 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/user/calls/duration/month/{month}")]
-        public async Task<IActionResult> GetCurrentUserDurationCallsInMonth(Monthes month)
+        [HttpGet("calls/month/{month}/duration")]
+        public async Task<IActionResult> GetCurrentUserDurationCallsInMonth(Months month)
         {
             try
             {
@@ -107,8 +107,8 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/user/calls/month/{month}")]
-        public async Task<IActionResult> GetCurrentUserCallsInMonth(Monthes month)
+        [HttpGet("calls/month/{month}")]
+        public async Task<IActionResult> GetCurrentUserCallsInMonth(Months month)
         {
             try
             {
@@ -125,8 +125,8 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/user/messages/count/month/{month}")]
-        public async Task<IActionResult> GetCurrentUserMessagesInMonth(Monthes month)
+        [HttpGet("messages/month/{month}/count")]
+        public async Task<IActionResult> GetCurrentUserMessagesInMonth(Months month)
         {
             try
             {
@@ -144,8 +144,8 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/user/internet/count/month/{month}")]
-        public async Task<IActionResult> GetCurrentUserInternetInMonth(Monthes month)
+        [HttpGet("internet/month/{month}/count")]
+        public async Task<IActionResult> GetCurrentUserInternetInMonth(Months month)
         {
             try
             {
@@ -163,7 +163,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/user/internet/last/")]
+        [HttpGet("internet/last")]
         public async Task<IActionResult> GetCurrentUserInternetLastThreeMonth()
         {
             try
@@ -189,7 +189,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/user/calls/last/")]
+        [HttpGet("calls/last")]
         public async Task<IActionResult> GetCurrentUserCallsLastThreeMonth()
         {
             try
@@ -203,7 +203,7 @@ namespace BillingApplication.Server.Controllers
                     .Where(x => x.Date >= startDate && x.Date <= endDate)
                     .Select(x => x.Duration)
                     .Sum();
-                logger.LogError($"GETTING: User {auth.GetCurrentUserId()} successfully get messages in last three month.");
+                logger.LogInformation($"GETTING: User {auth.GetCurrentUserId()} successfully get messages in last three month.");
                 return Ok(calls);
             }
             catch (Exception ex)
@@ -215,7 +215,7 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
-        [HttpGet("get/user/messages/last/")]
+        [HttpGet("messages/last")]
         public async Task<IActionResult> GetCurrentUserMessagesLastThreeMonth()
         {
             try
@@ -228,7 +228,7 @@ namespace BillingApplication.Server.Controllers
                 var messages = model
                     .Where(x => x.Date >= startDate && x.Date <= endDate)
                     .Count();
-                logger.LogError($"GETTING: User {auth.GetCurrentUserId()} successfully get messages in last three month.");
+                logger.LogInformation($"GETTING: User {auth.GetCurrentUserId()} successfully get messages in last three month.");
                 return Ok(messages);
             }
             catch (Exception ex)

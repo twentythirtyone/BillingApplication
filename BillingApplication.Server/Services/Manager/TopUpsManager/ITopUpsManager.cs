@@ -8,6 +8,5 @@ namespace BillingApplication.Server.Services.Manager.TopUpsManager
         Task<TopUps> GetTopUpById(int id);
         Task<IEnumerable<TopUps>> GetTopUpsByUserId(int? id);
         Task<int?> AddTopUp(TopUps entity);
-        Task<TopUps> GetLastTopUpByUserId(int? id);
     }
 }

@@ -59,16 +59,5 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             return payments
                     .Select(PaymentMapper.PaymentEntityToPaymentModel)!;
         }
-
-        public async Task<Payment> GetLastPaymentByUserId(int? id)
-        {
-            var payments = await context.Payments
-                .AsNoTracking()
-                .ToListAsync();
-
-            var payment = PaymentMapper.PaymentEntityToPaymentModel(payments.LastOrDefault(x => x.PhoneId == id));
-
-            return payment;
-        }
     }
 }
