@@ -46,7 +46,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpPut("update")]
+        [HttpPatch("update")]
         public async Task<IActionResult> Update([FromBody] Bundle BundleModel)
         {
             try
@@ -65,7 +65,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}/delete")]
         public async Task<IActionResult> DeleteById(int id)
         {
             try
@@ -84,7 +84,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get")]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             try
@@ -103,7 +103,7 @@ namespace BillingApplication.Server.Controllers
 
 
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
-        [HttpGet("get/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try

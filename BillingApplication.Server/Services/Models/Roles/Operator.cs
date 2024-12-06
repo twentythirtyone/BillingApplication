@@ -13,6 +13,7 @@ namespace BillingApplication.Services.Models.Roles
         public required string Email { get; set; }
         public required string Nickname { get; set; }
         public required string Password { get; set; }
+        public string Salt { get; set; }
         public required bool IsAdmin { get; set; }
         public string UniqueId => Id.ToString();
     }

@@ -7,6 +7,8 @@ using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Models.Subscriber;
 using BillingApplication.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
+using BillingApplication.Entities;
+using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
@@ -45,11 +47,37 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                 throw new InvalidOperationException("Указанный тариф не существует");
             }
             var currentUser = await context.Subscribers.FindAsync(user.Id);
+            var lastTariffId = currentUser!.Tariff.Id;
             var currentPassport = await context.PassportInfos.FindAsync(passportInfo.Id);
-            PassportMapper.UpdatePassportEntity(currentPassport, passportInfo);
-            SubscriberMapper.UpdateEntity(currentUser, user, existingTariff, currentPassport);
+            PassportMapper.UpdatePassportEntity(currentPassport!, passportInfo);
+            SubscriberMapper.UpdateEntity(currentUser, user, existingTariff, currentPassport!);
+
+            if (lastTariffId != tariffId && currentUser is not null)
+            {
+                await context.TariffChanges.AddAsync(
+                new TariffChangeEntity
+                {
+                    Date = DateTime.UtcNow,
+                    LastTariffId = (int)lastTariffId!,
+                    NewTariffId = (int)tariffId!,
+                    PhoneId = (int)currentUser.Id!
+                });
+            }
+
+            if (currentPassport!.PassportNumber != passportInfo.PassportNumber && currentUser is not null)
+            {
+                await context.OwnerChanges.AddAsync(
+                new OwnerChangeEntity
+                {
+                    Date = DateTime.UtcNow,
+                    LastUserId = (int)lastTariffId!,
+                    NewUserId = (int)tariffId!,
+                    PhoneId = (int)currentUser.Id!
+                });
+            }
+            
             await context.SaveChangesAsync();
-            return currentUser.Id;
+            return currentUser!.Id;
         }
 
         public async Task<int?> Delete(int? id)
@@ -69,7 +97,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                 .Include(s => s.PassportInfo)
                 .AsNoTracking()
                 .ToListAsync();
-            return userEntities.Select(SubscriberMapper.UserEntityToUserVModel).ToList();
+            return userEntities.Select(SubscriberMapper.UserEntityToUserVModel);
         }
 
 
@@ -160,7 +188,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             return 0;
         }
 
-        public async Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId)
+        public async Task<decimal> GetExpensesInMonth(Months month, int? subscriberId)
         {
             var user = await context.Subscribers.FindAsync(subscriberId);
             if (user != null)

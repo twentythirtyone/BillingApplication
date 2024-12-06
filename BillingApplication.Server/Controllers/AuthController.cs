@@ -39,6 +39,8 @@ namespace BillingApplication.Controllers
         {
             try
             {
+                if (auth.GetCurrentUserId() != -1)
+                    throw new Exception($"Вы уже авторизованы");
                 var userVM = await subscriberManager.ValidateSubscriberCredentials(loginModel.PhoneNumber, loginModel.Password);
                 if (userVM == null)
                     return Unauthorized("Неверный номер/пароль");
@@ -47,7 +49,7 @@ namespace BillingApplication.Controllers
                 logger.LogInformation($"LOGIN: User with id \"{user.Id}\" has been authorized.");
                 return Ok(new { token });
             }
-            catch (Exception ex) when (ex is ArgumentException || ex is UserNotFoundException)
+            catch (Exception ex)
             {
                 logger.LogError($"LOGIN FAILED: Failed subscriber login.");
                 return BadRequest(ex.Message);
@@ -127,12 +129,6 @@ namespace BillingApplication.Controllers
             auth.Logout(token);
             logger.LogInformation($"LOGOUT: User with id \"{id}\" has been logged out.");
             return Ok("Успешный выход из системы.");
-        }
-
-        [HttpPost("operator/login")]
-        public async Task<IActionResult> LoginOperator([FromBody] SubscriberLoginModel loginModel)
-        {
-            return NotFound();
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]

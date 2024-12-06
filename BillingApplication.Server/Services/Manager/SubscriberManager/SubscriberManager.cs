@@ -79,7 +79,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<SubscriberViewModel?> GetSubscriberById(int? id)
         {
-            return await subscriberRepository.GetSubscriberById(id) ?? throw new UserNotFoundException("Пользователь не найден"); ;
+            return await subscriberRepository.GetSubscriberById(id) ?? throw new UserNotFoundException("Пользователь не найден");
         }
 
         public async Task<IEnumerable<SubscriberViewModel>> GetSubscribers()
@@ -112,7 +112,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             return await subscriberRepository.GetExpensesCurrentYear(subscriberId);
         }
 
-        public async Task<decimal> GetExpensesInMonth(Monthes month, int? subscriberId)
+        public async Task<decimal> GetExpensesInMonth(Months month, int? subscriberId)
         {
             return await subscriberRepository.GetExpensesInMonth(month, subscriberId);
         }
