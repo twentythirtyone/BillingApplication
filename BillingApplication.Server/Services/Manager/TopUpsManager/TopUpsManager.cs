@@ -2,6 +2,7 @@
 using BillingApplication.Mapper;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Exceptions;
+using BillingApplication.Server.Quartz.Workers;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Services.Models.Subscriber.Stats;
 
@@ -11,10 +12,12 @@ namespace BillingApplication.Server.Services.Manager.TopUpsManager
     {
         public readonly ITopUpsRepository topUpsRepository;
         public readonly ISubscriberManager subscriberManager;
-        public TopUpsManager(ITopUpsRepository topUpsRepository, ISubscriberManager subscriberManager)
+        public readonly IEmailSender emailSender;
+        public TopUpsManager(ITopUpsRepository topUpsRepository, ISubscriberManager subscriberManager, IEmailSender emailSender)
         {
             this.topUpsRepository = topUpsRepository;
             this.subscriberManager = subscriberManager;
+            this.emailSender = emailSender;
         }
         public async Task<int?> AddTopUp(TopUps entity)
         {
@@ -26,7 +29,11 @@ namespace BillingApplication.Server.Services.Manager.TopUpsManager
             await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(existingUser),
                                                      existingUser.PassportInfo,
                                                      existingUser.Tariff.Id);
-            return await topUpsRepository.AddTopUp(entity);
+            var id = await topUpsRepository.AddTopUp(entity);
+            if (id is not null)
+                await emailSender.SendEmailAsync(existingUser.Email, "Пополнение счёта", $"На ваш счёт зачислено {entity.Amount} рублей");
+            else throw new Exception("Ошибка пополнения счёта");
+            return id;
         }
 
         public Task<TopUps> GetLastTopUpByUserId(int? id)

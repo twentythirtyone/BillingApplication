@@ -49,13 +49,18 @@ namespace BillingApplication.Server.Quartz
                             user.Messages += bundle.Messages;
                             user.CallTime += bundle.CallTime;
                             user.PaymentDate = DateTime.UtcNow;
-                            await paymentsManager!.AddPayment(new Payment()
+                            var id = await paymentsManager!.AddPayment(new Payment()
                             {
                                 Name = "Ежемесячное списание средств по тарифу",
                                 Amount = user.Tariff.Price,
                                 Date = DateTime.UtcNow,
                                 PhoneId = (int)user.Id!
                             });
+
+                            if (id is not null)
+                                await SendEmail(emailSender!, user.Email, "Уведомление о плате за тариф",
+                                           $"Ежемесячное списание средств по тарифу.\nТелефон: {user.Number}\nСтоимость: {user.Tariff.Price}\nДата:{DateTime.UtcNow})");
+                            
                         }
                         else
                         {

@@ -53,7 +53,6 @@ namespace BillingApplication.Services.Auth
             else
                 throw new ArgumentException("Неподдерживаемый тип пользователя");
 
-
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, (user as IUser)?.UniqueId ?? string.Empty),

@@ -15,6 +15,7 @@ namespace BillingApplication.Server.Controllers
     {
         public readonly ITopUpsManager topUpsManager;
         public readonly ILogger<TopUpsController> logger;
+
         public TopUpsController(ITopUpsManager topUpsManager, ILogger<TopUpsController> logger)
         {
             this.topUpsManager = topUpsManager;
@@ -22,7 +23,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
-        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
         [HttpPost("add")]
         public async Task<IActionResult> Add([FromBody] TopUps model)
         {

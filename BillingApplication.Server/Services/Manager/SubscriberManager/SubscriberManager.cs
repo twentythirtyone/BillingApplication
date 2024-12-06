@@ -79,7 +79,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<SubscriberViewModel?> GetSubscriberById(int? id)
         {
-            return await subscriberRepository.GetSubscriberById(id) ?? throw new UserNotFoundException("Пользователь не найден"); ;
+            return await subscriberRepository.GetSubscriberById(id) ?? throw new UserNotFoundException("Пользователь не найден");
         }
 
         public async Task<IEnumerable<SubscriberViewModel>> GetSubscribers()

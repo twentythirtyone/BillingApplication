@@ -356,6 +356,8 @@ namespace BillingApplication.Controllers
             {
                 var currentUserId = auth.GetCurrentUserId();
                 var result = await subscriberManager.AddExtraToSubscriber(extraId, (int)currentUserId!);
+                var email = (await subscriberManager.GetSubscriberById(currentUserId)).Email;
+                await emailSender.SendEmailAsync(email, "Уведомление", "Вы успешно приобрели дополнительный пакет");
                 logger.LogInformation($"ADDING: Extra {extraId} has been added to user {currentUserId}");
                 return Ok(result);
             }
