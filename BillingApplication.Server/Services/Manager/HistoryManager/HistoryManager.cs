@@ -51,6 +51,7 @@ namespace BillingApplication.Server.Services.Manager.HistoryManager
 
         public async Task<IEnumerable<object>> GetHistory(int subscriberId)
         {
+
             var calls = (await callsManager.GetByUserId(subscriberId))
                 .Select(x => new HistoryItem { Type = "Звонок", Data = x });
 
@@ -61,7 +62,7 @@ namespace BillingApplication.Server.Services.Manager.HistoryManager
                 .Select(x => new HistoryItem { Type = "СМС", Data = x });
 
             var payments = (await paymentManager.GetByUserId(subscriberId))
-                .Select(x => new HistoryItem { Type = "Оплата", Data = x });
+               .Select(x => new HistoryItem { Type = "Оплата", Data = x });
 
             var result = calls
                 .Concat(internet)
