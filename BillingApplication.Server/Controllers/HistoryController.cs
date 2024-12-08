@@ -4,6 +4,7 @@ using BillingApplication.Mapper;
 using BillingApplication.Server.Services.MailService;
 using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Services.Manager.ExtrasManager;
+using BillingApplication.Server.Services.Manager.HistoryManager;
 using BillingApplication.Server.Services.Manager.InternetManager;
 using BillingApplication.Server.Services.Manager.MessagesManager;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
@@ -23,28 +24,16 @@ namespace BillingApplication.Server.Controllers
     {
         private readonly IAuth auth;
         private readonly ILogger<HistoryController> logger;
-        private readonly ICallsManager callsManager;
-        private readonly IExtrasManager extrasManager;
-        private readonly IInternetManager internetManager;
-        private readonly IMessagesManager messagesManager;
-        private readonly IPaymentsManager paymentManager;
-
+        private readonly IHistoryManager historyManager;
 
         public HistoryController(IAuth auth, 
             ILogger<HistoryController> logger, 
-            ICallsManager callsManager, 
-            IExtrasManager extrasManager, 
-            IInternetManager internetManager, 
-            IMessagesManager messagesManager,
-            IPaymentsManager paymentsManager)
+            IHistoryManager historyManager
+            )
         {
             this.logger = logger;
             this.auth = auth;
-            this.callsManager = callsManager;
-            this.extrasManager = extrasManager;
-            this.internetManager = internetManager;
-            this.messagesManager = messagesManager;
-            this.paymentManager = paymentsManager;
+            this.historyManager = historyManager;
         }
 
         
@@ -53,7 +42,7 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                var result = await callsManager.Get();
+                var result = await historyManager.GetCalls();
                 logger.LogInformation($"HISTORY: [{DateTime.UtcNow}] Admin {auth.GetCurrentUserId()} got calls information");
                 return Ok(result);
             }
@@ -69,7 +58,7 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                var result = await internetManager.Get();
+                var result = await historyManager.GetInternet();
                 logger.LogInformation($"HISTORY: [{DateTime.UtcNow}] Admin {auth.GetCurrentUserId()} got internet information");
                 return Ok(result);
             }
@@ -85,7 +74,7 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                var result = await messagesManager.Get();
+                var result = await historyManager.GetMessages();
                 logger.LogInformation($"HISTORY: [{DateTime.UtcNow}] Admin {auth.GetCurrentUserId()} got messages information");
                 return Ok(result);
             }
@@ -101,13 +90,29 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                var result = await paymentManager.GetPayments();
+                var result = await historyManager.GetPayments();
                 logger.LogInformation($"HISTORY: [{DateTime.UtcNow}] Admin {auth.GetCurrentUserId()} got payment information");
                 return Ok(result);
             }
             catch (Exception ex)
             {
                 logger.LogError($"HISTORY ERROR: Cannot read messages history - {ex.Message}");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetUserHistory(int userId)
+        {
+            try
+            {
+                var result = await historyManager.GetHistory(userId);
+                logger.LogInformation($"HISTORY: [{DateTime.UtcNow}] Admin {auth.GetCurrentUserId()} got payment information");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"HISTORY ERROR: Cannot read user history - {ex.Message}");
                 return BadRequest(ex.Message);
             }
         }
