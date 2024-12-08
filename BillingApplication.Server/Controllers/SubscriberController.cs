@@ -16,6 +16,7 @@ using System.Text.Json;
 using BillingApplication.Server.Quartz.Workers;
 using BillingApplication.Server.Services.Models.Subscriber;
 using BillingApplication.Server.Services.MailService;
+using BillingApplication.Server.Services.Manager.HistoryManager;
 
 namespace BillingApplication.Controllers
 {
@@ -29,8 +30,16 @@ namespace BillingApplication.Controllers
         private readonly IEmailSender emailSender;
         private readonly IEmailChangeService emailChangeService;
         private readonly IEncrypt encrypt;
+        private readonly IHistoryManager historyManager;
 
-        public SubscriberController(ISubscriberManager subscriberManager, IAuth auth, ILogger<SubscriberController> logger, IEmailSender emailSender, IEncrypt encrypt, IEmailChangeService emailChangeService)
+        public SubscriberController(
+            ISubscriberManager subscriberManager, 
+            IAuth auth, 
+            ILogger<SubscriberController> logger, 
+            IEmailSender emailSender, 
+            IEncrypt encrypt, 
+            IEmailChangeService emailChangeService,
+            IHistoryManager historyManager)
         {
             this.subscriberManager = subscriberManager;
             this.auth = auth;
@@ -38,6 +47,7 @@ namespace BillingApplication.Controllers
             this.emailSender = emailSender;
             this.emailChangeService = emailChangeService;
             this.encrypt = encrypt;
+            this.historyManager = historyManager;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
@@ -289,6 +299,25 @@ namespace BillingApplication.Controllers
 
                 return BadRequest(ex.Message);
             }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [HttpGet("history")]
+        public async Task<IActionResult> GetSubscriberHistory()
+        {
+            try
+            {
+                var result = await historyManager.GetHistory((int)auth.GetCurrentUserId()!);
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                logger.LogError($"ERROR GETTING: Current User history has not been recieved." +
+                      $"\nMessage:{ex.Message}\n");
+
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         private async Task<IActionResult> ValidateAccessAndDoFunc(Func<int?, Task<IActionResult>> func, int? userId)
