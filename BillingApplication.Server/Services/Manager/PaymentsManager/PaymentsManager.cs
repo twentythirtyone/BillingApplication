@@ -32,7 +32,7 @@ namespace BillingApplication.Server.Services.Manager.PaymentsManager
             return await paymentsRepository.GetPaymentById(id) ?? throw new PaymentNotFoundException();
         }
 
-        public async Task<IEnumerable<Payment>> GetPayments()
+        public async Task<IEnumerable<Payment>> Get()
         {
             return await paymentsRepository.GetPayments() ?? Enumerable.Empty<Payment>();
         }

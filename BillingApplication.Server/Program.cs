@@ -29,6 +29,7 @@ using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.DataLayer.Repositories.Implementations;
 using BillingApplication.Server.Services.Manager.InternetManager;
 using BillingApplication.Server.Services.Manager.OperatorManager;
+using BillingApplication.Server.Services.Manager.HistoryManager;
 
 internal class Program
 {
@@ -166,6 +167,7 @@ internal class Program
         services.AddScoped<IInternetManager, InternetManager>();
         services.AddScoped<IOperatorManager, OperatorManager>();
         services.AddScoped<IOperatorRepository, OperatorRepository>();
+        services.AddScoped<IHistoryManager, HistoryManager>();
 
         services.AddTransient<JobFactory>();
         services.AddTransient<IMailService, MailService>();

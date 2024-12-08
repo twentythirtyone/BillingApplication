@@ -46,7 +46,7 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                var result = await paymentsManager.GetPayments();
+                var result = await paymentsManager.Get();
                 logger.LogInformation($"GETTING: Payments has been recieved");
                 return Ok(result);
             }
