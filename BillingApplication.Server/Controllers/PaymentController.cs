@@ -84,7 +84,7 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                var result = await paymentsManager.GetPaymentsByUserId(userId);
+                var result = await paymentsManager.GetByUserId(userId);
                 logger.LogInformation($"GETTING: User {userId} Payments has been recieved");
                 return Ok(result);
             }

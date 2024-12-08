@@ -6,6 +6,7 @@ using BillingApplication.Services.Models.Utilites.Tariff;
 using Microsoft.EntityFrameworkCore;
 using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
+using BillingApplication.Server.Mapper;
 
 namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
@@ -21,9 +22,12 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             var existingBundle = await context.Bundles.FindAsync(bundleId);
             if (existingBundle == null)
             {
-                throw new InvalidOperationException("Указанный в тарифе пакет не существует");
+                existingBundle = BundleMapper.BundleModelToBundleEntity(tariff!.Bundle);
+                await context.Bundles.AddAsync(
+                    existingBundle!
+                 );
             }
-            var tariffEntity = TariffMapper.TariftModelToTarifEntity(tariff, existingBundle);
+            var tariffEntity = TariffMapper.TariftModelToTarifEntity(tariff, existingBundle!);
 
             await context.Tariffs.AddAsync(tariffEntity);
             await context.SaveChangesAsync();
@@ -81,7 +85,10 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             var existingBundle = await context.Bundles.FindAsync(bundleId);
             if (existingBundle == null)
             {
-                throw new InvalidOperationException("Указанный в тарифе пакет не существует");
+                existingBundle = BundleMapper.BundleModelToBundleEntity(tariff!.Bundle);
+                await context.Bundles.AddAsync(
+                    existingBundle!
+                 );
             }
             var currentTariff = await context.Tariffs.FindAsync(tariff.Id);
             if (currentTariff.Id is not null)

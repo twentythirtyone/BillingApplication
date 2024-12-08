@@ -4,6 +4,7 @@ using BillingApplication.Mapper;
 using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Services.Manager.InternetManager;
 using BillingApplication.Server.Services.Manager.MessagesManager;
+using BillingApplication.Server.Services.Manager.PaymentsManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Services.Auth;
 using BillingApplication.Services.Auth.Roles;
@@ -21,15 +22,22 @@ namespace BillingApplication.Server.Controllers
         private readonly ICallsManager callsManager;
         private readonly ILogger<TrafficController> logger;
         private readonly IAuth auth;
+        private readonly IPaymentsManager paymentsManager;
 
-        public TrafficController(IInternetManager internetManager, IMessagesManager messagesManager, ICallsManager callsManager, ILogger<TrafficController> logger, IAuth auth)
+        public TrafficController(
+            IInternetManager internetManager,
+            IMessagesManager messagesManager,
+            ICallsManager callsManager,
+            ILogger<TrafficController> logger,
+            IAuth auth,
+            IPaymentsManager paymentsManager)
         {
             this.internetManager = internetManager;
             this.messagesManager = messagesManager;
             this.callsManager = callsManager;
             this.logger = logger;
             this.auth = auth;
-
+            this.paymentsManager = paymentsManager;
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
@@ -40,7 +48,7 @@ namespace BillingApplication.Server.Controllers
             try
             {
                 var model = await internetManager.Get();
-                logger.LogError($"GETTING: User {auth.GetCurrentUserId()} successfully get all internet traffic.");
+                logger.LogError($"GETTING: User {auth.GetCurrentUserId()} successfully get info about all internet traffic.");
                 return Ok(model);
             }
             catch (Exception ex)
@@ -230,6 +238,32 @@ namespace BillingApplication.Server.Controllers
                     .Count();
                 logger.LogInformation($"GETTING: User {auth.GetCurrentUserId()} successfully get messages in last three month.");
                 return Ok(messages);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"GETTING FAILED: Error while getting messages.");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
+        [HttpGet("extras/last")]
+        public async Task<IActionResult> GetCurrentUserExtrasLastMonth()
+        {
+            try
+            {
+                var now = DateTime.UtcNow;
+                var startDate = now.AddMonths(-1);
+                var endDate = now;
+                var model = await paymentsManager.GetByUserId(auth.GetCurrentUserId());
+                var result = model
+                    .Where(x => x.Date >= startDate 
+                             && x.Date <= endDate 
+                             && x.Name.StartsWith("Покупка дополнительного пакета"));
+
+                logger.LogInformation($"GETTING: User {auth.GetCurrentUserId()} successfully get messages in last three month.");
+                return Ok(result);
             }
             catch (Exception ex)
             {

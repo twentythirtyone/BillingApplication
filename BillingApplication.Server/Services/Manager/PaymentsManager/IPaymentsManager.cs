@@ -6,7 +6,7 @@ namespace BillingApplication.Server.Services.Manager.PaymentsManager
     {
         Task<IEnumerable<Payment>> Get();
         Task<Payment> GetPaymentById(int id);
-        Task<IEnumerable<Payment>> GetPaymentsByUserId(int? id);
+        Task<IEnumerable<Payment>> GetByUserId(int? id);
         Task<int?> AddPayment(Payment entity);
     }
 }

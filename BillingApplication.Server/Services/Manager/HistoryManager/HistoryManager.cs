@@ -51,21 +51,18 @@ namespace BillingApplication.Server.Services.Manager.HistoryManager
 
         public async Task<IEnumerable<object>> GetHistory(int subscriberId)
         {
-            var calls = (await GetCalls())
-                .Where(x => x.FromSubscriberId == subscriberId)
+
+            var calls = (await callsManager.GetByUserId(subscriberId))
                 .Select(x => new HistoryItem { Type = "Звонок", Data = x });
 
-            var internet = (await GetInternet())
-                .Where(x => x.PhoneId == subscriberId)
+            var internet = (await internetManager.GetByUserId(subscriberId))
                 .Select(x => new HistoryItem { Type = "Интернет", Data = x });
 
-            var messages = (await GetMessages())
-                .Where(x => x.FromPhoneId == subscriberId)
+            var messages = (await messagesManager.GetByUserId(subscriberId))
                 .Select(x => new HistoryItem { Type = "СМС", Data = x });
 
-            var payments = (await GetPayments())
-                .Where(x => x.PhoneId == subscriberId)
-                .Select(x => new HistoryItem { Type = "Оплата", Data = x });
+            var payments = (await paymentManager.GetByUserId(subscriberId))
+               .Select(x => new HistoryItem { Type = "Оплата", Data = x });
 
             var result = calls
                 .Concat(internet)
