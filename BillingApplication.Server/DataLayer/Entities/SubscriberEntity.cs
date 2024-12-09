@@ -15,9 +15,9 @@ namespace BillingApplication.Entities
         [Column("salt")]
         public string Salt { get; set; } = "";
         [Column("passport_id")]
-        public int PassportId { get; set; }
+        public int? PassportId { get; set; }
         [Column("tariff_id")]
-        public int TariffId { get; set; }
+        public int? TariffId { get; set; }
         [Column("phone_number")]
         public required string Number { get; set; }
         [Column("balance")]

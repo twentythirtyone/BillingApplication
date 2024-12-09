@@ -7,15 +7,19 @@ using Microsoft.EntityFrameworkCore;
 using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Server.Mapper;
+using BillingApplication.Server.Services.Models.Utilites;
+using BillingApplication.Server.Quartz.Workers;
 
 namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
     public class TariffRepository : ITariffRepository
     {
         private readonly BillingAppDbContext context;
-        public TariffRepository(BillingAppDbContext context)
+        private readonly IEmailSender emailSender;
+        public TariffRepository(BillingAppDbContext context, IEmailSender emailSender)
         {
             this.context = context;
+            this.emailSender = emailSender;
         }
         public async Task<int?> Create(Tariffs? tariff, int? bundleId)
         {
@@ -37,11 +41,36 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 
         public async Task<int?> Delete(int? id)
         {
-            var tariff = await context.Tariffs.FindAsync(id);
-            if (tariff != null)
-                context.Tariffs.Remove(tariff);
+            if (id == null)
+                return null;
+
+            var tariff = await context.Tariffs
+                                      .Include(t => t.Subscribers) 
+                                      .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tariff == null)
+                return null;
+
+            foreach (var subscriber in tariff.Subscribers)
+            {
+                subscriber.TariffId = Constants.DEFAULT_TARIFF_ID;
+                await emailSender.SendEmailAsync(subscriber.Email, "Уведомление", "Ваш тариф устарел и больше не функционирует.\n" +
+                                                                                  "Ваши остатки пакетов сохранены, но по их окончанию условия тарифа" +
+                                                                                  "прекращают своё действие. ");
+                context.TariffChanges.Add(
+                    new TariffChangeEntity
+                    {
+                        LastTariffId = null,
+                        NewTariffId = Constants.DEFAULT_TARIFF_ID,
+                        Date = DateTime.UtcNow,
+                        PhoneId = (int)subscriber.Id!
+                    }) ;
+            }
+            context.Tariffs.Remove(tariff);
+
             await context.SaveChangesAsync();
-            return tariff?.Id;
+
+            return tariff.Id;
         }
 
         public async Task<IEnumerable<Tariffs?>> Get()

@@ -29,7 +29,7 @@ namespace BillingApplication.Server.Quartz
                 .StartNow()
                 .WithSimpleSchedule(x => x
                 .WithIntervalInHours(24)
-                //.WithIntervalInMinutes(1)// для тестирования
+                //.WithIntervalInMinutes(1) для тестирования
                 .RepeatForever())
                 .Build();
 

@@ -10,8 +10,8 @@ namespace BillingApplication.Entities
     {
         public int? Id { get; set; }
         public int PhoneId { get; set; }
-        public int LastTariffId { get; set; }
-        public int NewTariffId { get; set; }
+        public int? LastTariffId { get; set; }
+        public int? NewTariffId { get; set; }
         public DateTime Date { get; set; }
         public virtual SubscriberEntity Subscriber { get; set; }
         public virtual TariffEntity LastTariff { get; set; }
