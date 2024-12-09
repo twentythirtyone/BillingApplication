@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-    const userData = useUser();
+    const { userData, loading } = useUser(); // Деструктурируем данные и статус загрузки
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
@@ -20,19 +20,19 @@ const Header = () => {
                 headers: {
                     'Accept': '*/*',
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
             });
 
             if (response.ok) {
                 localStorage.removeItem('token');
                 navigate('/');
-                console.log('Вы вышли')
+                console.log('Вы вышли');
             } else {
-                console.error("Ошибка при выполнении выхода", response.status);
+                console.error('Ошибка при выполнении выхода', response.status);
             }
         } catch (error) {
-            console.error("Ошибка сети или сервера:", error);
+            console.error('Ошибка сети или сервера:', error);
         }
     };
 
@@ -48,27 +48,36 @@ const Header = () => {
         };
     }, []);
 
-    if (!userData) {
+    // Обработка загрузки данных пользователя
+    if (loading) {
         return <div>Загрузка...</div>;
     }
+
+    // Если данных пользователя нет (например, не авторизован)
+    if (!userData) {
+        return null; // Или можно перенаправить пользователя
+    }
+
     const splittedUserName = userData.passportInfo.fullName.split(' ');
 
     return (
-        <header className='main-page-header'>
-            <div className='header-left'>
-                <img src={logo} className='header-logo' alt="Logo" />
-                <span className='header-title'>Alfa-Telecom</span>
+        <header className="main-page-header">
+            <div className="header-left">
+                <img src={logo} className="header-logo" alt="Logo" />
+                <span className="header-title">Alfa-Telecom</span>
             </div>
 
-            <div className='header-right' ref={menuRef}>
-                <button className='profile-button' onClick={toggleMenu}>
-                    <img className ='profile-pic' src='..\src\assets\img\avatar.svg'></img>
+            <div className="header-right" ref={menuRef}>
+                <button className="profile-button" onClick={toggleMenu}>
+                    <img className="profile-pic" src="..\src\assets\img\avatar.svg" alt="Avatar" />
                     {splittedUserName[0] + ' ' + splittedUserName[1]}
-                    <div className='profile-button-email'>{userData.email}</div>
+                    <div className="profile-button-email">{userData.email}</div>
                 </button>
                 {isMenuOpen && (
-                    <div className='profile-menu'>
-                        <button onClick={handleLogout} className='profile-menu-item'>Выйти</button>
+                    <div className="profile-menu">
+                        <button onClick={handleLogout} className="profile-menu-item">
+                            Выйти
+                        </button>
                     </div>
                 )}
             </div>
@@ -76,4 +85,4 @@ const Header = () => {
     );
 };
 
-export default Header
+export default Header;

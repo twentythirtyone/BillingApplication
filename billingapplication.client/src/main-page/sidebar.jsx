@@ -4,7 +4,6 @@ import tariffIcon from '../assets/img/sidebar/tariff.svg';
 import walletIcon from '../assets/img/sidebar/wallet.svg';
 import addServicesIcon from '../assets/img/sidebar/add-services.svg';
 import historyIcon from '../assets/img/sidebar/history.svg';
-import analyticsIcon from '../assets/img/sidebar/analitics.svg';
 import settingsIcon from '../assets/img/sidebar/settings.svg';
 
 const Sidebar = () => {
@@ -14,7 +13,6 @@ const Sidebar = () => {
         { path: 'wallet', name: 'Кошелек', icon: walletIcon },
         { path: 'add-services', name: 'Доп услуги', icon: addServicesIcon },
         { path: 'history', name: 'История', icon: historyIcon },
-        { path: 'analytics', name: 'Аналитика', icon: analyticsIcon },
         { path: 'settings', name: 'Настройки', icon: settingsIcon },
     ];
 

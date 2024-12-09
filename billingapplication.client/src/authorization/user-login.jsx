@@ -4,7 +4,7 @@ import logo from '../assets/img/logo.svg';
 
 const LoginForm = () => {
     useEffect(() => {
-        document.title = 'Вход';
+        document.title = 'Войти';
     });
     const navigate = useNavigate();
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -50,7 +50,6 @@ const LoginForm = () => {
             const token = data.token;
             localStorage.setItem('token', token);
             navigate('/main', { state: { token } });
-            location.reload();
         } catch (error) {
             setErrorMessage(error.message);
         } finally {

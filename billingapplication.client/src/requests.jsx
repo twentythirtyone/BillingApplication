@@ -2,7 +2,7 @@
 
 export const getTariff = async (token) => {
     try {
-        const response = await fetch('https://localhost:7262/tariff/get', {
+        const response = await fetch('https://localhost:7262/tariff', {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -34,7 +34,7 @@ export const fetchExpenses = async () => {
 
 export const changeTariff = async (tariffId) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`https://localhost:7262/subscriber/tariff/change/${tariffId}`, {
+    const response = await fetch(`https://localhost:7262/subscribers/tariff/change/${tariffId}`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
@@ -48,7 +48,7 @@ export const changeTariff = async (tariffId) => {
 
 export const payTariff = async (tariffId) => {
     const token = localStorage.getItem('token');
-    const response = await fetch(`https://localhost:7262/subscriber/pay/tariff`, {
+    const response = await fetch(`https://localhost:7262/subscribers/tariff/pay`, {
         method: 'POST',
         headers: {
             Authorization: `Bearer ${token}`,
