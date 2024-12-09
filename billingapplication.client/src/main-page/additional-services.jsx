@@ -19,7 +19,7 @@ export const AdditionalServices = ({cutValue}) => {
     const handleServicePurchase = async (serviceId, serviceTitle) => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`https://localhost:7262/subscriber/add/extra/${serviceId}`, {
+            const response = await fetch(`https://localhost:7262/subscribers/extras/add/${serviceId}`, {
                 method: 'POST',
                 headers: {
                     'Accept': '*/*',

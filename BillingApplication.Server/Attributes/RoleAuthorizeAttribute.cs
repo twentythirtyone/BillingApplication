@@ -2,7 +2,7 @@
 
 namespace BillingApplication.Attributes
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
     public class RoleAuthorizeAttribute : Attribute
     {
         public string[] Roles { get; }
