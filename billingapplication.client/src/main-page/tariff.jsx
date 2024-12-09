@@ -1,4 +1,5 @@
 ﻿import { AdditionalServices } from './additional-services.jsx';
+import ReactLoading from 'react-loading';
 import { useEffect, useState } from 'react';
 import { getRandomObjects, timeToMinutes } from './functions.js';
 import { getTariff, changeTariff, payTariff } from '../requests.jsx';
@@ -42,7 +43,7 @@ const Tariff = () => {
     const mainTariff = getRandomObjects(tariffs, 1)[0];
 
     if (!tariffs.length) {
-        return <div>Загрузка...</div>;
+        return <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading'/>;
     }
     return (
         <div className="tariff">
@@ -76,6 +77,7 @@ const Tariff = () => {
                 </div>
             </section>
             <img className='img-plug' src='..\src\assets\img\plug.png' alt='пока просто заглушка'></img>
+
             <div className="tariff-cards">
                 {slicedTariffsArray.map((tariff) => (
                     <div className="tariff-card-section" key={tariff.id}>

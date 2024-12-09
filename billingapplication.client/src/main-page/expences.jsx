@@ -1,6 +1,6 @@
 ﻿const getUserExpenses = async (token) => {
     try {
-        const response = await fetch('https://localhost:7262/subscriber/get/expenses/month', {
+        const response = await fetch('https://localhost:7262/subscribers/expenses/month/current', {
             method: 'GET',
             headers: {
                 'Accept': '*/*',

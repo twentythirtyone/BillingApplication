@@ -1,16 +1,14 @@
-import { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom";
-import { useUser } from '../user-context.jsx'
-import { AdditionalServices } from './additional-services.jsx'
-import { TariffOptions } from './tariff-options.jsx'
-import { fetchExpenses }  from '../requests.jsx'
+import { useEffect, useState } from 'react';
+import ReactLoading from 'react-loading';
+import { useUser } from '../user-context.jsx';
+import { AdditionalServices } from './additional-services.jsx';
+import { TariffOptions } from './tariff-options.jsx';
+import { fetchExpenses } from '../requests.jsx';
 
 const Dashboard = () => {
-    const navigate = useNavigate();
-    const userData = useUser();
+    const { userData, loading: userLoading } = useUser(); // Достаем данные и статус загрузки из контекста
     const [userExpenses, setUserExpenses] = useState(null);
-    const [loading, setLoading] = useState(true); // Для отслеживания загрузки данных
-    const [error, setError] = useState(null); // Для обработки ошибок
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const loadExpenses = async () => {
@@ -19,7 +17,6 @@ const Dashboard = () => {
                 setUserExpenses(expenses);
             } catch (err) {
                 console.error("Ошибка при загрузке расходов:", err);
-                setError("Не удалось загрузить данные расходов.");
             } finally {
                 setLoading(false);
             }
@@ -28,7 +25,7 @@ const Dashboard = () => {
         if (userData) {
             loadExpenses();
         } else {
-            setLoading(false);
+            setLoading(false); // Завершаем загрузку, если данных пользователя нет
         }
     }, [userData]);
 
@@ -36,18 +33,14 @@ const Dashboard = () => {
         document.title = "Панель управления";
     }, []);
 
-    useEffect(() => {
-        if (!userData || error) {
-            navigate("/"); // Перенаправление на главную страницу
-        }
-    }, [userData, error, navigate]);
-
-    if (loading) {
-        return <div>Загрузка данных...</div>;
+    // Если данные пользователя или расходы загружаются, показываем индикатор
+    if (userLoading || loading) {
+        return (<ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className="loading"/>);
     }
 
+    // Если пользователь не авторизован
     if (!userData) {
-        return null; // Пользователь не авторизован, уже перенаправлен на главную
+        return null; // Вы можете добавить здесь логику перенаправления, если нужно
     }
 
     const prettyNumber = userData.number.replace(
@@ -64,8 +57,12 @@ const Dashboard = () => {
             <div className="balance-section">
                 <h2>Баланс</h2>
                 <div className="balance">
-                    <div>Мои средства <p className="balance-sum">{userData.balance}₽</p></div>
-                    <div>Расходы: <p className="balance-sum">{userExpenses}₽</p></div>
+                    <div>
+                        Мои средства <p className="balance-sum">{userData.balance}₽</p>
+                    </div>
+                    <div>
+                        Расходы: <p className="balance-sum">{userExpenses}₽</p>
+                    </div>
                 </div>
             </div>
             <div className="tariff-section">

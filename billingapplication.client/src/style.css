@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+.loading {
+    margin: 0 auto; text-align: center;
+}
+
 /* ДОМАШНЯЯ СТРАНИЦА */
 .home {
     font-family: 'Inter', sans-serif;
@@ -248,12 +252,14 @@
 /* Главная */
 .main-page {
     display: flex;
+    justify-content: center;
+    align-items: center;
     min-height: 100vh;
-    min-width: 150vh;
+    min-width: 100vw;
     flex-direction: column;
     font-family: "Plus Jakarta Sans", sans-serif;
     background-color: #F4F7F3;
-    position: center;
+    margin: 0;
 }
 
 
@@ -343,15 +349,13 @@ height: 34px;
 /* Боковая панель */
 
 .sidebar {
-    width: 250px;
-    min-width: 250px;
+    width: 260px;
+    min-width: 260px;
     background-color: #fdecec;
     padding: 20px;
-    position: sticky;
     top: 0;
-    height: 100vh; /* Убедитесь, что она занимает всю высоту окна */
+    height: 100vh;
     overflow-y: auto;
-    margin-left: 15%
 }
 .sidebar-title {
     color: #AB3D36;
@@ -378,7 +382,7 @@ height: 34px;
     }
 
 .navbar-icon {
-    height: 20px;
+    height: 22px;
     margin-right: 12px;
 }
 
@@ -390,6 +394,7 @@ height: 34px;
 .main-page-content {
     margin-left: 20px;
     background-color: #F4F7F3;
+    min-width: 600px;
 }
 
 
@@ -657,7 +662,145 @@ height: 34px;
 .wallet {
 }
 
+.admin {
+    background-color: #1E2026;
+    color: #FFFFFF;
+}
+.admin-sidebar {
+    background-color: #242732;
+    color: #FFFFFF;
+}
+.admin-sidebar-text {
+    color: #FFFFFF;
+}
+.admin-icon {
+    filter: invert(1);
+}
+.admin-link:hover {
+    background-color: #2C303E;
+}
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #2C303E;
+    width: 100%;
+    box-sizing: border-box;
+}
+.admin-profile-button {
+    color: black;
+    border: none;
+    border-radius: 20px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 10px 15px;
+    margin-right: 250px;
+    background: white;
+}
+    .admin-profile-button:hover {
+        background-color: #bfbfbf;
+    }
+
+table {
+    font-family: "Inter", sans-serif;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
+    table-layout: fixed;
+    width: 1000px;
+}
+
+    table th, table td {
+        padding: 12px 10px;
+        font-weight: 300;
+    }
+
+    table th {
+        background-color: #242732;
+        color: #fff;
+    }
+
+    table tr {
+        border-bottom: 1px solid #ddd;
+    }
 
 
+.table-buttons {
+    padding: 8px 12px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: none;
+}
+    .table-buttons:hover {
+        filter: contrast(4);
+    }
 
+.add-new-tariff {
+    background-color: #ffffff;
+    min-width: 84px;
+    width: 460px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px;
+    border: none;
+}
 
+    .add-new-tariff:hover {
+        background-color: grey;
+    }
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    width: 400px;
+    border-radius: 12px;
+    z-index: 2;
+    color: white;
+    background-color: #242732;
+}
+
+.modal-overlay {
+
+}
+
+.modal label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.modal form input {
+    width: calc(100% - 20px);
+    padding: 4px 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.tariff-modal-buttons {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.tariff-modal-buttons button {
+    background-color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 7px 14px;
+    justify-content: space-between;
+}
+
+    .tariff-modal-buttons button:hover {
+        background-color: #bfbfbf;
+    }

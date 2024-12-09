@@ -1,15 +1,13 @@
 ﻿import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useUser } from './user-context.jsx'
 const WelcomePage = () => {
     const navigate = useNavigate();
-    const userData = useUser();
     useEffect(() => {
         document.title = 'Добро пожаловать!';
     }, []);
 
     const handleNavigation = () => {
-        const targetRoute = userData ? '/main' : '/login';
+        const targetRoute = '/login';
         navigate(targetRoute, { replace: false });
     };
 
