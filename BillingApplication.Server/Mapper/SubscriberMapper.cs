@@ -24,8 +24,8 @@ namespace BillingApplication.Mapper
                 Internet = userEntity.InternetAmount,
                 Messages = userEntity.MessagesCount,
                 PaymentDate = userEntity.PaymentDate,
-                PassportId = userEntity.PassportId,
-                TariffId = userEntity.TariffId,
+                PassportId = userEntity.PassportId ?? -1,
+                TariffId = userEntity.TariffId ?? -1,
 
             };
         }
@@ -46,8 +46,8 @@ namespace BillingApplication.Mapper
                 Internet = userEntity.InternetAmount,
                 Messages = userEntity.MessagesCount,
                 PaymentDate = userEntity.PaymentDate,
-                PassportId = userEntity.PassportId,
-                TariffId = userEntity.TariffId,
+                PassportId = userEntity.PassportId ?? -1,
+                TariffId = userEntity.TariffId ?? -1,
                 Tariff = TariffMapper.TariftEntityToTarifModel(userEntity.Tariff),
                 PassportInfo = PassportMapper.PassportEntityToPassportModel(userEntity.PassportInfo)!
             };

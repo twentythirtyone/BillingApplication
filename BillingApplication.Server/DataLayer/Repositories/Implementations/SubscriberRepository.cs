@@ -9,6 +9,7 @@ using BillingApplication.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Entities;
 using BillingApplication.Services.Models.Utilites.Tariff;
+using BillingApplication.Server.Services.Models.Utilites;
 
 namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
@@ -28,7 +29,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             var existingTariff = await context.Tariffs.FindAsync(tariffId);
             if (existingTariff == null)
             {
-                throw new InvalidOperationException("Указанный тариф не существует");
+                existingTariff = await context.Tariffs.FindAsync(Constants.DEFAULT_TARIFF_ID);
             }
 
             var userEntity = SubscriberMapper.UserModelToUserEntity(user, existingTariff, passportInfo);
@@ -44,22 +45,22 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             var existingTariff = await context.Tariffs.FindAsync(tariffId);
             if (existingTariff == null)
             {
-                throw new InvalidOperationException("Указанный тариф не существует");
+                existingTariff = await context.Tariffs.FindAsync(Constants.DEFAULT_TARIFF_ID);
             }
             var currentUser = await context.Subscribers.FindAsync(user.Id);
             var lastTariffId = currentUser!.Tariff.Id;
             var currentPassport = await context.PassportInfos.FindAsync(passportInfo.Id);
             PassportMapper.UpdatePassportEntity(currentPassport!, passportInfo);
-            SubscriberMapper.UpdateEntity(currentUser, user, existingTariff, currentPassport!);
+            SubscriberMapper.UpdateEntity(currentUser, user, existingTariff!, currentPassport!);
 
-            if (lastTariffId != tariffId && currentUser is not null)
+            if (lastTariffId != existingTariff!.Id && currentUser is not null)
             {
                 await context.TariffChanges.AddAsync(
                 new TariffChangeEntity
                 {
                     Date = DateTime.UtcNow,
                     LastTariffId = (int)lastTariffId!,
-                    NewTariffId = (int)tariffId!,
+                    NewTariffId = (int)existingTariff.Id!,
                     PhoneId = (int)currentUser.Id!
                 });
             }

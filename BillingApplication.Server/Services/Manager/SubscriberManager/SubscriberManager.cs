@@ -7,6 +7,7 @@ using BillingApplication.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Models.Subscriber;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
+using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.Server.Services.Manager.SubscriberManager
 {
@@ -46,7 +47,8 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
                     user.Password = encrypt.HashPassword(user.Password, user.Salt);
                 }
 
-                if(userUpdate.Tariff.Id != tariffId)
+                var tariff = userUpdate.Tariff ?? new Tariffs() { Title = "", Id = -1 };
+                if (tariff.Id != tariffId)
                 {
                     user.CallTime = new TimeSpan(0, 0, 0);
                     user.Internet = 0;

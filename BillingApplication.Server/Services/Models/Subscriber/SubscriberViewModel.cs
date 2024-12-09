@@ -17,7 +17,7 @@ namespace BillingApplication.Server.Services.Models.Subscriber
         public TimeSpan CallTime { get; set; }
         public int Messages { get; set; }
         public long Internet { get; set; }
-        public Tariffs Tariff { get; set; }
+        public Tariffs? Tariff { get; set; }
         public PassportInfo PassportInfo { get; set; }
     }
 }

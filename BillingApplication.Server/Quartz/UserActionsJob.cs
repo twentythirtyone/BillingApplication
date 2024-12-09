@@ -8,6 +8,7 @@ using BillingApplication.Server.Services.Manager.TariffManager;
 using BillingApplication.Server.Services.Models.Subscriber.Stats;
 using BillingApplication.Server.Services.Models.Utilites;
 using BillingApplication.Services.Models.Subscriber.Stats;
+using BillingApplication.Services.Models.Utilites.Tariff;
 using Quartz;
 
 namespace BillingApplication.Server.Quartz
@@ -69,7 +70,6 @@ namespace BillingApplication.Server.Quartz
                                 Price = ((gbytes * 1024) / 100) * Constants.INTERNET_PER_100MB_PRICE
                             }
                         );
-
 
                     await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), user.PassportInfo, user.Tariff.Id);
                 }
