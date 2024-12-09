@@ -11,17 +11,35 @@ export const TariffTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
+
+  const authToken = localStorage.getItem('token');
   useEffect(() => {
-    fetchTariffs()
-      .then((response) => setTariffs(response.data))
-      .catch((error) => console.error('Error fetching tariffs:', error));
-  }, []);
+    if (!authToken) return; // Ждем, пока появится токен
+
+    const fetchData = async () => {
+      setLoading(true); // Включаем индикатор загрузки
+      try {
+        const response = await fetchTariffs(authToken);
+        setTariffs(response.data);
+      } catch (error) {
+        console.error('Error fetching tariffs:', error);
+      } finally {
+        setLoading(false); // Выключаем индикатор загрузки
+      }
+    };
+
+    fetchData(); // Первичная загрузка данных
+    const intervalId = setInterval(fetchData, 5000); // Обновление каждые 5 секунд
+
+    return () => clearInterval(intervalId); // Очистка
+  }, [authToken]);
 
   const handleDelete = () => {
     deleteTariff(deleteId)
       .then(() => {
-        setTariffs(tariffs.filter((tariff) => tariff.id !== deleteId));
+        setTariffs((prev) => prev.filter((tariff) => tariff.id !== deleteId));
         setShowConfirm(false);
       })
       .catch((error) => console.error('Error deleting tariff:', error));
@@ -31,53 +49,58 @@ export const TariffTable = () => {
     setShowModal(true);
   };
 
-  const handleCancel = () => {
-    setShowModal(false);
-  };
-
   return (
     <div>
-        <h1>Тарифы</h1>
+      <h1>Тарифы</h1>
       <table>
-        <thead className='tariffs-heading'>
+        <thead className="tariffs-heading">
           <tr>
-            <th>ID</th>
             <th>Название</th>
             <th>Цена</th>
-            <th>Интернет</th>
+            <th>Интернет (МБ)</th>
             <th>Звонки</th>
             <th>SMS</th>
-            <th style={{color: '#8596AC'}}>Редактировать</th>
-            <th style={{color: '#8596AC'}}>Удалить</th>
+            <th style={{ color: '#8596AC' }}>Редактировать</th>
+            <th style={{ color: '#8596AC' }}>Удалить</th>
           </tr>
         </thead>
-        <tbody style={{color: '#8596AC'}}>
-          {tariffs.map((tariff) => (
-            <tr key={tariff.id}>
-              <td>{tariff.id}</td>
-              <td style={{color: '#fff'}}>{tariff.title}</td>
-              <td>{tariff.price}₽</td>
-              <td>{tariff.bundle.internet}</td>
-              <td>{tariff.bundle.callTime}</td>
-              <td>{tariff.bundle.messages}</td>
-              <td>
-                <button className='table-buttons'> <img src={editIcon} onClick={() => {
-                  setSelectedTariff(tariff);
-                  setShowModal(true);
-                }} /></button>
-              </td>
-              <td>
-                <button className='table-buttons'> <img src={deleteIcon} onClick={() => {
-                  setDeleteId(tariff.id);
-                  setShowConfirm(true);
-                }} /></button>
-              </td>
-            </tr>
-          ))}
+        <tbody style={{ color: '#8596AC' }}>
+            {tariffs.map((tariff) => (
+                <tr key={tariff.id}>
+                <td style={{ color: '#fff' }}>{tariff.title || '—'}</td>
+                <td>{tariff.price ? `${tariff.price}₽` : '0'}</td>
+                <td>{tariff.bundle?.internet || '0'}</td>
+                <td>{tariff.bundle?.callTime || '0'}</td>
+                <td>{tariff.bundle?.messages || '0'}</td>
+                <td>
+                    <button className="table-buttons">
+                    <img
+                        src={editIcon}
+                        onClick={() => {
+                        setSelectedTariff(tariff);
+                        setShowModal(true);
+                        }}
+                    />
+                    </button>
+                </td>
+                <td>
+                    <button className="table-buttons">
+                    <img
+                        src={deleteIcon}
+                        onClick={() => {
+                        setDeleteId(tariff.id);
+                        setShowConfirm(true);
+                        }}
+                    />
+                    </button>
+                </td>
+                </tr>
+            ))}
         </tbody>
       </table>
 
-      {!showModal && (<button className="add-new-tariff" onClick={handleAddClick}>
+      {!showModal && (
+        <button className="add-new-tariff" onClick={handleAddClick}>
           Добавить новый план...
         </button>
       )}
@@ -88,9 +111,11 @@ export const TariffTable = () => {
           onClose={() => setShowModal(false)}
           onSave={(updatedTariff) => {
             if (selectedTariff) {
-              setTariffs(tariffs.map((t) => t.id === updatedTariff.id ? updatedTariff : t));
+              setTariffs((prev) =>
+                prev.map((t) => (t.id === updatedTariff.id ? updatedTariff : t))
+              );
             } else {
-              setTariffs([...tariffs, updatedTariff]);
+              setTariffs((prev) => [...prev, updatedTariff]);
             }
           }}
         />

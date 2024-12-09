@@ -11,4 +11,4 @@ const axiosInstance = axios.create({
 export const fetchTariffs = () => axiosInstance.get('/');
 export const addTariff = (tariff) => axiosInstance.post('/add', tariff);
 export const updateTariff = (tariff) => axiosInstance.patch('/update', tariff);
-export const deleteTariff = (id) => axiosInstance.delete(`/${id}/delete`);
+export const deleteTariff = (id) => axiosInstance.delete(`/id/${id}/delete`);

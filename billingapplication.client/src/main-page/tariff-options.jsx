@@ -8,14 +8,14 @@ export const TariffOptions = ({ userData }) => {
     let maxTime = getMaxValue(currentTime, timeToMinutes(userData.tariff.bundle.callTime));
 
     let currentInternet = userData.internet;
-    let maxInternet = getMaxValue(currentInternet, userData.tariff.bundle.internet);
+    let maxInternet = getMaxValue(currentInternet, userData.tariff.bundle.internet) / 1024;
 
     let currentSMS = userData.messages;
     let maxSMS = getMaxValue(currentSMS, userData.tariff.bundle.messages);
 
     const dataOptions = [
         { label: "Минуты", value: currentTime, max: maxTime },
-        { label: "Интернет", value: currentInternet, max: maxInternet, unit: "ГБ" },
+        { label: "Интернет", value: currentInternet / 1024, max: maxInternet, unit: "ГБ" },
         { label: "SMS", value: currentSMS, max: maxSMS },
     ];
 

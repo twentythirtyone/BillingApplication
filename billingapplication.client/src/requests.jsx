@@ -1,62 +1,64 @@
 ﻿import getUserExpenses from './main-page/expences.jsx'
 
-export const getTariff = async (token) => {
-    try {
-        const response = await fetch('https://localhost:7262/tariff', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            },
-        });
 
-        if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status}`);
-        }
+import axios from 'axios';
 
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error('Failed to get tariff data', error);
-    }
-};
+// Настройка базового клиента
+const apiClient = axios.create({
+    baseURL: 'https://localhost:7262',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
 
-export const fetchExpenses = async () => {
+// Перехватчик для добавления токена авторизации
+apiClient.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     if (token) {
-        try {
-            const expenses = await getUserExpenses(token);
-            return expenses;
-        } catch (error) {
-            console.error("Failed to fetch user expenses:", error);
-        }
+        config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+}, (error) => Promise.reject(error));
+
+export const getTariff = async () => {
+    try {
+        const response = await apiClient.get('/tariff');
+        return response.data; // Возвращаем только данные
+    } catch (error) {
+        console.error('Ошибка при получении тарифов:', error);
+        throw error; // Генерируем ошибку для обработки
     }
 };
 
+// Получение расходов
+export const fetchExpenses = async () => {
+    try {
+        const response = await apiClient.get('/subscribers/expenses/month/current'); // Предполагаем, что это путь
+        return response.data; // Возвращаем только данные
+    } catch (error) {
+        console.error('Ошибка при загрузке расходов:', error);
+        throw error; // Генерируем ошибку для обработки
+    }
+};
+
+// Смена тарифа
 export const changeTariff = async (tariffId) => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`https://localhost:7262/subscribers/tariff/change/${tariffId}`, {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    if (!response.ok) {
-        throw new Error('Ошибка при смене тарифа');
+    try {
+        const response = await apiClient.post(`/subscribers/tariff/change/${tariffId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при смене тарифа:', error);
+        throw error; // Генерируем ошибку для обработки
     }
-    return response.json();
 };
 
+// Оплата тарифа
 export const payTariff = async (tariffId) => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(`https://localhost:7262/subscribers/tariff/pay`, {
-        method: 'POST',
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ tariffId }),
-    });
-    if (!response.ok) {
-        throw new Error('Ошибка при оплате тарифа');
+    try {
+        const response = await apiClient.post('/subscribers/tariff/pay', { tariffId });
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при оплате тарифа:', error);
+        throw error; // Генерируем ошибку для обработки
     }
-    return response.json();
 };

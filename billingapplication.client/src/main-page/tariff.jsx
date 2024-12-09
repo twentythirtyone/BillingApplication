@@ -64,7 +64,7 @@ const Tariff = () => {
                         </button>
                         {mainTariff.bundle && (
                             <ul className="tariff-features">
-                                <li>{mainTariff.bundle.internet} ГБ</li>
+                                <li>{+mainTariff.bundle.internet / 1024} ГБ</li>
                                 <li>{timeToMinutes(mainTariff.bundle.callTime)} Минут</li>
                                 <li>{mainTariff.bundle.messages} SMS</li>
                             </ul>
@@ -94,7 +94,7 @@ const Tariff = () => {
                         </button>
                         {tariff.bundle && (
                             <ul className="tariff-features">
-                                <li>{tariff.bundle.internet} ГБ</li>
+                                <li>{ +tariff.bundle.internet /1024} ГБ</li>
                                 <li>{timeToMinutes(tariff.bundle.callTime)} Минут</li>
                                 <li>{tariff.bundle.messages} SMS</li>
                             </ul>

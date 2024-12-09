@@ -42,7 +42,7 @@ const LoginForm = () => {
             }
 
             if (!response.ok) {
-                throw new Error('Не удалось отправить запрос на сервер');
+                throw new Error('Неверный логин или пароль');
             }
 
             const data = await response.json();
@@ -50,6 +50,7 @@ const LoginForm = () => {
             const token = data.token;
             localStorage.setItem('token', token);
             navigate('/main', { state: { token } });
+            window.location.reload();
         } catch (error) {
             setErrorMessage(error.message);
         } finally {

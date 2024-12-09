@@ -42,6 +42,7 @@ const AdminLoginForm = () => {
 
             localStorage.setItem('token', token);
             navigate('/operator', { state: { token } });
+            window.location.reload();
         } catch (error) {
             setErrorMessage(error.message);
         } finally {

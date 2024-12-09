@@ -6,6 +6,9 @@ const UserContext = createContext();
 
 export const useUser = () => {
     const context = useContext(UserContext);
+    if (!context) {
+        throw new Error("useUser must be used within a UserProvider");
+    }
     return context;
 };
 
@@ -16,45 +19,47 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            fetchUserData(token);
+            fetchUserData(token).catch(() => setLoading(false)); // Обработка ошибки
         } else {
-            setLoading(false);
+            setLoading(false); // Нет токена — завершаем загрузку
         }
     }, []);
 
     const fetchUserData = async (token) => {
-        setLoading(true);
         try {
             const response = await axios.get('https://localhost:7262/subscribers/current', {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },
             });
-
             setUserData(response.data);
         } catch (error) {
-            console.error("Failed to fetch user data:", error);
+            console.error("Ошибка при получении данных пользователя:", error);
+            setUserData(null); // Обнуляем данные пользователя при ошибке
         } finally {
-            setLoading(false);
+            setLoading(false); // Устанавливаем `loading` в `false`, даже при ошибке
         }
     };
 
     const refreshUserData = async () => {
         const token = localStorage.getItem('token');
         if (token) {
+            setLoading(true); // Обновление данных тоже может занять время
             await fetchUserData(token);
         }
     };
 
+    if (loading) {
+        return (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className="loading" />
+            </div>
+        );
+    }
+
     return (
         <UserContext.Provider value={{ userData, refreshUserData, loading }}>
-            {loading ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                    return (<ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className="loading" />);
-                </div>
-            ) : (
-                children
-            )}
+            {children}
         </UserContext.Provider>
     );
 };

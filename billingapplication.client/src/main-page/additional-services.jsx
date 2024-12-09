@@ -53,7 +53,7 @@ export const AdditionalServices = ({cutValue}) => {
             {latestServices.map((service) => (
                 <div className="service-card" key={service.id}>
                     <span className="service-card-title"> +{parseAdditionalDesc(service.description)[0]}</span>
-                    <span className="service-card-desc">{parseAdditionalDesc(service.description)[1]}</span>
+                    <span className="service-card-desc">{parseAdditionalDesc(service.description)[1] }</span>
                     <button
                         className="service-price"
                         onClick={() => handleServicePurchase(service.id, service.title)}>

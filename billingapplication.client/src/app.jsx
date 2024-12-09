@@ -24,10 +24,10 @@ createRoot(document.getElementById('root')).render(
                     <Route path='login' element={<LoginForm />} />
                     <Route path='operator-login' element={<AdminLoginForm />} />
                     <Route path='operator' element={<AdminMainPage />}>
-                        <Route index element={<Navigate to="control" />} />
+                        <Route index element={<Navigate to="management" />} />
+                        <Route path="management" element={<TariffTable />} />
                         <Route path="control" element={<Control />} />
                         <Route path="monitoring" element={<Control />} />
-                        <Route path="management" element={<TariffTable />} />
                         <Route path="user-control" element={<Control />} />
                         <Route path="analytics" element={<Control />} />
                         <Route path="settings" element={<Control />} />

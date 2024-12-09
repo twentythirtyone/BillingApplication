@@ -1,8 +1,10 @@
 const ConfirmModal = ({ message, onConfirm, onCancel }) => (
-  <div className="modal">
+  <div className="tariff-confirm-modal">
     <p>{message}</p>
-    <button onClick={onConfirm}>Да</button>
-    <button onClick={onCancel}>Нет</button>
+    <div className="tariff-modal-buttons tariff-confirm">
+        <button onClick={onConfirm}>Да</button>
+        <button onClick={onCancel}>Нет</button>
+    </div>
   </div>
 );
 

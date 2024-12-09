@@ -6,27 +6,32 @@ import { TariffOptions } from './tariff-options.jsx';
 import { fetchExpenses } from '../requests.jsx';
 
 const Dashboard = () => {
-    const { userData, loading: userLoading } = useUser(); // Достаем данные и статус загрузки из контекста
+    const { userData, loading: userLoading, refreshUserData } = useUser(); // Достаем метод обновления из контекста
     const [userExpenses, setUserExpenses] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const loadExpenses = async () => {
-            try {
-                const expenses = await fetchExpenses();
-                setUserExpenses(expenses);
-            } catch (err) {
-                console.error("Ошибка при загрузке расходов:", err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (userData) {
-            loadExpenses();
-        } else {
-            setLoading(false); // Завершаем загрузку, если данных пользователя нет
+    // Функция для загрузки расходов
+    const loadExpenses = async () => {
+        setLoading(true);
+        try {
+            const expenses = await fetchExpenses();
+            setUserExpenses(expenses);
+        } catch (err) {
+            console.error("Ошибка при загрузке расходов:", err);
+        } finally {
+            setLoading(false);
         }
+    };
+
+    // Первичная загрузка данных
+    useEffect(() => {
+        const initialize = async () => {
+            if (userData) {
+                await loadExpenses();
+            }
+            setLoading(false); // Завершаем первичную загрузку
+        };
+        initialize();
     }, [userData]);
 
     useEffect(() => {
@@ -35,7 +40,15 @@ const Dashboard = () => {
 
     // Если данные пользователя или расходы загружаются, показываем индикатор
     if (userLoading || loading) {
-        return (<ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className="loading"/>);
+        return (
+            <ReactLoading
+                type="cylon"
+                color="#FF3B30"
+                height={667}
+                width={375}
+                className="loading"
+            />
+        );
     }
 
     // Если пользователь не авторизован

@@ -76,7 +76,7 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
             />
 
           <label>
-            Интернет:
+            Интернет(МБ):
           </label>
             <input
               type="number"
@@ -90,10 +90,10 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
               value={formData.callTime}
               onChange={(e) => handleCallTimeChange(e.target.value)}
               style={{
-                width: '390px',
-                padding: '5px',
+                width: '389px',
+                padding: '7px',
                 border: 'none',
-                borderRadius: '4px',
+                borderRadius: '12px',
                 fontSize: '14px',
               }}
               showSeconds
