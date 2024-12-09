@@ -763,6 +763,7 @@ table {
     padding: 20px;
     width: 400px;
     border-radius: 12px;
+    border: 1px solid #bfbfbf;
     z-index: 2;
     color: white;
     background-color: #242732;
@@ -774,16 +775,16 @@ table {
 
 .modal label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     font-weight: bold;
 }
 
 .modal form input {
     width: calc(100% - 20px);
-    padding: 4px 10px;
+    padding: 6px 10px;
     margin-bottom: 15px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 12px;
     font-size: 14px;
 }
 
@@ -794,13 +795,34 @@ table {
 }
 
 .tariff-modal-buttons button {
+    margin-top: 20px;
     background-color: white;
     border: none;
     border-radius: 12px;
     padding: 7px 14px;
-    justify-content: space-between;
+    width: 150px;
 }
 
     .tariff-modal-buttons button:hover {
         background-color: #bfbfbf;
     }
+
+.tariff-confirm button{
+    margin-top: 30px;
+    padding: 9px 20px;
+}
+
+.tariff-confirm-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    width: 350px;
+    height: 150px;
+    border-radius: 12px;
+    z-index: 2;
+    color: white;
+    background-color: #242732;
+    text-align: center;
+}
