@@ -50,40 +50,42 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
     return (
       <div className="modal">
         <form onSubmit={handleSubmit}>
-            <label>
-            ID:
-            <input
-              type="number"
-              value={formData.id}
-              onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-            />
-          </label>
           <label>
             Название:
+          </label>
             <input
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
             />
+          <label>
+            Описание:
           </label>
+            <input
+              type="text"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            />
           <label>
             Цена:
+          </label>
             <input
               type="number"
               value={formData.price}
               onChange={(e) => setFormData({ ...formData, price: +e.target.value })}
             />
-          </label>
+
           <label>
             Интернет:
+          </label>
             <input
               type="number"
               value={formData.internet}
               onChange={(e) => setFormData({ ...formData, internet: e.target.value })}
             />
-          </label>
           <label>
             Звонки:
+          </label>
             <TimeField
               value={formData.callTime}
               onChange={(e) => handleCallTimeChange(e.target.value)}
@@ -96,15 +98,14 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
               }}
               showSeconds
             />
-          </label>
           <label>
             SMS:
+          </label>
             <input
               type="number"
               value={formData.messages}
               onChange={(e) => setFormData({ ...formData, messages: +e.target.value })}
             />
-          </label>
           <div className="tariff-modal-buttons">
             <button type="submit">Сохранить</button>
             <button type="button" onClick={onClose}>Отмена</button>
