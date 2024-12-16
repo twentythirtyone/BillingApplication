@@ -19,9 +19,8 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
     };
   
     const handleSubmit = (e) => {
-      e.preventDefault();
-  
-      // Создаем объект в формате, который ожидает сервер
+        e.preventDefault();
+
       const updatedTariff = {
         tariff: {
           id: formData.id,
