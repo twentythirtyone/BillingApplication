@@ -8,6 +8,7 @@ using BillingApplication.Server.Exceptions;
 using BillingApplication.Server.Services.Models.Subscriber;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Services.Models.Utilites.Tariff;
+using BillingApplication.Server.Services.Models.Subscriber.Stats;
 
 namespace BillingApplication.Server.Services.Manager.SubscriberManager
 {
@@ -117,6 +118,11 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         public async Task<decimal> GetExpensesInMonth(Months month, int? subscriberId)
         {
             return await subscriberRepository.GetExpensesInMonth(month, subscriberId);
+        }
+
+        public async Task<WalletHistoryModel> GetWalletHistory(int userId)
+        {
+            return await subscriberRepository.GetWalletHistory(userId);
         }
 
         public async Task<int?> AddExtraToSubscriber(int extraId, int subscriberId)

@@ -1,5 +1,6 @@
 ﻿using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Models.Subscriber;
+using BillingApplication.Server.Services.Models.Subscriber.Stats;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber;
 using BillingApplication.Services.Models.Utilites;
@@ -26,5 +27,6 @@ namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
         Task<decimal> GetExpensesCurrentYear(int? subscriberId);
         Task<decimal> GetExpensesInMonth(Months month, int? subscriberId);
         Task<int?> AddUserTraffic(int subscriberId);
+        Task<WalletHistoryModel> GetWalletHistory(int userId);
     }
 }

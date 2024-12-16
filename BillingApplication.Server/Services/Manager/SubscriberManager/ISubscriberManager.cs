@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Server.Services.Models.Subscriber;
+using BillingApplication.Server.Services.Models.Subscriber.Stats;
 using BillingApplication.Services.Models.Roles;
 using BillingApplication.Services.Models.Subscriber;
 using BillingApplication.Services.Models.Subscriber.Stats;
@@ -21,5 +22,6 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         Task<decimal> GetExpensesCurrentYear(int? subscriberId);
         Task<decimal> GetExpensesInMonth(Months month, int? subscriberId);
         Task<int?> AddPaymentForTariff(int subscriberId);
+        Task<WalletHistoryModel> GetWalletHistory(int userId);
     }
 }
