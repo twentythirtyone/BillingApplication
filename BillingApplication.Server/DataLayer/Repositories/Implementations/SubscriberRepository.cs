@@ -10,6 +10,8 @@ using BillingApplication.Server.DataLayer.Repositories.Abstractions;
 using BillingApplication.Entities;
 using BillingApplication.Services.Models.Utilites.Tariff;
 using BillingApplication.Server.Services.Models.Utilites;
+using BillingApplication.Server.Services.Models.Subscriber.Stats;
+using BillingApplication.Server.Mapper;
 
 namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 {
@@ -220,6 +222,25 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                 await context.SaveChangesAsync();
             }
             return user.Id;
+        }
+
+        public async Task<WalletHistoryModel> GetWalletHistory(int userId)
+        {
+            var walletHistory = new WalletHistoryModel();
+
+            var user = await context.Subscribers
+                .Include(x => x.TopUps)
+                .Include(x => x.Payments)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+            
+
+            if (user == null)
+                throw new UserNotFoundException();
+
+            walletHistory.TopUps = user.TopUps.Select(TopUpsMapper.TopUpsEntityToTopUpsModel).ToList()!;
+            walletHistory.Payments = user.Payments.Select(PaymentMapper.PaymentEntityToPaymentModel).ToList()!;
+
+            return walletHistory;
         }
     }
 }

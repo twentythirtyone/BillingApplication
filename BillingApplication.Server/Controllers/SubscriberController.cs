@@ -302,6 +302,25 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [HttpGet("wallet/history")]
+        public async Task<IActionResult> GetWalletHistory()
+        {
+            try
+            {
+                var result = await subscriberManager.GetWalletHistory((int)auth.GetCurrentUserId()!);
+                logger.LogInformation($"GETTING: Current User wallet history has been recieved");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"ERROR GETTING: Current User wallet history has has not been recieved." +
+                      $"\nMessage:{ex.Message}\n");
+
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [HttpGet("history")]
         public async Task<IActionResult> GetSubscriberHistory()
         {

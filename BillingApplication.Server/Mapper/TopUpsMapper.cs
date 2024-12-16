@@ -5,7 +5,7 @@ namespace BillingApplication.Server.Mapper
 {
     public static class TopUpsMapper
     {
-        public static TopUps? BundleEntityToBundleModel(TopUpsEntity? topUpsEntity)
+        public static TopUps? TopUpsEntityToTopUpsModel(TopUpsEntity? topUpsEntity)
         {
             if (topUpsEntity == null)
                 return null;
@@ -19,7 +19,7 @@ namespace BillingApplication.Server.Mapper
             };
         }
 
-        public static TopUpsEntity? BundleModelToBundleEntity(TopUps? topUps)
+        public static TopUpsEntity? TopUpsModelToTopUpsEntity(TopUps? topUps)
         {
             if (topUps == null)
                 return null;

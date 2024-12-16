@@ -15,7 +15,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
         public async Task<int?> AddTopUp(TopUps entity)
         {
             entity.Date = DateTime.UtcNow;
-            await context.TopUps.AddAsync(TopUpsMapper.BundleModelToBundleEntity(entity));
+            await context.TopUps.AddAsync(TopUpsMapper.TopUpsModelToTopUpsEntity(entity));
             return entity.Id;
         }
 
@@ -27,7 +27,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
         public async Task<TopUps> GetTopUpById(int id)
         {
             var topUp = await context.TopUps.FindAsync(id);
-            return TopUpsMapper.BundleEntityToBundleModel(topUp)!;
+            return TopUpsMapper.TopUpsEntityToTopUpsModel(topUp)!;
         }
 
         public async Task<IEnumerable<TopUps>> GetTopUps()
@@ -36,7 +36,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                 .AsNoTracking()
                 .ToListAsync();
 
-            return topUps.Select(TopUpsMapper.BundleEntityToBundleModel)!;
+            return topUps.Select(TopUpsMapper.TopUpsEntityToTopUpsModel)!;
         }
 
         public async Task<IEnumerable<TopUps>> GetTopUpsByUserId(int? id)
@@ -47,7 +47,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 
             return topUps
                     .Where(x => x.PhoneId == id)
-                    .Select(TopUpsMapper.BundleEntityToBundleModel)!;
+                    .Select(TopUpsMapper.TopUpsEntityToTopUpsModel)!;
         }
 
     }
