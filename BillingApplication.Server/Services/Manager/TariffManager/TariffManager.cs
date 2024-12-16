@@ -3,6 +3,7 @@ using BillingApplication.Exceptions;
 using BillingApplication.Services.Models.Utilites.Tariff;
 using BillingApplication.Services.Models.Utilites;
 using BillingApplication.Server.DataLayer.Repositories.Abstractions;
+using BillingApplication.Server.Services.Models.Utilites;
 
 namespace BillingApplication.Server.Services.Manager.TariffManager
 {
@@ -24,7 +25,7 @@ namespace BillingApplication.Server.Services.Manager.TariffManager
         {
             var tariff = await tariffRepository.GetByTitle(title);
             await tariffRepository.Delete(tariff.Id);
-            if (tariff.Id == 1) throw new TariffNotFoundException("Нельзя удалить стандартный тариф.");
+            if (tariff.Id == Constants.DEFAULT_TARIFF_ID) throw new TariffNotFoundException("Нельзя удалить стандартный тариф.");
             return tariff.Title ?? throw new TariffNotFoundException("Ошибка при удалении тарифа");
         }
 
@@ -32,7 +33,7 @@ namespace BillingApplication.Server.Services.Manager.TariffManager
         {
             var tariff = await tariffRepository.GetById(id);
             await tariffRepository.Delete(tariff.Id);
-            if (tariff.Id == 1) throw new TariffNotFoundException("Нельзя удалить стандартный тариф.");
+            if (tariff.Id == Constants.DEFAULT_TARIFF_ID) throw new TariffNotFoundException("Нельзя удалить стандартный тариф.");
             return tariff.Title ?? throw new TariffNotFoundException("Ошибка при удалении тарифа");
         }
 

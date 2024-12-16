@@ -7,5 +7,7 @@ namespace BillingApplication.Server.Services.Manager.ExtrasManager
         Task<IEnumerable<Extras?>> GetExtras();
         Task<Extras?> GetExtrasById(int extrasId);
         Task<int?> AddNewExtra(Extras extras);
+        Task<int?> Update(Extras extras, int bundleId);
+        Task<int?> Delete(int extrasId);
     }
 }

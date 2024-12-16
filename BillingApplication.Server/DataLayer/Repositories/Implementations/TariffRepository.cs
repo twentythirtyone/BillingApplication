@@ -49,7 +49,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                                       .FirstOrDefaultAsync(t => t.Id == id);
 
             if (tariff == null)
-                return null;
+                throw new TariffNotFoundException();
 
             foreach (var subscriber in tariff.Subscribers)
             {

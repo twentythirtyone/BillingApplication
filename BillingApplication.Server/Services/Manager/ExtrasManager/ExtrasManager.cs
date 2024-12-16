@@ -13,7 +13,12 @@ namespace BillingApplication.Server.Services.Manager.ExtrasManager
         public async Task<int?> AddNewExtra(Extras extras)
         {
             int? id = await extrasRepository.Create(extras);
-            return id ?? throw new Exception("extras_create_exception");
+            return id ?? throw new Exception("Create extra exception");
+        }
+
+        public async Task<int?> Delete(int extrasId)
+        {
+            return await extrasRepository.Delete(extrasId) ?? throw new Exception("Delete extra exception");
         }
 
         public async Task<IEnumerable<Extras?>> GetExtras()
@@ -25,7 +30,12 @@ namespace BillingApplication.Server.Services.Manager.ExtrasManager
         public async Task<Extras?> GetExtrasById(int extrasId)
         {
             Extras? extras = await extrasRepository.GetById(extrasId);
-            return extras ?? throw new Exception("extra_does_not_exists");
+            return extras ?? throw new Exception("Get extra exception");
+        }
+
+        public async Task<int?> Update(Extras extras, int bundleId)
+        {
+            return await extrasRepository.Update(extras, bundleId) ?? throw new Exception("Update extra excepton");
         }
     }
 }

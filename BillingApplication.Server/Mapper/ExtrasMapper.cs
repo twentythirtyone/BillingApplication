@@ -1,5 +1,7 @@
 ﻿using BillingApplication.DataLayer.Entities;
+using BillingApplication.Entities;
 using BillingApplication.Services.Models.Utilites;
+using BillingApplication.Services.Models.Utilites.Tariff;
 
 namespace BillingApplication.Server.Mapper
 {
@@ -30,6 +32,17 @@ namespace BillingApplication.Server.Mapper
                 Price = extrasModel.Price,
                 Title = extrasModel.Title
             };
+        }
+
+        public static ExtrasEntity? UpdateExtraEntity(ExtrasEntity currentExtra, Extras extra, BundleEntity bundleEntity)
+        {
+            if (extra == null)
+                return null;
+            currentExtra.Title = extra.Title ?? "None";
+            currentExtra.Description = extra.Description ?? "None";
+            currentExtra.Price = extra.Price;
+            currentExtra.Bundle = bundleEntity;
+            return currentExtra;
         }
     }
 }
