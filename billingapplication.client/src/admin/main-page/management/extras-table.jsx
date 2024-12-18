@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
-import { fetchTariffs, deleteTariff } from './tariff-api.jsx';
-import { TariffFormModal } from './tariff-modal';
+import { fetchExtras, deleteExtra } from './extras-api.jsx';
+import { ExtrasFormModal } from './extras-modal';
 import deleteIcon from '../../../assets/img/delete.svg';
 import editIcon from '../../../assets/img/edit.svg';
 import ConfirmModal from './confirm-modal';
-import { ExtrasTable } from './extras-table.jsx';
 
-export const TariffTable = () => {
-  const [tariffs, setTariffs] = useState([]);
-  const [selectedTariff, setSelectedTariff] = useState(null);
+export const ExtrasTable = () => {
+  const [extras, setExtras] = useState([]);
+  const [selectedExtra, setSelectedExtra] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
@@ -22,10 +21,10 @@ export const TariffTable = () => {
     const fetchData = async () => {
       setLoading(true); // Включаем индикатор загрузки
       try {
-        const response = await fetchTariffs(authToken);
-        setTariffs(response.data);
+        const response = await fetchExtras(authToken);
+        setExtras(response.data);
       } catch (error) {
-        console.error('Error fetching tariffs:', error);
+        console.error('Error fetching extras:', error);
       } finally {
         setLoading(false); // Выключаем индикатор загрузки
       }
@@ -38,12 +37,12 @@ export const TariffTable = () => {
   }, [authToken]);
 
   const handleDelete = () => {
-    deleteTariff(deleteId)
+    deleteExtra(deleteId)
       .then(() => {
-        setTariffs((prev) => prev.filter((tariff) => tariff.id !== deleteId));
+        setExtras((prev) => prev.filter((extra) => extra.id !== deleteId));
         setShowConfirm(false);
       })
-      .catch((error) => console.error('Error deleting tariff:', error));
+      .catch((error) => console.error('Error deleting extra:', error));
   };
 
   const handleAddClick = () => {
@@ -52,7 +51,7 @@ export const TariffTable = () => {
 
   return (
     <div>
-      <h1>Тарифы</h1>
+      <h1>Дополнительные услуги</h1>
       <table>
         <thead className="tariffs-heading">
           <tr>
@@ -66,21 +65,18 @@ export const TariffTable = () => {
           </tr>
         </thead>
         <tbody style={{ color: '#8596AC' }}>
-          {tariffs.map((tariff) => (
-            <tr key={tariff.id}>
-              <td style={{ color: '#fff' }}>{tariff.title || '—'}</td>
-              <td>{tariff.price ? `${tariff.price}₽` : '0'}</td>
-              <td>{tariff.bundle?.internet || '0'}</td>
-              <td>{tariff.bundle?.callTime || '0'}</td>
-              <td>{tariff.bundle?.messages || '0'}</td>
-              {tariff.title !== 'Стандартный' && (
+          {extras.map((extra) => (
+            <tr key={extra.id}>
+              <td style={{ color: '#fff' }}>{extra.title || '—'}</td>
+              <td>{extra.price ? `${extra.price}₽` : '0'}</td>
+              {extra.title !== 'Стандартный' && (
                 <>
                   <td>
                     <button className="table-buttons">
                       <img
                         src={editIcon}
                         onClick={() => {
-                          setSelectedTariff(tariff);
+                          setSelectedExtra(extra);
                           setShowModal(true);
                         }}
                       />
@@ -91,7 +87,7 @@ export const TariffTable = () => {
                       <img
                         src={deleteIcon}
                         onClick={() => {
-                          setDeleteId(tariff.id);
+                          setDeleteId(extra.id);
                           setShowConfirm(true);
                         }}
                       />
@@ -111,16 +107,16 @@ export const TariffTable = () => {
       )}
 
       {showModal && (
-        <TariffFormModal
-          tariff={selectedTariff}
+        <ExtraFormModal
+          tariff={selectedExtra}
           onClose={() => setShowModal(false)}
           onSave={(updatedTariff) => {
-            if (selectedTariff) {
-              setTariffs((prev) =>
+            if (selectedExtra) {
+              setExtras((prev) =>
                 prev.map((t) => (t.id === updatedTariff.id ? updatedTariff : t))
               );
             } else {
-              setTariffs((prev) => [...prev, updatedTariff]);
+              setExtras((prev) => [...prev, updatedTariff]);
             }
           }}
         />
@@ -133,7 +129,6 @@ export const TariffTable = () => {
           onCancel={() => setShowConfirm(false)}
         />
       )}
-        <ExtrasTable />
     </div>
   );
 };

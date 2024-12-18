@@ -10,8 +10,8 @@ export const Sidebar = () => {
     const menuItems = [
         { path: 'control', name: 'Панель управления', icon: controlIcon },
         { path: 'monitoring', name: 'Мониторинг', icon: tariffIcon },
-        { path: 'management', name: 'Управление', icon: addServicesIcon },
-        { path: 'user-control', name: 'Управление пользователем', icon: historyIcon },
+        { path: 'management', name: 'Управление услугами', icon: addServicesIcon },
+        { path: 'user-control', name: 'Управление пользователями', icon: historyIcon },
         { path: 'analytics', name: 'Аналитика', icon: analyticsIcon },
         { path: 'settings', name: 'Настройки', icon: settingsIcon },
     ];
