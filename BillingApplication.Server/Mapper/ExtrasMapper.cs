@@ -17,7 +17,8 @@ namespace BillingApplication.Server.Mapper
                 Description = extrasEntity.Description,
                 Package = extrasEntity.Package,
                 Price = extrasEntity.Price,
-                Title = extrasEntity.Title
+                Title = extrasEntity.Title,
+                Bundle = BundleMapper.BundleEntityToBundleModel(extrasEntity.Bundle)
             };
         }
 
@@ -30,7 +31,8 @@ namespace BillingApplication.Server.Mapper
                 Description = extrasModel.Description,
                 Package = extrasModel.Package,
                 Price = extrasModel.Price,
-                Title = extrasModel.Title
+                Title = extrasModel.Title,
+                Bundle = BundleMapper.BundleModelToBundleEntity(extrasModel.Bundle)
             };
         }
 
