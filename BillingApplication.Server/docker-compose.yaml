@@ -1,0 +1,19 @@
+version: '3.9'
+
+volumes:
+  postgres-data:
+    external: false
+
+services:
+  postgre-db:
+    container_name: billing-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: billingapp
+      POSTGRES_USER: billing
+      POSTGRES_PASSWORD: password
+    ports:
+      - target: 5432
+        published: 5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
