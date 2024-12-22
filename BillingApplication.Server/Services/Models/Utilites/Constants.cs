@@ -6,6 +6,6 @@
         public static decimal CALL_PER_MINUTE_PRICE = 3;
         public static int INTERNET_PER_100MB_PRICE = 30;
 
-        public static int DEFAULT_TARIFF_ID = 12;
+        public static int DEFAULT_TARIFF_ID = 1;
     }
 }

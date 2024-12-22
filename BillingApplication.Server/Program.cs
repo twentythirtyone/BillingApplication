@@ -30,6 +30,7 @@ using BillingApplication.Server.DataLayer.Repositories.Implementations;
 using BillingApplication.Server.Services.Manager.InternetManager;
 using BillingApplication.Server.Services.Manager.OperatorManager;
 using BillingApplication.Server.Services.Manager.HistoryManager;
+using BillingApplication.Server.Services.Initializers;
 
 internal class Program
 {
@@ -57,6 +58,10 @@ internal class Program
             var app = builder.Build();
 
             ConfigureMiddleWare(app);
+            using var scope = app.Services.CreateScope();
+            using var appDbContext = scope.ServiceProvider.GetRequiredService<BillingAppDbContext>();
+
+            DbContextInitializer.InitializeDbContext(appDbContext, new Encrypt());
 
             app.Run();
             
