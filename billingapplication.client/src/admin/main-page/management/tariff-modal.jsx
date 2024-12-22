@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { addTariff, updateTariff } from './tariff-api.jsx';
+import { addTariff, updateTariff } from './managment-api.jsx';
 import TimeField from 'react-simple-timefield';
 
 export const TariffFormModal = ({ tariff, onClose, onSave }) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchTariffs, deleteTariff } from './tariff-api.jsx';
+import { fetchTariffs, deleteTariff } from './managment-api.jsx';
 import { TariffFormModal } from './tariff-modal';
 import deleteIcon from '../../../assets/img/delete.svg';
 import editIcon from '../../../assets/img/edit.svg';
@@ -17,6 +17,7 @@ export const TariffTable = () => {
 
   const authToken = localStorage.getItem('token');
   useEffect(() => {
+    document.title = "Управление услугами";
     if (!authToken) return; // Ждем, пока появится токен
 
     const fetchData = async () => {
@@ -58,7 +59,7 @@ export const TariffTable = () => {
           <tr>
             <th>Название</th>
             <th>Цена</th>
-            <th>Интернет (МБ)</th>
+            <th>Интернет</th>
             <th>Звонки</th>
             <th>SMS</th>
             <th style={{ color: '#8596AC' }}>Редактировать</th>
@@ -70,7 +71,7 @@ export const TariffTable = () => {
             <tr key={tariff.id}>
               <td style={{ color: '#fff' }}>{tariff.title || '—'}</td>
               <td>{tariff.price ? `${tariff.price}₽` : '0'}</td>
-              <td>{tariff.bundle?.internet || '0'}</td>
+              <td>{tariff.bundle?.internet / 1024 || '0'}</td>
               <td>{tariff.bundle?.callTime || '0'}</td>
               <td>{tariff.bundle?.messages || '0'}</td>
               {tariff.title !== 'Стандартный' && (

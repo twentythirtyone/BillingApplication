@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+п»їimport { createContext, useContext, useState, useEffect } from 'react';
 import ReactLoading from 'react-loading';
 import axios from 'axios';
 
@@ -19,9 +19,9 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            fetchUserData(token).catch(() => setLoading(false)); // Обработка ошибки
+            fetchUserData(token).catch(() => setLoading(false));
         } else {
-            setLoading(false); // Нет токена — завершаем загрузку
+            setLoading(false);
         }
     }, []);
 
@@ -34,17 +34,17 @@ export const UserProvider = ({ children }) => {
             });
             setUserData(response.data);
         } catch (error) {
-            console.error("Ошибка при получении данных пользователя:", error);
-            setUserData(null); // Обнуляем данные пользователя при ошибке
+            console.error("РќРµ СѓРґР°Р»РѕСЃСЊ РїРѕР»СѓС‡РёС‚СЊ РґР°РЅРЅС‹Рµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ (РєР»РёРµРЅС‚Р°):", error);
+            setUserData(null); 
         } finally {
-            setLoading(false); // Устанавливаем `loading` в `false`, даже при ошибке
+            setLoading(false);
         }
     };
 
     const refreshUserData = async () => {
         const token = localStorage.getItem('token');
         if (token) {
-            setLoading(true); // Обновление данных тоже может занять время
+            setLoading(true); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             await fetchUserData(token);
         }
     };

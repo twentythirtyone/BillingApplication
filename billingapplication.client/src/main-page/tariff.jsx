@@ -43,7 +43,10 @@ const Tariff = () => {
     const mainTariff = getRandomObjects(tariffs, 1)[0];
 
     if (!tariffs.length) {
-        return <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading'/>;
+        return (<div className="tariff">
+            <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading'/>;
+        </div>)
+        
     }
     return (
         <div className="tariff">

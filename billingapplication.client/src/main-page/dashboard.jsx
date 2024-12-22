@@ -41,13 +41,15 @@ const Dashboard = () => {
     // Если данные пользователя или расходы загружаются, показываем индикатор
     if (userLoading || loading) {
         return (
-            <ReactLoading
-                type="cylon"
-                color="#FF3B30"
-                height={667}
-                width={375}
-                className="loading"
-            />
+            <div className="dashboard">
+                <ReactLoading
+                    type="cylon"
+                    color="#FF3B30"
+                    height={667}
+                    width={375}
+                    className="loading"
+                />
+            </div>
         );
     }
 
