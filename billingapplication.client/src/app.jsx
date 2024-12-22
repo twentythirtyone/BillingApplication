@@ -13,6 +13,7 @@ import Wallet from './main-page/wallet.jsx'
 import { AdminMainPage } from './admin/main-page/admin-main-page.jsx'
 import { Control } from './admin/main-page/control.jsx'
 import { TariffTable } from './admin/main-page/management/tariff-table.jsx'
+import { ClientRegisterForm } from './admin/main-page/users-control.jsx'
 import './style.css'
 
 createRoot(document.getElementById('root')).render(
@@ -28,7 +29,7 @@ createRoot(document.getElementById('root')).render(
                         <Route path="management" element={<TariffTable />} />
                         <Route path="control" element={<Control />} />
                         <Route path="monitoring" element={<Control />} />
-                        <Route path="user-control" element={<Control />} />
+                        <Route path="user-control" element={<ClientRegisterForm />} />
                         <Route path="analytics" element={<Control />} />
                         <Route path="settings" element={<Control />} />
                     </Route>

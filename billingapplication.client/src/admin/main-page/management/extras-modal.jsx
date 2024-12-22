@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { addExtra, updateExtra } from './extras-api.jsx';
+import { addExtra, updateExtra } from './managment-api.jsx';
 import TimeField from 'react-simple-timefield';
 
 export const ExtrasFormModal = ({ extra, onClose, onSave }) => {
