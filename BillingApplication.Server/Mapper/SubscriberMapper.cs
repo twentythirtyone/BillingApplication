@@ -81,6 +81,7 @@ namespace BillingApplication.Mapper
             userEntity.Salt = userModel.Salt ?? "";
             userEntity.Password = userModel.Password ?? "";
             userEntity.Number = userModel.Number ?? "";
+            userEntity.Balance = userModel.Balance;
             userEntity.Tariff = tariff;
             userEntity.PassportInfo = passportInfo;
             userEntity.CallTime = userModel.CallTime;
