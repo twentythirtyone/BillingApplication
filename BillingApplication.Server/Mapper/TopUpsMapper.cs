@@ -25,7 +25,6 @@ namespace BillingApplication.Server.Mapper
                 return null;
             return new TopUpsEntity()
             {
-                Id = topUps.Id,
                 Amount = topUps.Amount,
                 Date = topUps.Date,
                 PhoneId = topUps.PhoneId,
