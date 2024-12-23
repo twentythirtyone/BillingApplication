@@ -29,7 +29,7 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
           price: formData.price,
           bundle: {
             id: formData.bundleId,
-            internet: formData.internet,
+            internet: formData.internet * 1024,
             callTime: formData.callTime,
             messages: formData.messages,
           },
@@ -75,7 +75,7 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
             />
 
           <label>
-            Интернет(МБ):
+            Интернет(ГБ):
           </label>
             <input
               type="number"

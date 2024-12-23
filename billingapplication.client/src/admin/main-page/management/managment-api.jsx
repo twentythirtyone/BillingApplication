@@ -18,9 +18,9 @@ const extraInstance = axios.create({
 export const fetchTariffs = () => tariffInstance.get('/');
 export const addTariff = (tariff) => tariffInstance.post('/add', tariff);
 export const updateTariff = (tariff) => tariffInstance.patch('/update', tariff);
-export const deleteTariff = (id) => tariffInstance.delete(`/id/${id}/delete`);
+export const deleteTariff = (id) => tariffInstance.delete(`/id/${id}`);
 
 export const fetchExtras = () => extraInstance.get('/');
 export const addExtra = (extra) => extraInstance.post('/new', extra);
 export const updateExtra = (extra) => extraInstance.patch('/update', extra);
-export const deleteExtra = (id) => extraInstance.delete(`/id/${id}/delete`);
+export const deleteExtra = (id) => extraInstance.delete(`/id/${id}`);
