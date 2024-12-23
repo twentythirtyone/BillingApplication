@@ -17,7 +17,9 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             entity.Date = DateTime.UtcNow;
             await context.TopUps.AddAsync(TopUpsMapper.TopUpsModelToTopUpsEntity(entity));
             await context.SaveChangesAsync();
-            return entity.Id;
+
+            var topUp = await context.TopUps.Where(topup => topup.PhoneId == entity.PhoneId).OrderByDescending(topUp => topUp.Id).FirstAsync();
+            return topUp.Id;
         }
 
         public Task<TopUps> GetLastTopUpByUserId(int? id)
