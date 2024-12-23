@@ -83,7 +83,7 @@ function Wallet() {
         const topUpData = {
             id: 0,
             phoneId: userData.id,
-            senderInfo: userData?.number || 'string',
+            senderInfo: userData?.number || '',
             amount: parseFloat(amount),
             date: new Date().toISOString(),
         };
