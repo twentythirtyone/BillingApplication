@@ -23,5 +23,6 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
         Task<decimal> GetExpensesInMonth(Months month, int? subscriberId);
         Task<int?> AddPaymentForTariff(int subscriberId);
         Task<WalletHistoryModel> GetWalletHistory(int userId);
+        Task<Dictionary<Months, decimal>> GetExpensesInLastTwelveMonths(int? subscriberId);
     }
 }

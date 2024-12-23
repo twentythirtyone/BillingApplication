@@ -242,5 +242,28 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 
             return walletHistory;
         }
+
+        public async Task<Dictionary<Months, decimal>> GetExpensesInLastTwelveMonths(int? subscriberId)
+        {
+            var user = await context.Subscribers.FindAsync(subscriberId);
+            if (user != null)
+            {
+                var startDate = DateTime.UtcNow.AddMonths(-11).Date;
+                var endDate = DateTime.UtcNow.Date;
+
+                var payments = await context.Payments
+                                            .AsNoTracking()
+                                            .Where(x => x.PhoneId == user.Id && x.Date >= startDate && x.Date <= endDate)
+                                            .ToListAsync();
+
+                var expensesByMonth = payments
+                    .GroupBy(x => (Months)x.Date.ToUniversalTime().Month)
+                    .ToDictionary(g => g.Key, g => g.Sum(x => x.Amount));
+
+                return expensesByMonth;
+            }
+
+            return new Dictionary<Months, decimal>();
+        }
     }
 }

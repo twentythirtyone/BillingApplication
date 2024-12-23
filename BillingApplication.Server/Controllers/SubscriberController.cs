@@ -173,13 +173,9 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesCurrentMonth(id);
-                    logger.LogInformation($"GETTING: User {userId} Expenses has been recieved");
-
-                    return Ok(result);
-                }, userId);
+                var result = await subscriberManager.GetExpensesCurrentMonth(userId);
+                logger.LogInformation($"GETTING: User {userId} Expenses has been recieved");
+                return Ok(result);
             }
             catch (PackageNotFoundException ex)
             {
@@ -196,12 +192,9 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesCurrentMonth(id);
-                    logger.LogInformation($"GETTING: Current User Expenses has been recieved");
-                    return Ok(result);
-                }, auth.GetCurrentUserId());
+                var result = await subscriberManager.GetExpensesCurrentMonth(auth.GetCurrentUserId());
+                logger.LogInformation($"GETTING: Current User Expenses has been recieved");
+                return Ok(result);
             }
             catch (PackageNotFoundException ex)
             {
@@ -218,12 +211,9 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesInMonth((Months)month, id);
-                    logger.LogInformation($"GETTING: User {userId} Expenses in month {month} has been recieved");
-                    return Ok(result);
-                }, userId);
+                var result = await subscriberManager.GetExpensesInMonth((Months)month, userId);
+                logger.LogInformation($"GETTING: User {userId} Expenses in month {month} has been recieved");
+                return Ok(result);
             }
             catch (PackageNotFoundException ex)
             {
@@ -242,12 +232,9 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesCurrentYear(id);
-                    logger.LogInformation($"GETTING: User {userId} Expenses has been recieved");
-                    return Ok(result);
-                }, userId);
+                var result = await subscriberManager.GetExpensesCurrentYear(userId);
+                logger.LogInformation($"GETTING: User {userId} Expenses has been recieved");
+                return Ok(result);
             }
             catch (PackageNotFoundException ex)
             {
@@ -263,12 +250,46 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesCurrentYear(id);
-                    logger.LogInformation($"GETTING: Current User Expenses has been recieved");
-                    return Ok(result);
-                }, auth.GetCurrentUserId());
+                var result = await subscriberManager.GetExpensesCurrentYear(auth.GetCurrentUserId());
+                logger.LogInformation($"GETTING: Current User Expenses has been recieved");
+                return Ok(result);
+            }
+            catch (PackageNotFoundException ex)
+            {
+                logger.LogError($"ERROR GETTING: Current User Expenses has has not been recieved." +
+                      $"\nMessage:{ex.Message}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [HttpGet("expenses/monthes/current")]
+        public async Task<IActionResult> GetExpensesCurrentUserLastTwelveMonth()
+        {
+            try
+            {
+                var result = await subscriberManager.GetExpensesInLastTwelveMonths(auth.GetCurrentUserId());
+                logger.LogInformation($"GETTING: Current User Expenses has been recieved");
+                return Ok(result);
+            }
+            catch (PackageNotFoundException ex)
+            {
+                logger.LogError($"ERROR GETTING: Current User Expenses has has not been recieved." +
+                      $"\nMessage:{ex.Message}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("{userId}/expenses/monthes/current")]
+        public async Task<IActionResult> GetExpensesCurrentUserLastTwelveMonthById(int userId)
+        {
+            try
+            {
+                var result = await subscriberManager.GetExpensesInLastTwelveMonths(userId);
+                logger.LogInformation($"GETTING: Current User Expenses has been recieved");
+                return Ok(result);
             }
             catch (PackageNotFoundException ex)
             {
@@ -284,12 +305,9 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                return await ValidateAccessAndDoFunc(async id =>
-                {
-                    var result = await subscriberManager.GetExpensesInMonth((Months)month, id);
-                    logger.LogInformation($"GETTING: Current User Expenses has been recieved");
-                    return Ok(result);
-                }, auth.GetCurrentUserId());
+                var result = await subscriberManager.GetExpensesInMonth((Months)month, auth.GetCurrentUserId());
+                logger.LogInformation($"GETTING: Current User Expenses has been recieved");
+                return Ok(result);
             }
             catch (PackageNotFoundException ex)
             {
@@ -339,35 +357,26 @@ namespace BillingApplication.Controllers
             
         }
 
-        private async Task<IActionResult> ValidateAccessAndDoFunc(Func<int?, Task<IActionResult>> func, int? userId)
-        {
-            var currentUserId = auth.GetCurrentUserId();
-            var currentUserRoles = auth.GetCurrentUserRoles();
-            if (currentUserId != userId && !currentUserRoles.Contains("Admin") && !currentUserRoles.Contains("Operator"))
-            {
-                logger.LogError($"ERROR AUTH: Error authorization by {userId}");
-                return Unauthorized("Попытка не авторизованного доступа");
-            }
-            logger.LogInformation($"AUTH: Success user {userId} authorization");
-            return await func(userId);
-        }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpPatch("update")]
-        public async Task<IActionResult> UpdateSubscriber([FromBody] SubscriberRegisterModel model)
+        public async Task<IActionResult> UpdateSubscriber([FromBody] SubscriberUpdateModel model)
         {
             try
             {
-                int? result = await subscriberManager.UpdateSubscriber(model.User, model.Passport, model.TariffId);
+                var user = await subscriberManager.GetSubscriberById(model.UserId);
+                user.Number = model.PhoneNumber;
+                user.Email = model.Email;
+                int? result = await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), model.Passport, model.TariffId);
                 if (result == null)
                     return BadRequest("Ошибка при обновлении пользователя");
-                logger.LogInformation($"UPDATING: User {model.User.Id} has been updated");
+                logger.LogInformation($"UPDATING: User {model.UserId} has been updated");
                 return Ok(result);
             }
             catch (InvalidOperationException ex)
             {
-                logger.LogError($"ERROR UPDATING: User {model.User.Id} has not been updated" +
+                logger.LogError($"ERROR UPDATING: User {model.UserId} has not been updated" +
                       $"\nMessage:{ex.Message}" +
                       $"\nModel: {JsonSerializer.Serialize(model)}\n");
                 return BadRequest(ex.Message);

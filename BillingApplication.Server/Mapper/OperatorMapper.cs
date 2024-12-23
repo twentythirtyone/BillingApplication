@@ -13,7 +13,6 @@ namespace BillingApplication.Server.Mapper
                 return null;
             return new OperatorEntity()
             {
-                Id = operatorModel.Id,
                 Email = operatorModel.Email,
                 IsAdmin = operatorModel.IsAdmin,
                 Nickname = operatorModel.Nickname,
