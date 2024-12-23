@@ -42,6 +42,11 @@ namespace BillingApplication.Server.Services.Manager.OperatorManager
             return await operatorRepository.GetOperatorById(id) ?? throw new UserNotFoundException();
         }
 
+        public async Task<Operator?> GetOperatorByEmail(string email)
+        {
+            return await operatorRepository.GetOperatorByEmail(email) ?? throw new UserNotFoundException();
+        }
+
         public async Task<int?> Update(Operator user)
         {
             return await operatorRepository.Update(user) ?? throw new UserNotFoundException();

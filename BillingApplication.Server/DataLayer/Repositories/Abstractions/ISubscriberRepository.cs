@@ -28,5 +28,6 @@ namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
         Task<decimal> GetExpensesInMonth(Months month, int? subscriberId);
         Task<int?> AddUserTraffic(int subscriberId);
         Task<WalletHistoryModel> GetWalletHistory(int userId);
+        Task<Dictionary<Months, decimal>> GetExpensesInLastTwelveMonths(int? subscriberId);
     }
 }

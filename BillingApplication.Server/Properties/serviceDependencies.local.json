@@ -7,7 +7,7 @@
       "connectionId": null
     },
     "postgresql1": {
-      "containerPorts": "5432:5432",
+      "containerPorts": "5432:5433",
       "secretStore": "LocalSecretsFile",
       "containerName": "postgre-db",
       "containerImage": "postgres-data",

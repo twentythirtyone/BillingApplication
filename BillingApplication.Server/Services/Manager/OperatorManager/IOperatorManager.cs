@@ -10,5 +10,6 @@ namespace BillingApplication.Server.Services.Manager.OperatorManager
         Task<int?> Update(Operator user);
         Task<int?> Delete(int? id);
         Task<Operator> ValidateOperatorCredentials(string email, string password);
+        Task<Operator?> GetOperatorByEmail(string email);
     }
 }
