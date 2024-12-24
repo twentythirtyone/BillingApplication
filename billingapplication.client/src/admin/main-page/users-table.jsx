@@ -12,7 +12,7 @@ export const UserTable = () => {
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('https://localhost:7262/subscribers', {
+        const response = await axios.get('http://billing-app-server:5183/subscribers', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

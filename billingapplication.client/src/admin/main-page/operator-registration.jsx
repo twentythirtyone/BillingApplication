@@ -23,7 +23,7 @@ export const OperatorRegistrationForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://localhost:7262/auth/register/operator', {
+            const response = await axios.post('http://billing-app-server:5183/auth/register/operator', {
                 id: 0,
                 email: formData.email,
                 nickname: formData.nickname,

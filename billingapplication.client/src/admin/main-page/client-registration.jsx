@@ -68,7 +68,7 @@ export const ClientRegisterForm = () => {
 
     try {
       const response = await axios.post(
-        'https://localhost:7262/auth/register/subscriber',
+        'http://billing-app-server:5183/auth/register/subscriber',
         requestBody,
         {
           headers: { Authorization: `Bearer ${TOKEN}` },

@@ -95,7 +95,7 @@ function Wallet() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('https://localhost:7262/topups/add', {
+            const response = await fetch('http://billing-app-server:5183/topups/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

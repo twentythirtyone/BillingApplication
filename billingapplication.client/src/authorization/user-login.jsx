@@ -26,7 +26,7 @@ const LoginForm = () => {
         setErrorMessage('');
 
         try {
-            const response = await fetch('https://localhost:7262/Auth/login', {
+            const response = await fetch('http://billing-app-server:5183/Auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

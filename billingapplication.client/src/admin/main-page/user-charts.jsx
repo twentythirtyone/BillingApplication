@@ -16,7 +16,7 @@ export const UserCharts = ({ userId }) => {
     const fetchAnalytics = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`https://localhost:7262/history/${userId}`, {
+        const response = await axios.get(`http://billing-app-server:5183/history/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const Tariff_API = 'https://localhost:7262/tariff';
-const EXTRA_API = 'https://localhost:7262/extras';
+const Tariff_API = 'http://billing-app-server:5183/tariff';
+const EXTRA_API = 'http://billing-app-server:5183/extras';
 const TOKEN = localStorage.getItem('token');
 
 const tariffInstance = axios.create({

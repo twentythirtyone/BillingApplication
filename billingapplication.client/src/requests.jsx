@@ -5,7 +5,7 @@ import axios from 'axios';
 
 // Настройка базового клиента
 const apiClient = axios.create({
-    baseURL: 'https://localhost:7262',
+    baseURL: 'http://billing-app-server:5183',
     headers: {
         'Content-Type': 'application/json',
     },

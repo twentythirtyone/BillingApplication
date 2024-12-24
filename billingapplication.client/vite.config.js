@@ -12,16 +12,14 @@ const apiUrl =
 
 
 const target = env.ASPNETCORE_URLS
-    ? env.ASPNETCORE_URLS.split(';')[0]
+    ? env.ASPNETCORE_URLS.split(';')[1]
     : apiUrl;
 
     async function pingApp() {
         try {
-          const response = await fetch(`${apiUrl}/swagger/index.html`); // Пинг на swagger
+          const response = await fetch(`${apiUrl}/Auth/login`); 
           const text = await response.text(); // Считываем как текст
           console.log('Response text:', text); // Выводим текст ответа
-          
-          // Проверяем, что это не ошибка
           if (response.ok) {
             console.log('Ping successful! Swagger UI is available.');
           } else {
@@ -32,7 +30,6 @@ const target = env.ASPNETCORE_URLS
         }
       }
       
-      // Вызываем пинг при запуске
       pingApp();
 
 export default defineConfig({
