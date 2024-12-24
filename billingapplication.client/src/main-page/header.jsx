@@ -8,6 +8,10 @@ const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
+    const apiUrl = 
+        (process.env.BACKEND_HOST && process.env.BACKEND_PORT)
+            ? `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`
+            : 'http://localhost:5183';
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -15,7 +19,7 @@ const Header = () => {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('https://localhost:7262/auth/logout', {
+            const response = await fetch(`${apiUrl}/auth/logout`, {
                 method: 'POST',
                 headers: {
                     'Accept': '*/*',

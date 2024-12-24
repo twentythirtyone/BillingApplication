@@ -19,9 +19,9 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            fetchUserData(token).catch(() => setLoading(false)); // Обработка ошибки
+            fetchUserData(token).catch(() => setLoading(false)); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         } else {
-            setLoading(false); // Нет токена — завершаем загрузку
+            setLoading(false); // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         }
     }, []);
 
@@ -34,17 +34,17 @@ export const UserProvider = ({ children }) => {
             });
             setUserData(response.data);
         } catch (error) {
-            console.error("Ошибка при получении данных пользователя:", error);
-            setUserData(null); // Обнуляем данные пользователя при ошибке
+            console.error("пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ:", error);
+            setUserData(null); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         } finally {
-            setLoading(false); // Устанавливаем `loading` в `false`, даже при ошибке
+            setLoading(false); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ `loading` пїЅ `false`, пїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         }
     };
 
     const refreshUserData = async () => {
         const token = localStorage.getItem('token');
         if (token) {
-            setLoading(true); // Обновление данных тоже может занять время
+            setLoading(true); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
             await fetchUserData(token);
         }
     };

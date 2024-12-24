@@ -9,6 +9,11 @@ const AdminLoginForm = () => {
     const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
 
+    const apiUrl = 
+        (process.env.BACKEND_HOST && process.env.BACKEND_PORT)
+            ? `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`
+            : 'http://localhost:5183';
+
     useEffect(() => {
         document.title = 'Войти';
     }, []);
@@ -19,7 +24,8 @@ const AdminLoginForm = () => {
         setErrorMessage('');
 
         try {
-            const response = await fetch('https://localhost:7262/auth/login/operator', {
+            
+            const response = await fetch(`${apiUrl}/auth/login/operator`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

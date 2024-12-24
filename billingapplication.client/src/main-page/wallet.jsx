@@ -11,13 +11,18 @@ function Wallet() {
 
     const { userData, loading: userLoading, refreshUserData } = useUser();
 
+    const apiUrl = 
+        (process.env.BACKEND_HOST && process.env.BACKEND_PORT)
+            ? `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`
+            : 'http://localhost:5183';
+
     useEffect(() => {
         document.title = 'Кошелек';
 
         const fetchHistory = async () => {
             try {
                 const token = localStorage.getItem('token');
-                const response = await fetch('https://localhost:7262/subscribers/history', {
+                const response = await fetch(`${apiUrl}/subscribers/history`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
