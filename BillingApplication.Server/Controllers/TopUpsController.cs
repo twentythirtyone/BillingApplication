@@ -29,13 +29,13 @@ namespace BillingApplication.Server.Controllers
         {
             try
             {
-                await topUpsManager.AddTopUp(model);
-                logger.LogInformation($"ADDING: TopUp {model.Id} added");
-                return Ok(model);
+                int? topupId = await topUpsManager.AddTopUp(model);
+                logger.LogInformation($"ADDING: TopUp {topupId} added");
+                return Created();
             }
             catch (Exception ex)
             {
-                logger.LogError($"ERROR ADDING: TopUp {model.Id} has not been added" +
+                logger.LogError($"ERROR ADDING: TopUp has not been added" +
                                 $"\nMessage:{ex.Message}" +
                                 $"\nModel: {JsonSerializer.Serialize(model)}\n");
                 return BadRequest(ex.Message);

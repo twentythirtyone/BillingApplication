@@ -341,21 +341,20 @@ height: 34px;
     }
 
 .content-layout {
-    display: flex;
+    display:flex;
     margin-top: 15px;
-
+    justify-content: center;
 }
 
 /* Боковая панель */
 
 .sidebar {
     width: 267px;
-    min-width: 267px;
     background-color: #fdecec;
     padding: 20px;
     top: 0;
     height: 100vh;
-    overflow-y: auto;
+    margin-right: 20px;
 }
 .sidebar-title {
     color: #AB3D36;
@@ -394,13 +393,13 @@ height: 34px;
 .main-page-content {
     margin-left: 20px;
     background-color: #F4F7F3;
-    min-width: 600px;
 }
 
 
 /* Панель управления */
 .dashboard {
     margin-top: 30px;
+    width: 700px;
 }
 
 .phone-number {
@@ -466,6 +465,10 @@ height: 34px;
     height: 150px;
     background-color: #f7f7f7;
     border-radius: 8px;
+}
+
+.tariff {
+    width: 700px;
 }
 
 .tariff-section {
@@ -660,6 +663,7 @@ height: 34px;
 
 /* Кошелек */
 .wallet {
+    width: 700px;
 }
 
 .admin {
@@ -826,3 +830,222 @@ table {
     background-color: #242732;
     text-align: center;
 }
+
+.topup-button {
+    background: none;
+    border:none;
+    display:flex;
+    margin-top: 14px;
+    padding: 7px;
+    border-radius: 10px;
+    width: 700px;
+}
+
+.topup-button:hover {
+    background-color: #EDEDED;
+}
+
+.topup-button-img {
+    background-color: #EDEDED;
+    width: 48px;
+    height: 48px;
+    margin-right: 15px;
+    border-radius: 9px;
+}
+
+.topup-button-img img {
+    align-items: center;
+    margin-top: 15px;
+}
+
+.topup-button-text {
+    font-size: 16px;
+    font-weight: 600;
+    text-align: left;
+    margin-top: 5px;
+}
+
+.topup-button-text p {
+    font-size: 14px;
+    font-weight: 400;
+    margin-top: 5px;
+    right: 0;
+    margin-bottom: 0;
+    color: #737373;
+}
+
+.transaction-list {
+    padding: 0;
+}
+
+.transaction:hover {
+    background: none;
+}
+
+.transaction-sum {
+    width: 600px;
+    text-align: right;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: -22px;
+}
+
+.transaction-img img{
+    margin-left: 12px;
+    margin-top: 12px;
+}
+
+.show-more-transactions {
+    font-size: 17px;
+    margin-left: 7px;
+    padding: 8px 25px;
+    border:none;
+    border-radius: 12px;
+    background-color: #ebebeb;
+}
+
+.show-more-transactions:hover {
+    background-color:#e2e2e2;
+}
+
+.expenses {
+    margin-top: 30px;
+    font-size: 20px;
+    font-weight: 500;
+    color: #AB3D36;
+}
+
+.expenses-sum {
+    margin-top: -10px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #1F0A0A;
+}
+
+.popup-topup {
+    display: flex;
+    margin-bottom: 44px;
+}
+.topup-input {
+    border: none;
+    border-radius: 8px;
+    padding: 5px;
+    font-size: 16px;
+}
+
+.topup-input:focus {
+    outline: none;
+  }
+
+.popup-actions button{
+    font-size: 17px;
+    margin-left: 7px;
+    padding: 8px 25px;
+    border:none;
+    border-radius: 12px;
+    background-color: #ebebeb;
+}
+
+.popup-actions button:hover {
+    background-color:#e2e2e2;
+}
+
+.col-id {
+    width: 50px;
+  }
+  
+  .col-name {
+    width: 250px;
+  }
+  
+  .col-email {
+    width: 250px;
+  }
+
+  .custom-table tbody tr:hover {
+    background-color:#242732;
+    cursor: pointer;
+  }
+
+  .user-analytics {
+    width: 1000px;
+  }
+  .user-analytics-graph {
+    width: 700px;
+  }
+
+  .clientRegister {
+    display: flex;
+    flex-direction: column;
+    width: 1000px;
+  }
+  
+  .clientRegister label {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+  }
+  
+  .clientRegister input {
+    width: 448px;
+    height: 30px;
+    padding: 3px 8px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    margin-left: 5px;
+    flex: 1;
+    border: 1px solid  #474A57;
+    background-color:#262930;
+  }
+
+  .clientRegister input:focus {
+    outline: none;
+  }
+
+  .clientRegister h2 {
+   margin-bottom: 8px;
+   margin-left: 10px;
+  }
+
+  .registerButton {
+    margin-top: 10px;
+    width: 215px;
+    padding: 6px 0;
+    border: none;
+    border-radius: 12px;
+    background-color: white;
+    font-size: 16px;
+  }
+
+  .registerButton:hover {
+    background-color:#ddd;
+  }
+
+  .register-client {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    width: 440px;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 16px;
+    background-color:#ffffff;
+  }
+
+  .register-client:hover {
+    background-color:#cecece;
+  }
+
+  .register-buttons{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .admin-checkbox {
+    font-size: 16px;
+    margin-left: 10px;
+
+  }

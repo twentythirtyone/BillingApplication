@@ -9,9 +9,7 @@ const MainPage = () => {
             <Header />
             <div className='content-layout'>
                 <Sidebar />
-                <div className='main-page-content'>
                     <Outlet />
-                </div>
             </div>
         </div>
     );

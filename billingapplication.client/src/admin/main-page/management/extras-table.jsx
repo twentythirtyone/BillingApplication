@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchExtras, deleteExtra } from './extras-api.jsx';
+import { fetchExtras, deleteExtra } from './managment-api.jsx';
 import { ExtrasFormModal } from './extras-modal';
 import deleteIcon from '../../../assets/img/delete.svg';
 import editIcon from '../../../assets/img/edit.svg';
@@ -16,24 +16,24 @@ export const ExtrasTable = () => {
 
   const authToken = localStorage.getItem('token');
   useEffect(() => {
-    if (!authToken) return; // Ждем, пока появится токен
+    if (!authToken) return;
 
     const fetchData = async () => {
-      setLoading(true); // Включаем индикатор загрузки
+      setLoading(true);
       try {
         const response = await fetchExtras(authToken);
         setExtras(response.data);
       } catch (error) {
         console.error('Error fetching extras:', error);
       } finally {
-        setLoading(false); // Выключаем индикатор загрузки
+        setLoading(false);
       }
     };
 
-    fetchData(); // Первичная загрузка данных
-    const intervalId = setInterval(fetchData, 5000); // Обновление каждые 5 секунд
+    fetchData();
+    const intervalId = setInterval(fetchData, 5000);
 
-    return () => clearInterval(intervalId); // Очистка
+    return () => clearInterval(intervalId);
   }, [authToken]);
 
   const handleDelete = () => {
@@ -57,57 +57,74 @@ export const ExtrasTable = () => {
           <tr>
             <th>Название</th>
             <th>Цена</th>
-            <th>Интернет (МБ)</th>
-            <th>Звонки</th>
-            <th>SMS</th>
+            <th>Услуга</th>
+            <th>Объем</th>
             <th style={{ color: '#8596AC' }}>Редактировать</th>
             <th style={{ color: '#8596AC' }}>Удалить</th>
           </tr>
         </thead>
         <tbody style={{ color: '#8596AC' }}>
-          {extras.map((extra) => (
-            <tr key={extra.id}>
-              <td style={{ color: '#fff' }}>{extra.title || '—'}</td>
-              <td>{extra.price ? `${extra.price}₽` : '0'}</td>
-              {extra.title !== 'Стандартный' && (
-                <>
-                  <td>
-                    <button className="table-buttons">
-                      <img
-                        src={editIcon}
-                        onClick={() => {
-                          setSelectedExtra(extra);
-                          setShowModal(true);
-                        }}
-                      />
-                    </button>
-                  </td>
-                  <td>
-                    <button className="table-buttons">
-                      <img
-                        src={deleteIcon}
-                        onClick={() => {
-                          setDeleteId(extra.id);
-                          setShowConfirm(true);
-                        }}
-                      />
-                    </button>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
+          {extras.map((extra) => {
+            let serviceType = '—';
+            let serviceVolume = '—';
+  
+            if (extra.bundle?.callTime && extra.bundle.callTime !== '00:00:00') {
+              serviceType = 'Связь';
+              serviceVolume = extra.bundle.callTime;
+            } else if (extra.bundle?.internet) {
+              serviceType = 'Интернет';
+              serviceVolume = `${extra.bundle.internet / 1024} ГБ`;
+            } else if (extra.bundle?.messages && extra.bundle.messages !== 0) {
+              serviceType = 'SMS';
+              serviceVolume = `${extra.bundle.messages} SMS`;
+            }
+  
+            return (
+              <tr key={extra.id}>
+                <td style={{ color: '#fff' }}>{extra.title || '—'}</td>
+                <td>{extra.price ? `${extra.price}₽` : '0'}</td>
+                <td>{serviceType}</td>
+                <td>{serviceVolume}</td>
+                {extra.title !== 'Стандартный' && (
+                  <>
+                    <td>
+                      <button className="table-buttons">
+                        <img
+                          src={editIcon}
+                          onClick={() => {
+                            setSelectedExtra(extra);
+                            setShowModal(true);
+                          }}
+                        />
+                      </button>
+                    </td>
+                    <td>
+                      <button className="table-buttons">
+                        <img
+                          src={deleteIcon}
+                          onClick={() => {
+                            setDeleteId(extra.id);
+                            setShowConfirm(true);
+                          }}
+                        />
+                      </button>
+                    </td>
+                  </>
+                )}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
-
+  
       {!showModal && (
         <button className="add-new-tariff" onClick={handleAddClick}>
-          Добавить новый план...
+          Добавить новую услугу...
         </button>
       )}
-
+  
       {showModal && (
-        <ExtraFormModal
+        <ExtrasFormModal
           tariff={selectedExtra}
           onClose={() => setShowModal(false)}
           onSave={(updatedTariff) => {
@@ -121,10 +138,10 @@ export const ExtrasTable = () => {
           }}
         />
       )}
-
+  
       {showConfirm && (
         <ConfirmModal
-          message="Вы уверены, что хотите удалить тариф?"
+          message="Вы уверены, что хотите удалить услугу?"
           onConfirm={handleDelete}
           onCancel={() => setShowConfirm(false)}
         />

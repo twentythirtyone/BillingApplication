@@ -10,6 +10,7 @@ using System.Text.Json;
 using BillingApplication.Server.Services.MailService;
 using BillingApplication.Server.Quartz.Workers;
 using BillingApplication.Server.Services.Models.Subscriber;
+using BillingApplication.Server.Services.Models.Auth;
 
 namespace BillingApplication.Controllers
 {
@@ -57,11 +58,11 @@ namespace BillingApplication.Controllers
         }
 
         [HttpPost("login/request")]
-        public async Task<IActionResult> RequestLoginWithCode([FromBody] SubscriberLoginModel loginModel)
+        public async Task<IActionResult> RequestLoginWithCode([FromBody] string phoneNumber)
         {
             try
             {
-                var userVM = await subscriberManager.ValidateSubscriberCredentials(loginModel.PhoneNumber, loginModel.Password);
+                var userVM = await subscriberManager.GetSubscriberByPhoneNumber(phoneNumber);
                 if (userVM == null)
                     return Unauthorized("Неверный номер/пароль");
 
@@ -77,13 +78,13 @@ namespace BillingApplication.Controllers
             }
             catch (Exception ex)
             {
-                logger.LogError($"LOGIN REQUEST FAILED: Failed login request for user with phone {loginModel.PhoneNumber}.");
+                logger.LogError($"LOGIN REQUEST FAILED: Failed login request for user with phone {phoneNumber}.");
                 return BadRequest(ex.Message);
             }
         }
 
         [HttpPost("login/confirm")]
-        public async Task<IActionResult> ConfirmLoginWithCode([FromBody] LoginConfirmationModel confirmationModel)
+        public async Task<IActionResult> ConfirmLoginWithCode([FromBody] SubscriberLoginConfirmationModel confirmationModel)
         {
             try
             {
@@ -138,7 +139,7 @@ namespace BillingApplication.Controllers
         {
             try
             {
-                var result = await subscriberManager.CreateSubscriber(model.User, model.Passport, model.TariffId);
+                var result = await subscriberManager.CreateSubscriber(model.SubscriberModel, model.Passport, model.TariffId);
                 if (result == null)
                     return BadRequest("Ошибка при регистрации пользователя");
                 logger.LogError($"REGISTER: A new User with id \"{result}\" has been created.");

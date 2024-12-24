@@ -65,7 +65,7 @@ namespace BillingApplication.Server.Controllers
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]
-        [HttpDelete("{id}/delete")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteById(int id)
         {
             try

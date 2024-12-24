@@ -1,13 +1,20 @@
 ﻿import { useEffect, useState } from 'react';
 import { useUser } from '../user-context.jsx';
+import cardIcon from '../assets/img/wallet/card.svg';
+import simIcon from '../assets/img/wallet/sim.svg';
+import smsIcon from '../assets/img/wallet/sms.svg';
+import internetIcon from '../assets/img/wallet/internet.svg';
+
+const token = localStorage.getItem('token');
 
 function Wallet() {
     const [transactionHistory, setTransactionHistory] = useState([]);
     const [error, setError] = useState(null);
     const [visibleCount, setVisibleCount] = useState(3);
-    const [isPopupVisible, setPopupVisible] = useState(false); // Состояние для показа попапа
-    const [amount, setAmount] = useState(''); // Поле для ввода суммы
-    const [isLoading, setLoading] = useState(false); // Состояние загрузки
+    const [isPopupVisible, setPopupVisible] = useState(false);
+    const [amount, setAmount] = useState('');
+    const [isLoading, setLoading] = useState(false);
+    const [expenses, setExpenses] = useState(0);
 
     const { userData, loading: userLoading, refreshUserData } = useUser();
 
@@ -20,9 +27,8 @@ function Wallet() {
         document.title = 'Кошелек';
 
         const fetchHistory = async () => {
-            try {
-                const token = localStorage.getItem('token');
-                const response = await fetch(`${apiUrl}/subscribers/history`, {
+            try { 
+                const response = await fetch('https://localhost:7262/subscribers/history', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -35,14 +41,36 @@ function Wallet() {
                 }
 
                 const data = await response.json();
-                const filteredData = data.filter((transaction) => transaction.data.amount !== 0);
+                const filteredData = data.filter((transaction) => transaction.type === 'Оплата');
                 setTransactionHistory(filteredData);
             } catch (err) {
                 setError(err.message);
             }
         };
 
+        const getExpenses = async () => {
+            try {
+                const response = await fetch('https://localhost:7262/subscribers/expenses/month/current', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Ошибка: ${response.status}`);
+                }
+
+                const data = await response.json();
+                setExpenses(data);
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+
         fetchHistory();
+        getExpenses();
     }, []);
 
     const handleShowMore = () => {
@@ -59,8 +87,8 @@ function Wallet() {
 
         const topUpData = {
             id: 0,
-            phoneId: userData?.id || 0,
-            senderInfo: userData?.number || 'string',
+            phoneId: userData.id,
+            senderInfo: userData?.number || '',
             amount: parseFloat(amount),
             date: new Date().toISOString(),
         };
@@ -83,7 +111,7 @@ function Wallet() {
             alert('Счет успешно пополнен');
             setPopupVisible(false);
             setAmount('');
-            refreshUserData(); // Обновляем данные пользователя
+            refreshUserData();
         } catch (err) {
             alert(err.message);
         } finally {
@@ -91,35 +119,36 @@ function Wallet() {
         }
     };
 
-    const getIcon = (type) => {
-        switch (type) {
-            case 'СМС':
-                return '📨';
-            case 'Интернет':
-                return '🌐';
-            case 'Оплата':
-                return '💳';
-            case 'Звонки':
-                return '📞';
-            default:
-                return '❓';
+    const getIcon = (string) => {
+        if (string.includes('звонок')) {
+            return simIcon;
+        } else if (string.toLowerCase().includes('смс')) {
+            return smsIcon;
+        } else if (string.toLowerCase().includes('гб')) {
+            return internetIcon;
+        } else {
+            return cardIcon;
         }
     };
 
     return (
         <div className="wallet">
-            <h2>Кошелек</h2>
+            <h1>Кошелек</h1>
+            <h3>Пополнить счет</h3>
 
-            {/* Ссылка на пополнение */}
-            <button className="topup-button" onClick={() => setPopupVisible(true)}>
-                Пополнить счет
-            </button>
-
-            {/* Попап */}
-            {isPopupVisible && (
+            {!isPopupVisible ? (
+                <button className="topup-button" onClick={() => setPopupVisible(true)}>
+                    <div className="topup-button-img">
+                        <img src={cardIcon} alt="Иконка карты" />
+                    </div>
+                    <div className="topup-button-text">
+                        Банковская карта
+                        <p>от 10 до 30000₽</p>
+                    </div>
+                </button>
+            ) : (
                 <div className="popup-overlay">
-                    <div className="popup">
-                        <h3>Пополнение счета</h3>
+                    <div className="popup-topup">
                         <input
                             type="number"
                             placeholder="Введите сумму"
@@ -149,28 +178,29 @@ function Wallet() {
                     <>
                         <ul className="transaction-list">
                             {transactionHistory.slice(0, visibleCount).map((transaction, index) => (
-                                <li key={index} className="transaction-item">
-                                    <div className="transaction-icon">{getIcon(transaction.type)}</div>
-                                    <div className="transaction-details">
-                                        <p className="transaction-type">
-                                            <strong>{transaction.type}</strong>
-                                        </p>
-                                        <p className="transaction-name">{transaction.data.name}</p>
-                                        <p className="transaction-amount-date">
-                                            <span>{transaction.data.amount} ₽</span> ·{' '}
-                                            <span>{new Date(transaction.data.date).toLocaleString()}</span>
-                                        </p>
+                                <li key={index} className="topup-button transaction">
+                                    <div className="topup-button-img transaction-img">
+                                        <img src={getIcon(transaction.data.name)}></img>
+                                    </div>
+                                    <div className="topup-button-text">
+                                        {transaction.data.name}
+                                        <div className='transaction-sum'>{transaction.data.amount} ₽</div>
+                                        <p>{new Date(transaction.data.date).toLocaleString()}</p>
                                     </div>
                                 </li>
                             ))}
                         </ul>
                         {visibleCount < transactionHistory.length && (
-                            <button className="show-more" onClick={handleShowMore}>
+                            <button className="show-more-transactions" onClick={handleShowMore}>
                                 Показать еще
                             </button>
                         )}
                     </>
                 )}
+            </div>
+            <div>
+                <h2 className='expenses'>Месячные расходы</h2>
+                <div className='expenses-sum'>{expenses} ₽</div>
             </div>
         </div>
     );

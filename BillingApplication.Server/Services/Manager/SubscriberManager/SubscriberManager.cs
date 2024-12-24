@@ -120,6 +120,11 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             return await subscriberRepository.GetExpensesInMonth(month, subscriberId);
         }
 
+        public async Task<Dictionary<Months, decimal>> GetExpensesInLastTwelveMonths(int? subscriberId)
+        {
+            return await subscriberRepository.GetExpensesInLastTwelveMonths(subscriberId);
+        }
+
         public async Task<WalletHistoryModel> GetWalletHistory(int userId)
         {
             return await subscriberRepository.GetWalletHistory(userId);

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+﻿import { createContext, useContext, useState, useEffect } from 'react';
 import ReactLoading from 'react-loading';
 import axios from 'axios';
 
@@ -19,9 +19,9 @@ export const UserProvider = ({ children }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         if (token) {
-            fetchUserData(token).catch(() => setLoading(false)); // ��������� ������
+            fetchUserData(token).catch(() => setLoading(false));
         } else {
-            setLoading(false); // ��� ������ � ��������� ��������
+            setLoading(false);
         }
     }, []);
 
@@ -34,10 +34,10 @@ export const UserProvider = ({ children }) => {
             });
             setUserData(response.data);
         } catch (error) {
-            console.error("������ ��� ��������� ������ ������������:", error);
-            setUserData(null); // �������� ������ ������������ ��� ������
+            console.error("Не удалось получить данные пользователя (клиента):", error);
+            setUserData(null); 
         } finally {
-            setLoading(false); // ������������� `loading` � `false`, ���� ��� ������
+            setLoading(false);
         }
     };
 
