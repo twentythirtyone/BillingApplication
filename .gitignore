@@ -361,4 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/BillingApplication.Server/docker-compose.yaml
+/BillingApplication.Server/logs
