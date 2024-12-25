@@ -5,7 +5,7 @@ export const Header = () => {
     const navigate = useNavigate();
     const handleLogout = async () => {
         try {
-            const response = await fetch('http://billing-app-server:5183/auth/logout', {
+            const response = await fetch('/billingapplication/auth/logout', {
                 method: 'POST',
                 headers: {
                     'Accept': '*/*',

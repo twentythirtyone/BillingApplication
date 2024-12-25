@@ -1,11 +1,6 @@
 ﻿const getUserExpenses = async (token) => {
     try {
-        const apiUrl = 
-        (process.env.BACKEND_HOST && process.env.BACKEND_PORT)
-            ? `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`
-            : 'http://localhost:5183';
-
-        const response = await fetch(`${apiUrl}/subscribers/expenses/month/current`, {
+        const response = await fetch(`/billingapplication/subscribers/expenses/month/current`, {
             method: 'GET',
             headers: {
                 'Accept': '*/*',

@@ -5,7 +5,7 @@ export const AdditionalServices = ({cutValue}) => {
 
     const fetchServices = async () => {
         try {
-            const response = await fetch('http://billing-app-server:5183/extras');
+            const response = await fetch('/billingapplication/extras');
             if (!response.ok) {
                 throw new Error('Ошибка при загрузке данных');
             }
@@ -19,7 +19,7 @@ export const AdditionalServices = ({cutValue}) => {
     const handleServicePurchase = async (serviceId, serviceTitle) => {
         const token = localStorage.getItem('token');
         try {
-            const response = await fetch(`http://billing-app-server:5183/subscribers/extras/add/${serviceId}`, {
+            const response = await fetch(`/billingapplication/subscribers/extras/add/${serviceId}`, {
                 method: 'POST',
                 headers: {
                     'Accept': '*/*',

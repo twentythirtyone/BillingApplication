@@ -12,7 +12,7 @@ export const UserInfo = ({ userId }) => {
     const fetchUserData = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(`http://billing-app-server:5183/subscribers/${userId}`, {
+        const response = await axios.get(`/billingapplication/subscribers/${userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

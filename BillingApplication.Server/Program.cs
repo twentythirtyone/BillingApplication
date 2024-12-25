@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using React.AspNet;
 using System.Security.Claims;
 using System.Text;
+using System.Net;
 using BillingApplication.Server.Services.Manager.BundleManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
@@ -48,6 +49,13 @@ internal class Program
                 .AddEnvironmentVariables();
 
             CheckSecretsAndDbConnection(builder);
+            builder.WebHost.ConfigureKestrel((context, options) =>
+            {
+                options.Listen(IPAddress.Any, 7262, listenOptions =>
+                {
+                    listenOptions.UseHttps("/root/.aspnet/https/certificate.pfx", "pass");
+                });
+            });
 
             var configuration = builder.Configuration;
 
@@ -131,7 +139,7 @@ internal class Program
         {
             options.AddPolicy("AllowSpecificOrigin", builder =>
             {
-                builder.WithOrigins("https://localhost:5173")
+                builder.WithOrigins(["https://localhost"])
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials();

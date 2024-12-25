@@ -26,12 +26,8 @@ export const UserProvider = ({ children }) => {
     }, []);
 
     const fetchUserData = async (token) => {
-        const apiUrl = 
-        (process.env.BACKEND_HOST && process.env.BACKEND_PORT)
-            ? `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`
-            : 'http://localhost:5183';
         try {
-            const response = await axios.get(`${apiUrl}/subscribers/current`, {
+            const response = await axios.get(`/billingapplication/subscribers/current`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 },

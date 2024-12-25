@@ -1,33 +1,80 @@
 version: '3'
+
+volumes:
+  postgres-data:
+    external: false
+
+networks:
+  alpha-network:
+
 services:
   billing-app-client:
+    container_name: billing-app-client
     build:
       context: ./billingapplication.client
     environment:
-      - BACKEND_HOST=http://billing-app-server
-      - BACKEND_PORT=5183
-    command: ["sh", "-c", "./scripts/wait-for-it.sh billing-app-server:5183 -- npm run dev"]
+      - BACKEND_HOST=https://billing-app-server
+      - BACKEND_PORT=7262
+    volumes:
+      - ${HOME}/.aspnet/https:/root/.aspnet/https
+    command: ["sh", "-c", "./scripts/wait-for-it.sh billing-app-server:7262 -- npm run dev"]
     depends_on:
-      - billing-app-server
+      postgre-db:
+        condition: service_healthy
+    networks:
+      alpha-network:
 
   billing-app-server:
+    container_name: billing-app-server
     build:
       context: ./BillingApplication.Server
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://0.0.0.0:5183
+      - ASPNETCORE_URLS=https://+:7262;http://+:5183
       - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=Microsoft.AspNetCore.SpaProxy
+      - DOTNET_RUNNING_IN_CONTAINER=true
     volumes:
-      - /home/panhater/.microsoft/usersecrets:/root/.microsoft/usersecrets
-      - /home/panhater/.aspnet/https:/root/.aspnet/https
+      - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
+      - ${HOME}/.aspnet/https:/root/.aspnet/https
     restart: always
+    ports:
+      - 7262:7262
+    depends_on:
+      - postgre-db
+    networks:
+      alpha-network:
   
   billing-app-nginx:
+    container_name: billing-app-nginx
     build:
       context: ./nginx
     ports:
       - "443:443" 
+    command: ["sh", "-c", "./scripts/wait-for-it.sh billing-app-client:5173 -- nginx -g 'daemon off;'"]
     volumes:
-      - /root/nginx/ssl:/etc/nginx/ssl 
+      - ${HOME}/nginx/ssl:/etc/nginx/ssl 
     depends_on:
       - billing-app-server 
+      - billing-app-client
+    networks:
+      alpha-network:
+
+  postgre-db:
+    container_name: billing-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: billingapp
+      POSTGRES_USER: billing
+      POSTGRES_PASSWORD: password
+    ports:
+      - target: 5432
+        published: 5432
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      alpha-network:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 3s
+      retries: 5

@@ -26,7 +26,7 @@ const LoginForm = () => {
         setErrorMessage('');
 
         try {
-            const response = await fetch('http://billing-app-server:5183/Auth/login', {
+            const response = await fetch('/billingapplication/Auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ const LoginForm = () => {
             }
 
             if (!response.ok) {
-                throw new Error('Неверный логин или пароль');
+                throw new Error(response.status);
             }
 
             const data = await response.json();

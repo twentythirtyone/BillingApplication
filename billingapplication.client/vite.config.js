@@ -41,9 +41,10 @@ export default defineConfig({
     },
     server: {
         proxy: {
-            '^/billingapplication': {
+            '/billingapplication': {
                 target,
-                secure: false
+                secure: false,
+                rewrite: (path) => path.replace(/^\/billingapplication/, ''),
             }
         },
         host: '0.0.0.0',

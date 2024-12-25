@@ -10,7 +10,7 @@ export const UserDetails = () => {
     const fetchUserActions = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get(`http://billing-app-server:5183/history/${id}`, {
+        const response = await axios.get(`/billingapplication/history/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
