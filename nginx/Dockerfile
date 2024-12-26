@@ -2,7 +2,7 @@ FROM nginx:alpine
 
 RUN apk add --no-cache bash
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY ./ /etc/nginx/
 COPY ./scripts ./scripts
 
 CMD ["nginx", "-g", "daemon off;"]

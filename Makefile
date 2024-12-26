@@ -6,7 +6,8 @@ ENV_VARS = \
     POSTGRES_PASSWORD=password \
     POSTGRES_HOST=billing-app-db \
     POSTGRES_PORT=5432 \
-	PGBOUNCER_PORT=6432
+	PGBOUNCER_PORT=6432 \
+	CERT_PATH=/etc/letsencrypt/live/alfatelekom.ru/
 
 env:
 	@$(eval SHELL:=/bin/bash)

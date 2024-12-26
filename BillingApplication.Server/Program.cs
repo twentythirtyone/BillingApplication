@@ -139,7 +139,7 @@ internal class Program
         {
             options.AddPolicy("AllowSpecificOrigin", builder =>
             {
-                builder.WithOrigins(["https://localhost"])
+                builder.WithOrigins(["https://alfatelekom.ru"])
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials();
