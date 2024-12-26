@@ -17,11 +17,9 @@ const target = env.ASPNETCORE_URLS
 
     async function pingApp() {
         try {
-          const response = await fetch(`${apiUrl}/Auth/login`); 
-          const text = await response.text(); // Считываем как текст
-          console.log('Response text:', text); // Выводим текст ответа
+          const response = await fetch(`${target}/ping`); 
           if (response.ok) {
-            console.log('Ping successful! Swagger UI is available.');
+            console.log('Ping successful! Server is available.');
           } else {
             console.error(`Ping failed with status: ${response.status}`);
           }
@@ -30,7 +28,7 @@ const target = env.ASPNETCORE_URLS
         }
       }
       
-      pingApp();
+// pingApp();
 
 export default defineConfig({
     plugins: [plugin()],

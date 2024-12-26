@@ -17,6 +17,7 @@ COPY --from=publish /app/publish .
 
 ENV DOTNET_USER_SECRETS=/root/.microsoft/usersecrets
 
+VOLUME ["/root/.microsoft/usersecrets"]
 
 EXPOSE 7262
 EXPOSE 5183

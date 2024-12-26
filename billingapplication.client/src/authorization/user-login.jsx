@@ -37,7 +37,7 @@ const LoginForm = () => {
                 }),
             });
 
-            if (response.status === 401) {
+            if (response.status === 401 || response.status === 400) {
                 throw new Error('Неверный логин или пароль');
             }
 

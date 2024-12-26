@@ -18,17 +18,12 @@ function Wallet() {
 
     const { userData, loading: userLoading, refreshUserData } = useUser();
 
-    const apiUrl = 
-        (process.env.BACKEND_HOST && process.env.BACKEND_PORT)
-            ? `${process.env.BACKEND_HOST}:${process.env.BACKEND_PORT}`
-            : 'http://localhost:5183';
-
     useEffect(() => {
         document.title = 'Кошелек';
 
         const fetchHistory = async () => {
             try { 
-                const response = await fetch('https://localhost:7262/subscribers/history', {
+                const response = await fetch('/billingapplication/subscribers/history', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -50,7 +45,7 @@ function Wallet() {
 
         const getExpenses = async () => {
             try {
-                const response = await fetch('https://localhost:7262/subscribers/expenses/month/current', {
+                const response = await fetch('/billingapplication/subscribers/expenses/month/current', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
