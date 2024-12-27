@@ -16,9 +16,8 @@ make db
 
 если какой то трабл со скриптами
 ```sh
-dos2unix database/scripts/entrypoint.sh
-dos2unix nginx/scripts/wait-for-it.sh
-dos2unix billingapplication.client/scripts/wait-for-it.sh
+dos2unix docker/scripts/entrypoint.sh
+dos2unix docker/scripts/wait-for-it.sh
 ```
 
 - Строка подключения к бд
