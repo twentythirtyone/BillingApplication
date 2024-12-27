@@ -63,5 +63,5 @@
 #*.RTF   diff=astextplain
 
 docker-compose.yaml merge=ours
-nginx/*
-*.sh
+nginx/* merge=ours
+*.sh merge=ours
