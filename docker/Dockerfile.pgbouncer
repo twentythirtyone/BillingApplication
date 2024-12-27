@@ -1,5 +1,5 @@
 FROM edoburu/pgbouncer:latest
 
-COPY database/scripts/entrypoint.sh /docker-entrypoint.sh
+COPY docker/scripts/entrypoint.sh /docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
