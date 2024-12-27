@@ -2,7 +2,7 @@ FROM nginx:alpine
 
 RUN apk add --no-cache bash
 
-COPY ./ /etc/nginx/
-COPY ./scripts ./scripts
+COPY ./nginx /etc/nginx
+COPY ./docker/scripts/wait-for-it.sh ./scripts/
 
 CMD ["nginx", "-g", "daemon off;"]

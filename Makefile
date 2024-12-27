@@ -15,11 +15,11 @@ env:
 	@echo "$(ENV_FILE) file created"
 
 run:
-	@chmod +x database/scripts/entrypoint.sh
+	@chmod +x docker/scripts/entrypoint.sh
 	@docker compose up --build -d
 
 runl:
-	@chmod +x database/scripts/entrypoint.sh
+	@chmod +x docker/scripts/entrypoint.sh
 	@docker compose up --build
 
 off:
