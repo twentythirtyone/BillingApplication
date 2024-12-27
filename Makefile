@@ -33,3 +33,6 @@ db:
 
 logs:
 	@docker compose logs
+
+deploy-run:
+	@docker compose -f docker-compose.yaml up --build

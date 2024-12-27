@@ -1,0 +1,6 @@
+services:
+  server:
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets
+  nginx:
+    volumes: null
