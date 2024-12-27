@@ -12,7 +12,7 @@ const apiUrl =
 
 
 const target = env.ASPNETCORE_URLS
-    ? env.ASPNETCORE_URLS.split(';')[1]
+    ? env.ASPNETCORE_URLS
     : apiUrl;
 
     async function pingApp() {
@@ -41,7 +41,6 @@ export default defineConfig({
         proxy: {
             '/billingapplication': {
                 target,
-                secure: false,
                 rewrite: (path) => path.replace(/^\/billingapplication/, ''),
             }
         },

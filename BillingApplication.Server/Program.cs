@@ -49,13 +49,6 @@ internal class Program
                 .AddEnvironmentVariables();
 
             CheckSecretsAndDbConnection(builder);
-            builder.WebHost.ConfigureKestrel((context, options) =>
-            {
-                options.Listen(IPAddress.Any, 7262, listenOptions =>
-                {
-                    listenOptions.UseHttps("/root/.aspnet/https/certificate.pfx", "pass");
-                });
-            });
 
             var configuration = builder.Configuration;
 

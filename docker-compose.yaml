@@ -11,11 +11,9 @@ services:
     build:
       context: ./billingapplication.client
     environment:
-      - BACKEND_HOST=https://server
-      - BACKEND_PORT=7262
-    volumes:
-      - ${HOME}/.aspnet/https:/root/.aspnet/https
-    command: ["sh", "-c", "./scripts/wait-for-it.sh server:7262 -- npm run dev"]
+      - BACKEND_HOST=http://server
+      - BACKEND_PORT=5183
+    command: ["sh", "-c", "./scripts/wait-for-it.sh server:5183 -- npm run dev"]
     depends_on:
       - server
     networks:
@@ -26,13 +24,11 @@ services:
     build:
       context: ./BillingApplication.Server
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=https://+:7262;http://+:5183
+      - ASPNETCORE_URLS=http://+:5183
       - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=Microsoft.AspNetCore.SpaProxy
       - DOTNET_RUNNING_IN_CONTAINER=true
     volumes:
       - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
-      - ${HOME}/.aspnet/https:/root/.aspnet/https
     restart: always
     depends_on:
       db:
@@ -49,7 +45,7 @@ services:
     command: ["sh", "-c", "./scripts/wait-for-it.sh client:5173 -- nginx -g 'daemon off;'"]
     volumes:
       - ${CERT_PATH}:/etc/nginx/ssl 
-      - /etc/letsencrypt:/etc/letsencrypt # только для сервера
+      - /etc/letsencrypt:/etc/letsencrypt 
     depends_on:
       - server 
       - client

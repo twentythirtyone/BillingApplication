@@ -27,3 +27,6 @@ off:
 
 db:
 	@docker compose up --build -d db pgbouncer
+
+logs:
+	@docker compose logs
