@@ -9,6 +9,9 @@ ENV_VARS = \
 	PGBOUNCER_PORT=6432 \
 	CERT_PATH=/etc/letsencrypt/live/alfatelekom.ru/
 
+.DEFAULT:
+	@echo "Выполняется перед любой целью"
+
 env:
 	@$(eval SHELL:=/bin/bash)
 	@printf "%s\n" $(ENV_VARS) > $(ENV_FILE)
@@ -30,3 +33,6 @@ db:
 
 logs:
 	@docker compose logs
+
+deploy-run:
+	@docker compose -f docker-compose.yaml up --build
