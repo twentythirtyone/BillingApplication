@@ -148,34 +148,38 @@ internal class Program
         services.AddScoped<IAuth, Auth>();
         services.AddScoped<Auth>();
         services.AddScoped<IEncrypt, Encrypt>();
+
         services.AddScoped<ISubscriberRepository, SubscriberRepository>();
         services.AddScoped<ITariffRepository, TariffRepository>();
         services.AddScoped<IBundleRepository, BundleRepository>();
+        services.AddScoped<IPaymentRepository, PaymentRepository>();
+        services.AddScoped<ITopUpsRepository, TopUpsRepository>();
+        services.AddScoped<IExtrasRepository, ExtrasRepository>();
+        services.AddScoped<IMessagesRepository, MessagesRepository>();
+        services.AddScoped<IInternetRepository, InternetRepository>();
+        services.AddScoped<IOperatorRepository, OperatorRepository>();
+        services.AddScoped<ICallsRepository, CallsRepository>();
+
         services.AddScoped<ITariffManager, TariffManager>();
         services.AddScoped<ISubscriberManager, SubscriberManager>();
         services.AddScoped<IMessagesManager, MessagesManager>();
         services.AddScoped<ICallsManager, CallsManager>();
         services.AddScoped<IBundleManager, BundleManager>();
-        services.AddScoped<RoleAuthorizeFilter>();
-        services.AddScoped<IPaymentRepository, PaymentRepository>();
         services.AddScoped<IPaymentsManager, PaymentsManager>();
-        services.AddScoped<ITopUpsRepository, TopUpsRepository>();
-        services.AddScoped<ITopUpsManager, TopUpsManager>();
-        services.AddScoped<BillingJob>();
-        services.AddScoped<UserActionsJob>();
-        services.AddScoped<IEmailSender, EmailSender>();
-        services.AddScoped<IExtrasRepository, ExtrasRepository>();
         services.AddScoped<IExtrasManager, ExtrasManager>();
-        services.AddScoped<ICallsRepository, CallsRepository>();
-        services.AddScoped<IMessagesRepository, MessagesRepository>();
-        services.AddScoped<IInternetRepository, InternetRepository>();
         services.AddScoped<IInternetManager, InternetManager>();
         services.AddScoped<IOperatorManager, OperatorManager>();
-        services.AddScoped<IOperatorRepository, OperatorRepository>();
+        services.AddScoped<ITopUpsManager, TopUpsManager>();
         services.AddScoped<IHistoryManager, HistoryManager>();
+
+        services.AddScoped<RoleAuthorizeFilter>();
+
+        services.AddScoped<BillingJob>();
+        services.AddScoped<UserActionsJob>();
 
         services.AddTransient<JobFactory>();
         services.AddTransient<IMailService, MailService>();
+        services.AddScoped<IEmailSender, EmailSender>();
 
         services.AddHostedService<DataSchedulerService>();
 

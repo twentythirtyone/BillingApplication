@@ -19,7 +19,7 @@ namespace BillingApplication.Server.Controllers
     [Route("history")]
     [ApiController]
     [ServiceFilter(typeof(RoleAuthorizeFilter))]
-    [RoleAuthorize(UserRoles.ADMIN)]
+    [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
     public class HistoryController: Controller
     {
         private readonly IAuth auth;
