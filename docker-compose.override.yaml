@@ -6,5 +6,6 @@ services:
   nginx:
     build:
       dockerfile: docker/Dockerfile.nginx.local
+    image: ghcr.io/twentythirtyone/billing-nginx-local:latest
     volumes:
       - ./local/nginx/ssl:/etc/nginx/ssl 

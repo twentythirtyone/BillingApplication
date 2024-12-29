@@ -1,4 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+LABEL org.opencontainers.image.source https://github.com/twentythirtyone/BillingApplication
+
 WORKDIR /src
 
 COPY BillingApplication.Server/ ./

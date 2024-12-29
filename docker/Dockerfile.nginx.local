@@ -1,5 +1,7 @@
 FROM nginx:alpine
 
+LABEL org.opencontainers.image.source https://github.com/twentythirtyone/BillingApplication
+
 RUN apk add --no-cache bash
 
 COPY ./local/nginx/ /etc/nginx/
