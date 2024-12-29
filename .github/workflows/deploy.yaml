@@ -12,15 +12,15 @@ jobs:
         name: publish image
         runs-on: ubuntu-latest
 
-        - name: Load .env
-        run: |
-            make env 
-            cat .env >> $GITHUB_ENV
         steps:
         - uses: actions/checkout@v3
         - name: Login
           run: |
             echo ${{ secrets.PAT }} | docker login $REGISTRY -u ${{ github.actor }} --password-stdin
+        - name: Load .env
+          run: |
+            make env 
+            cat .env >> $GITHUB_ENV
         - name: Build and Publish
           run: |
             docker compose -f docker-compose.yaml build
