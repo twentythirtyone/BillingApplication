@@ -12,6 +12,10 @@ jobs:
         name: publish image
         runs-on: ubuntu-latest
 
+        - name: Load .env
+        run: |
+            make env 
+            cat .env >> $GITHUB_ENV
         steps:
         - uses: actions/checkout@v3
         - name: Login
