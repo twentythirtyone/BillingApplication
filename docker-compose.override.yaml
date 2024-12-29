@@ -9,3 +9,7 @@ services:
     image: ghcr.io/twentythirtyone/billing-nginx-local:latest
     volumes:
       - ./local/nginx/ssl:/etc/nginx/ssl 
+  
+  pgbouncer:
+    ports:
+      - 6432:6432
