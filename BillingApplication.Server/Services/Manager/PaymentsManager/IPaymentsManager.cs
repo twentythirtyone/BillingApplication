@@ -8,5 +8,6 @@ namespace BillingApplication.Server.Services.Manager.PaymentsManager
         Task<Payment> GetPaymentById(int id);
         Task<IEnumerable<Payment>> GetByUserId(int? id);
         Task<int?> AddPayment(Payment entity);
+        Task<IEnumerable<Payment>> GetCurrentMonthPayments();
     }
 }

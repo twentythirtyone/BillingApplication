@@ -39,6 +39,15 @@ namespace BillingApplication.Controllers
             return Ok(result);
         }
 
+        [HttpGet("month")]
+        public async Task<IActionResult> GetBoughtExtrasByMonth()
+        {
+            var result = await extrasManager.GetBoughtExtrasCurrentMonthCount();
+            logger.LogInformation($"GETTING: Extras has been recieved.");
+            return Ok(result);
+        }
+
+
         [HttpPost("new")]
         [RoleAuthorize(UserRoles.ADMIN)]
         public async Task<IActionResult> Create([FromBody] Extras extrasModel)

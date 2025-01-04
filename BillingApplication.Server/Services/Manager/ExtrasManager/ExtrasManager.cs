@@ -21,6 +21,11 @@ namespace BillingApplication.Server.Services.Manager.ExtrasManager
             return await extrasRepository.Delete(extrasId) ?? throw new Exception("Delete extra exception");
         }
 
+        public async Task<Dictionary<string, int>> GetBoughtExtrasCurrentMonthCount()
+        {
+            return await extrasRepository.GetBoughtExtrasCurrentMonthCount();
+        }
+
         public async Task<IEnumerable<Extras?>> GetExtras()
         {
             IEnumerable<Extras?> extras = await extrasRepository.Get();
