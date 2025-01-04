@@ -60,6 +60,25 @@ namespace BillingApplication.Server.Controllers
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("month")]
+        public async Task<IActionResult> GetPaymentsInCurrentMonth()
+        {
+            try
+            {
+                var result = await paymentsManager.GetCurrentMonthPayments();
+                logger.LogInformation($"GETTING: Payments has been recieved");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"ERROR GETTING: Payments has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {

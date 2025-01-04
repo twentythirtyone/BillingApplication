@@ -9,5 +9,6 @@ namespace BillingApplication.Server.Services.Manager.ExtrasManager
         Task<int?> AddNewExtra(Extras extras);
         Task<int?> Update(Extras extras, int bundleId);
         Task<int?> Delete(int extrasId);
+        Task<Dictionary<string, int>> GetBoughtExtrasCurrentMonthCount();
     }
 }

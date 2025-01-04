@@ -41,5 +41,14 @@ namespace BillingApplication.Server.Services.Manager.PaymentsManager
         {
             return await paymentsRepository.GetPaymentsByUserId(id) ?? Enumerable.Empty<Payment>();
         }
+
+        public async Task<IEnumerable<Payment>> GetCurrentMonthPayments()
+        {
+            var currentDate = DateTime.UtcNow.Date;
+
+            var result = await paymentsRepository.GetPayments();
+
+            return result.Where(x => x.Date.Month == currentDate.Month && x.Date.Year == currentDate.Year);
+        }
     }
 }

@@ -83,5 +83,23 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             await context.SaveChangesAsync();
             return currentExtra.Id;
         }
+
+        public async Task<Dictionary<string, int>> GetBoughtExtrasCurrentMonthCount()
+        {
+            var result = new Dictionary<string, int>();
+
+            var titles = await context.Extras.Select(x=>x.Title).ToListAsync();
+
+            foreach (var title in titles)
+            {
+                var payments = await context.Payments
+                    .Where(x => x.Name.Contains(title))
+                    .ToListAsync();
+
+                result.Add(title, payments.Count);
+            }
+
+            return result;
+        }
     }
 }
