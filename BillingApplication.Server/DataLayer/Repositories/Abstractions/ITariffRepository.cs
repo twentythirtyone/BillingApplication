@@ -14,5 +14,6 @@ namespace BillingApplication.Server.DataLayer.Repositories.Abstractions
         Task<Tariffs?> GetByTitle(string title);
         Task<Tariffs?> GetBySubscriber(int userId);
         Task<Bundle> GetBundleByTariffId(int? tariffId);
+        Task<Dictionary<string, int>> GetTariffsByUserCount();
     }
 }

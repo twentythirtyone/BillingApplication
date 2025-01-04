@@ -186,6 +186,26 @@ namespace BillingApplication.Controllers
         }
 
         [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("new_users/count")]
+        public async Task<IActionResult> GetNewUsersInLastTwelveMonths()
+        {
+            try
+            {
+                var result = await subscriberManager.GetNewUsersInLastTwelveMonths();
+                logger.LogInformation($"GETTING: New users recieved");
+                return Ok(result);
+            }
+            catch (PackageNotFoundException ex)
+            {
+                logger.LogError($"ERROR GETTING:  New users has not been recieved." +
+                                      $"\nMessage:{ex.Message}\n");
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
         [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR, UserRoles.USER)]
         [HttpGet("expenses/month/current")]
         public async Task<IActionResult> GetExpensesCurrentUserCurrentMonth()

@@ -67,6 +67,11 @@ namespace BillingApplication.Server.Services.Manager.TariffManager
             return tariff ?? throw new TariffNotFoundException();
         }
 
+        public async Task<Dictionary<string, int>> GetTariffsByUserCount()
+        {
+            return await tariffRepository.GetTariffsByUserCount();
+        }
+
         public async Task<int> UpdateTariff(Tariffs tariffModel, int bundleId)
         {
             var id = await tariffRepository.Update(tariffModel, bundleId);

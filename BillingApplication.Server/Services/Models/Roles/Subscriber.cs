@@ -24,6 +24,7 @@ namespace BillingApplication.Services.Models.Roles
         public TimeSpan CallTime { get; set; }
         public int Messages { get; set; }
         public long Internet { get; set; }
+        public DateTime CreationDate { get; set; }
         public string UniqueId => Id.ToString()!;
         
     }

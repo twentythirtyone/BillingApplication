@@ -30,6 +30,9 @@ namespace BillingApplication.Entities
         public int MessagesCount { get; set; }
         [Column("internet")]
         public long InternetAmount { get; set; }
+        [Column("creation_date")]
+        public DateTime CreationDate { get; set; }
+
 
         public virtual PassportInfoEntity PassportInfo { get; set; }
         public virtual TariffEntity Tariff { get; set; }

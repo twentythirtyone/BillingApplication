@@ -19,5 +19,6 @@ namespace BillingApplication.Server.Services.Models.Subscriber
         public long Internet { get; set; }
         public Tariffs? Tariff { get; set; }
         public PassportInfo PassportInfo { get; set; }
+        public DateTime CreationDate { get; set; }
     }
 }

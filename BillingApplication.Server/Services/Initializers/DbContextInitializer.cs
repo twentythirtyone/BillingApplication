@@ -146,6 +146,7 @@ namespace BillingApplication.Server.Services.Initializers
                     MessagesCount = tariff!.Bundle.Messages,
                     CallTime = tariff!.Bundle.CallTIme,
                     Password = encrypt.HashPassword(password, salt),
+                    CreationDate = DateTime.UtcNow
                 });
 
                 
