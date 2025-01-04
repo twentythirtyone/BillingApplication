@@ -14,6 +14,8 @@ namespace BillingApplication.Server.Services.Manager.TariffManager
         Task<IEnumerable<Tariffs?>> GetAllTariffs();
         Task<Tariffs> GetTariffBySubscriberId(int userId);
         Task<Bundle> GetBundleByTariffId(int? tariffId);
+        Task<Dictionary<string, int>> GetTariffsByUserCount();
+
 
     }
 }

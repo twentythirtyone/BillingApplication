@@ -150,5 +150,9 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             return await subscriberRepository.AddUserTraffic(subscriberId);
         }
 
+        public async Task<Dictionary<string, int>> GetNewUsersInLastTwelveMonths()
+        {
+            return await subscriberRepository.GetNewUsersInLastTwelveMonths();
+        }
     }
 }

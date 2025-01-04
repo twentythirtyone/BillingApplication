@@ -26,6 +26,7 @@ namespace BillingApplication.Mapper
                 PaymentDate = userEntity.PaymentDate,
                 PassportId = userEntity.PassportId ?? -1,
                 TariffId = userEntity.TariffId ?? -1,
+                CreationDate = userEntity.CreationDate
 
             };
         }
@@ -48,6 +49,7 @@ namespace BillingApplication.Mapper
                 PaymentDate = userEntity.PaymentDate,
                 PassportId = userEntity.PassportId ?? -1,
                 TariffId = userEntity.TariffId ?? -1,
+                CreationDate = userEntity.CreationDate,
                 Tariff = TariffMapper.TariftEntityToTarifModel(userEntity.Tariff),
                 PassportInfo = PassportMapper.PassportEntityToPassportModel(userEntity.PassportInfo)!
             };
@@ -68,6 +70,7 @@ namespace BillingApplication.Mapper
                 CallTime = userModel.CallTime,
                 InternetAmount = userModel.Internet,
                 MessagesCount = userModel.Messages,
+                CreationDate = userModel.CreationDate,
                 PaymentDate = userModel.PaymentDate,
                 PassportInfo = PassportMapper.PassportModelToPassportEntity(passportInfo)
             };
@@ -87,6 +90,7 @@ namespace BillingApplication.Mapper
             userEntity.CallTime = userModel.CallTime;
             userEntity.InternetAmount = userModel.Internet;
             userEntity.MessagesCount = userModel.Messages;
+            userEntity.CreationDate = userModel.CreationDate;
 
             return userEntity;
         }
@@ -108,7 +112,8 @@ namespace BillingApplication.Mapper
                 Messages = user.Messages,
                 PaymentDate = user.PaymentDate,
                 PassportId = user.PassportId,
-                TariffId = user.TariffId
+                TariffId = user.TariffId,
+                CreationDate = user.CreationDate
             };
         }
     }

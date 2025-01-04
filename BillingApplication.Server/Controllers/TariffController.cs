@@ -193,5 +193,22 @@ namespace BillingApplication.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [ServiceFilter(typeof(RoleAuthorizeFilter))]
+        [RoleAuthorize(UserRoles.ADMIN, UserRoles.OPERATOR)]
+        [HttpGet("user_count")]
+        public async Task<IActionResult> GetTariffsByUserCount()
+        {
+            try
+            {
+                var result = await tariffManager.GetTariffsByUserCount();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"GETTING FAILED: Error while getting messages.");
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

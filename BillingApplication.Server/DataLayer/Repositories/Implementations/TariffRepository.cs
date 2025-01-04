@@ -140,5 +140,20 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             }
             return bundle;
         }
+
+        public async Task<Dictionary<string, int>> GetTariffsByUserCount()
+        {
+            var tariffs = await context.Tariffs.Select(x => x.Title).ToListAsync();
+            var result = new Dictionary<string, int>();
+            foreach (var tariff in tariffs)
+            {
+                var users = await context.Subscribers
+                    .Include(x => x.Tariff)
+                    .Where(x => x.Tariff.Title == tariff)
+                    .ToListAsync();
+                result.Add(tariff, users.Count);
+            }
+            return result.OrderByDescending(x=>x.Value).ToDictionary();
+        }
     }
 }

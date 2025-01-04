@@ -35,6 +35,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             }
 
             var userEntity = SubscriberMapper.UserModelToUserEntity(user, existingTariff, passportInfo);
+            userEntity!.CreationDate = DateTime.UtcNow;
 
             await context.Subscribers.AddAsync(userEntity);
             await context.SaveChangesAsync();
@@ -265,5 +266,26 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
 
             return new Dictionary<Months, decimal>();
         }
+
+        public async Task<Dictionary<string, int>> GetNewUsersInLastTwelveMonths()
+        {
+            var startDate = DateTime.UtcNow.AddMonths(-11).Date;
+            var endDate = DateTime.UtcNow.Date;
+
+            var users = await context.Subscribers
+                                     .AsNoTracking()
+                                     .Where(x => x.CreationDate.Date >= startDate && x.CreationDate.Date <= endDate)
+                                     .ToListAsync();
+
+            var newUsersByMonth = users
+                .GroupBy(x => x.CreationDate.ToUniversalTime().ToString("MMMM", new System.Globalization.CultureInfo("ru-RU"))) 
+                .OrderBy(g => DateTime.ParseExact(g.Key, "MMMM", new System.Globalization.CultureInfo("ru-RU")))
+                .ToDictionary(g => g.Key, g => g.Count());
+
+
+            return newUsersByMonth;
+        }
+
+
     }
 }
