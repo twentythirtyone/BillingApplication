@@ -1049,3 +1049,41 @@ table {
     margin-left: 10px;
 
   }
+  
+  .history-select {
+    padding: 3px;
+    border: none;
+    border-radius: 6px;
+    outline: none;
+    font-size: 15px;
+  }
+
+  .prev-page {
+    background: none;
+    border: none;
+    font-size: 30px;
+    display: flex;
+    align-items: center;
+    margin-top: 125px;
+    margin-left: -40px;
+    position:absolute;
+    color: rgb(182, 182, 182);
+  }
+
+  .next-page {
+    background: none;
+    border: none;
+    font-size: 30px;
+    margin-top: 125px;
+    margin-left: 630px;
+    position:absolute;
+    color: rgb(182, 182, 182);
+  }
+
+.next-page:hover {
+    color: rgb(14, 14, 14);
+  }
+
+.prev-page:hover {
+    color: rgb(14, 14, 14);
+  }

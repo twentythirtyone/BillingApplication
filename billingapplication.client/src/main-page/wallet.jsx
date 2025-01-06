@@ -4,6 +4,7 @@ import cardIcon from '../assets/img/wallet/card.svg';
 import simIcon from '../assets/img/wallet/sim.svg';
 import smsIcon from '../assets/img/wallet/sms.svg';
 import internetIcon from '../assets/img/wallet/internet.svg';
+import dollarIcon from '../assets/img/wallet/dollar.svg';
 
 const token = localStorage.getItem('token');
 
@@ -15,6 +16,7 @@ function Wallet() {
     const [amount, setAmount] = useState('');
     const [isLoading, setLoading] = useState(false);
     const [expenses, setExpenses] = useState(0);
+    const [filterType, setFilterType] = useState('payments');
 
     const { userData, loading: userLoading, refreshUserData } = useUser();
 
@@ -22,22 +24,21 @@ function Wallet() {
         document.title = 'Кошелек';
 
         const fetchHistory = async () => {
-            try { 
-                const response = await fetch('/billingapplication/subscribers/history', {
+            try {
+                const response = await fetch('/billingapplication/subscribers/wallet/history', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
+    
                 if (!response.ok) {
                     throw new Error(`Ошибка: ${response.status}`);
                 }
-
+    
                 const data = await response.json();
-                const filteredData = data.filter((transaction) => transaction.type === 'Оплата');
-                setTransactionHistory(filteredData);
+                setTransactionHistory(data);
             } catch (err) {
                 setError(err.message);
             }
@@ -119,12 +120,29 @@ function Wallet() {
             return simIcon;
         } else if (string.toLowerCase().includes('смс')) {
             return smsIcon;
-        } else if (string.toLowerCase().includes('гб')) {
+        } else if (string.toLowerCase().includes('гб') || string.toLowerCase().includes('гига')) {
             return internetIcon;
+        } else if (string.toLowerCase().includes('пополнение')) {
+            return dollarIcon;
         } else {
             return cardIcon;
         }
     };
+
+    const handleFilterChange = (event) => {
+        setFilterType(event.target.value);
+    };
+
+    const getFilteredData = () => {
+        if (filterType === 'payments') {
+            return transactionHistory.payments || [];
+        } else if (filterType === 'topUps') {
+            return transactionHistory.topUps || [];
+        }
+        return [];
+    };
+
+    const filteredData = transactionHistory ? getFilteredData() : [];
 
     return (
         <div className="wallet">
@@ -165,28 +183,33 @@ function Wallet() {
 
             <div className="transaction-history">
                 <h3>История операций</h3>
+
+                <select value={filterType} onChange={handleFilterChange} className='history-select'>
+                    <option value="payments">Списания</option>
+                    <option value="topUps">Пополнения</option>
+                </select>
                 {error ? (
                     <p className="error">{error}</p>
-                ) : transactionHistory.length === 0 ? (
+                ) : filteredData.length === 0 ? (
                     <p>Загрузка или нет данных...</p>
                 ) : (
                     <>
                         <ul className="transaction-list">
-                            {transactionHistory.slice(0, visibleCount).map((transaction, index) => (
+                            {filteredData.slice(0, visibleCount).map((transaction, index) => (
                                 <li key={index} className="topup-button transaction">
                                     <div className="topup-button-img transaction-img">
-                                        <img src={getIcon(transaction.data.name)}></img>
+                                        <img src={getIcon(transaction.name || 'Пополнение')} alt="icon" />
                                     </div>
                                     <div className="topup-button-text">
-                                        {transaction.data.name}
-                                        <div className='transaction-sum'>{transaction.data.amount} ₽</div>
-                                        <p>{new Date(transaction.data.date).toLocaleString()}</p>
+                                        {transaction.name || 'Пополнение счёта'}
+                                        <div className='transaction-sum'>{transaction.amount} ₽</div>
+                                        <p>{new Date(transaction.date).toLocaleString()}</p>
                                     </div>
                                 </li>
                             ))}
                         </ul>
-                        {visibleCount < transactionHistory.length && (
-                            <button className="show-more-transactions" onClick={handleShowMore}>
+                        {visibleCount < filteredData.length && (
+                            <button className="show-more-transactions" onClick={() => setVisibleCount(visibleCount + 5)}>
                                 Показать еще
                             </button>
                         )}

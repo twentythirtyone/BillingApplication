@@ -2,6 +2,9 @@
 
 export const AdditionalServices = ({cutValue}) => {
     const [additionalServices, setAdditionalServices] = useState([]);
+    const [currentPage, setCurrentPage] = useState(0);
+    const servicesPerPage = 6;
+
 
     const fetchServices = async () => {
         try {
@@ -48,19 +51,63 @@ export const AdditionalServices = ({cutValue}) => {
 
     const latestServices = additionalServices.slice(-cutValue);
 
+    const totalPages = Math.ceil(latestServices.length / servicesPerPage);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages - 1) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const startIndex = currentPage * servicesPerPage;
+    const visibleServices = latestServices.slice(startIndex, startIndex + servicesPerPage);
+
+    const getTypeExtra = (bundle) => {
+        if (bundle.callTime && bundle.callTime !== "00:00:00") {
+            const [hours, minutes, seconds] = bundle.callTime.split(":").map(Number);
+            const totalMinutes = hours * 60 + minutes + seconds / 60;
+            return `минут ${Math.round(totalMinutes)}`;
+        }
+    
+        if (bundle.messages > 0) {
+            return `смс ${bundle.messages}`;
+        }
+    
+        if (bundle.internet > 0) {
+            return `гб ${bundle.internet / 1024}`;
+        }
+    };
+
     return (
         <div className="additional-services">
-            {latestServices.map((service) => (
-                <div className="service-card" key={service.id}>
-                    <span className="service-card-title"> +{parseAdditionalDesc(service.description)[0]}</span>
-                    <span className="service-card-desc">{parseAdditionalDesc(service.description)[1] }</span>
-                    <button
-                        className="service-price"
-                        onClick={() => handleServicePurchase(service.id, service.title)}>
-                        {service.price}₽
-                    </button>
-                </div>
-            ))}
+            {currentPage > 0 && (
+                <button className="prev-page" onClick={handlePrevPage}>
+                    ‹
+                </button>
+            )}
+            {visibleServices.map((service) => (
+            <div className="service-card" key={service.id}>
+                <span className="service-card-title"> +{parseAdditionalDesc(getTypeExtra(service.bundle))[1]}</span>
+                <span className="service-card-desc">{parseAdditionalDesc(getTypeExtra(service.bundle))[0]}</span>
+                <button
+                    className="service-price"
+                    onClick={() => handleServicePurchase(service.id, service.title)}>
+                    {service.price}₽
+                </button>
+            </div>
+        ))}
+            
+            {currentPage < totalPages - 1 && (
+                <button className="next-page" onClick={handleNextPage}>
+                    ›
+                </button>
+            )}
         </div>
     );
 };
