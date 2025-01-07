@@ -10,6 +10,7 @@ import Dashboard from './main-page/dashboard.jsx'
 import Tariff from './main-page/tariff.jsx'
 import Wallet from './main-page/wallet.jsx'
 import { AddServicesPage } from './main-page/add-services-page.jsx'
+import { UserSettings } from './main-page/user-settings.jsx'
 
 import { AdminMainPage } from './admin/main-page/admin-main-page.jsx'
 import { Control } from './admin/main-page/control.jsx'
@@ -49,8 +50,7 @@ createRoot(document.getElementById('root')).render(
                         <Route path="tariff" element={<Tariff />} />
                         <Route path="wallet" element={<Wallet />} />
                         <Route path="add-services" element={<AddServicesPage />} />
-                        <Route path="history" element={<Dashboard />} />
-                        <Route path="settings" element={<Dashboard />} />
+                        <Route path="settings" element={<UserSettings />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

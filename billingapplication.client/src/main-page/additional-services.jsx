@@ -4,7 +4,7 @@ import {getTypeExtra} from './functions.js';
 export const AdditionalServices = ({cutValue}) => {
     const [additionalServices, setAdditionalServices] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const servicesPerPage = 6;
+    const servicesPerPage = 3;
 
 
     const fetchServices = async () => {

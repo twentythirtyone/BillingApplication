@@ -3,8 +3,8 @@ import controlIcon from '../assets/img/sidebar/control.svg';
 import tariffIcon from '../assets/img/sidebar/tariff.svg';
 import walletIcon from '../assets/img/sidebar/wallet.svg';
 import addServicesIcon from '../assets/img/sidebar/add-services.svg';
-import historyIcon from '../assets/img/sidebar/history.svg';
 import settingsIcon from '../assets/img/sidebar/settings.svg';
+//import historyIcon from '../assets/img/sidebar/history.svg';
 
 const Sidebar = () => {
     const menuItems = [
@@ -12,7 +12,7 @@ const Sidebar = () => {
         { path: 'tariff', name: 'Тариф', icon: tariffIcon },
         { path: 'wallet', name: 'Кошелек', icon: walletIcon },
         { path: 'add-services', name: 'Доп услуги', icon: addServicesIcon },
-        { path: 'history', name: 'История', icon: historyIcon },
+        //{ path: 'history', name: 'История', icon: historyIcon },
         { path: 'settings', name: 'Настройки', icon: settingsIcon },
     ];
 
