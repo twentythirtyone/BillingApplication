@@ -876,6 +876,9 @@ table {
 
 .transaction-list {
     padding: 0;
+    max-height: 214px;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .transaction:hover {
@@ -1087,3 +1090,103 @@ table {
 .prev-page:hover {
     color: rgb(14, 14, 14);
   }
+
+.add-serv-page {
+    width: 700px;
+}
+
+.add-serv-tariff {
+    background-color: #fff;
+    border-radius: 16px;
+    padding: 10px 10px 20px 25px
+}
+
+.tariff-options {
+    width: 700px;
+}
+.tariff-card {
+    margin-right: 50px;
+}
+
+.service-item {
+    display: flex;
+    padding: 10px;
+}
+
+.service-item button {
+    width: 700px;
+    height: 65px;
+    display: flex;
+    background-color: white;
+    border: none;
+    border-radius: 12px;
+    justify-content: space-between;
+}
+
+.service-item button:hover {
+    background-color: rgb(247, 246, 246);
+    cursor: pointer;
+}
+
+.extra-servise-title{
+    display: flex;
+}
+
+.service-info {
+    margin-left: 10px;
+    margin-top: 8px;
+}
+
+.service-info span {
+    display: block;
+    margin: 0 auto;
+}
+
+.service-title-line {
+    font-size: 18px;
+}
+
+.service-desc-line {
+    font-size: 14px;
+    font-weight: 100;
+    text-align: left;
+    padding-top: 4px;
+    color: #8d8d8d;
+}
+
+.service-price-line {
+    font-size: 18px;
+    margin-top: 22px;
+    margin-right: 15px;
+}
+
+.additional-services-list {
+    height: 420px;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.additional-services-list::-webkit-scrollbar {
+    width: 16px;
+  }
+
+.additional-services-list::-webkit-scrollbar-track {
+    background: #F4F7F3;
+  }
+
+.additional-services-list::-webkit-scrollbar-thumb {
+    background-color: rgb(168, 168, 168); 
+    border-radius: 20px;
+    border: 5px solid #F4F7F3;
+  }
+
+.service-item-icon img{
+    width: 24px;
+    margin-top: 8px;
+    margin-left: 4px;
+    margin-right: 0px;
+    padding: 3px;
+    background-color: #EDEDED;
+    padding: 12px;
+    border-radius: 8px;
+}

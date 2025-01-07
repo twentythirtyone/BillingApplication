@@ -5,6 +5,7 @@ import simIcon from '../assets/img/wallet/sim.svg';
 import smsIcon from '../assets/img/wallet/sms.svg';
 import internetIcon from '../assets/img/wallet/internet.svg';
 import dollarIcon from '../assets/img/wallet/dollar.svg';
+import { ExpensesChart } from './expences-graph.jsx';
 
 const token = localStorage.getItem('token');
 
@@ -220,6 +221,7 @@ function Wallet() {
                 <h2 className='expenses'>Месячные расходы</h2>
                 <div className='expenses-sum'>{expenses} ₽</div>
             </div>
+            <ExpensesChart />
         </div>
     );
 }

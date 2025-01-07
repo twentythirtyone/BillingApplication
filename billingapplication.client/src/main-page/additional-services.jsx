@@ -1,4 +1,5 @@
 ﻿import { useEffect, useState } from 'react';
+import {getTypeExtra} from './functions.js';
 
 export const AdditionalServices = ({cutValue}) => {
     const [additionalServices, setAdditionalServices] = useState([]);
@@ -68,22 +69,6 @@ export const AdditionalServices = ({cutValue}) => {
     const startIndex = currentPage * servicesPerPage;
     const visibleServices = latestServices.slice(startIndex, startIndex + servicesPerPage);
 
-    const getTypeExtra = (bundle) => {
-        if (bundle.callTime && bundle.callTime !== "00:00:00") {
-            const [hours, minutes, seconds] = bundle.callTime.split(":").map(Number);
-            const totalMinutes = hours * 60 + minutes + seconds / 60;
-            return `минут ${Math.round(totalMinutes)}`;
-        }
-    
-        if (bundle.messages > 0) {
-            return `смс ${bundle.messages}`;
-        }
-    
-        if (bundle.internet > 0) {
-            return `гб ${bundle.internet / 1024}`;
-        }
-    };
-
     return (
         <div className="additional-services">
             {currentPage > 0 && (
@@ -93,8 +78,8 @@ export const AdditionalServices = ({cutValue}) => {
             )}
             {visibleServices.map((service) => (
             <div className="service-card" key={service.id}>
-                <span className="service-card-title"> +{parseAdditionalDesc(getTypeExtra(service.bundle))[1]}</span>
-                <span className="service-card-desc">{parseAdditionalDesc(getTypeExtra(service.bundle))[0]}</span>
+                <span className="service-card-title"> +{parseAdditionalDesc(getTypeExtra(service.bundle))[0]}</span>
+                <span className="service-card-desc">{parseAdditionalDesc(getTypeExtra(service.bundle))[1]}</span>
                 <button
                     className="service-price"
                     onClick={() => handleServicePurchase(service.id, service.title)}>
