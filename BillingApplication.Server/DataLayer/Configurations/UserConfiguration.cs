@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BillingApplication
 {
-    internal class UserConfiguration : IEntityTypeConfiguration<SubscriberEntity>
+    public class UserConfiguration : IEntityTypeConfiguration<SubscriberEntity>
     {
         public void Configure(EntityTypeBuilder<SubscriberEntity> builder)
         {

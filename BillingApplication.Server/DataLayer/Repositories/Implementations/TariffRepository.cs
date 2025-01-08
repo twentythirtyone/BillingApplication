@@ -33,6 +33,9 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             }
             var tariffEntity = TariffMapper.TariftModelToTarifEntity(tariff, existingBundle!);
 
+            if (context.Tariffs.Any(x => x.Title == tariff.Title))
+                throw new Exception("Такое название тарифа уже есть");
+
             await context.Tariffs.AddAsync(tariffEntity);
             await context.SaveChangesAsync();
 

@@ -35,19 +35,22 @@ namespace BillingApplication
             modelBuilder.Entity<PassportInfoEntity>()
                 .HasMany(p => p.Subscribers) // Один паспорт имеет много подписчиков
                 .WithOne(s => s.PassportInfo) // У подписчика есть один паспорт
-                .HasForeignKey(s => s.PassportId); // Внешний ключ в таблице подписчиков
+                .HasForeignKey(s => s.PassportId)// Внешний ключ в таблице подписчиков
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Связь между Subscriber и Payment
             modelBuilder.Entity<SubscriberEntity>()
                 .HasMany(s => s.Payments) // Один подписчик имеет много платежей
                 .WithOne(p => p.Subscriber) // У платежа есть один подписчик
-                .HasForeignKey(p => p.PhoneId); // Внешний ключ в таблице платежей
+                .HasForeignKey(p => p.PhoneId)
+                .OnDelete(DeleteBehavior.NoAction); // Внешний ключ в таблице платежей
 
             // Связь между Subscriber и TopUps
             modelBuilder.Entity<SubscriberEntity>()
                 .HasMany(s => s.TopUps) // Один подписчик имеет много пополнений
                 .WithOne(t => t.Subscriber) // У пополнения есть один подписчик
-                .HasForeignKey(t => t.PhoneId); // Внешний ключ в таблице пополнений
+                .HasForeignKey(t => t.PhoneId)// Внешний ключ в таблице пополнений
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Связь между Subscriber и Calls
             modelBuilder.Entity<SubscriberEntity>()
@@ -77,49 +80,57 @@ namespace BillingApplication
             modelBuilder.Entity<SubscriberEntity>()
                 .HasMany(s => s.TariffChanges) // Один подписчик имеет много изменений тарифа
                 .WithOne(tc => tc.Subscriber) // У изменения тарифа есть один подписчик
-                .HasForeignKey(tc => tc.PhoneId); // Внешний ключ в таблице изменений тарифа
+                .HasForeignKey(tc => tc.PhoneId)// Внешний ключ в таблице изменений тарифа
+                .OnDelete(DeleteBehavior.NoAction); 
 
             // Связь между Tariff и Subscriber
             modelBuilder.Entity<TariffEntity>()
                 .HasMany(t => t.Subscribers) // Один тариф имеет много подписчиков
                 .WithOne(s => s.Tariff) // У подписчика есть один тариф
-                .HasForeignKey(s => s.TariffId); // Внешний ключ в таблице подписчиков
+                .HasForeignKey(s => s.TariffId)// Внешний ключ в таблице подписчиков
+                .OnDelete(DeleteBehavior.NoAction); 
 
 
             // Связь между Bundle и Tariff
             modelBuilder.Entity<BundleEntity>()
                 .HasMany(b => b.Tariffs) // Один бандл имеет много тарифов
                 .WithOne(t => t.Bundle) // У тарифа есть один бандл
-                .HasForeignKey(t => t.TariffPlan); // Внешний ключ в тарифе
+                .HasForeignKey(t => t.TariffPlan)// Внешний ключ в тарифе
+                .OnDelete(DeleteBehavior.Cascade); 
 
 
             // Связь между Bundle и Extras
             modelBuilder.Entity<BundleEntity>()
                 .HasMany(b => b.Extras) // Один пакет имеет много дополнительных услуг
                 .WithOne(e => e.Bundle) // У дополнительной услуги есть один пакет
-                .HasForeignKey(e => e.Package); // Внешний ключ в таблице дополнительных услуг
+                .HasForeignKey(e => e.Package)// Внешний ключ в таблице дополнительных услуг
+                .OnDelete(DeleteBehavior.Cascade); 
 
             // Связь между TariffChange и Tariff
             modelBuilder.Entity<TariffChangeEntity>()
                 .HasOne(tc => tc.LastTariff) // У изменения тарифа есть последний тариф
                 .WithMany() // Один тариф может не иметь связанных изменений
-                .HasForeignKey(tc => tc.LastTariffId); // Внешний ключ для последнего тарифа
+                .HasForeignKey(tc => tc.LastTariffId)// Внешний ключ для последнего тарифа
+                .OnDelete(DeleteBehavior.SetNull); 
 
             modelBuilder.Entity<TariffChangeEntity>()
                 .HasOne(tc => tc.NewTariff) // У изменения тарифа есть новый тариф
                 .WithMany() // Один тариф может не иметь связанных изменений
-                .HasForeignKey(tc => tc.NewTariffId); // Внешний ключ для нового тарифа
+                .HasForeignKey(tc => tc.NewTariffId) // Внешний ключ для нового тарифа
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Связь между OwnerChange и PassportInfo
             modelBuilder.Entity<OwnerChangeEntity>()
                 .HasOne(oc => oc.LastUser) // У изменения владельца есть последний пользователь
                 .WithMany() // Один пользователь может не иметь связанных изменений
-                .HasForeignKey(oc => oc.LastUserId); // Внешний ключ для последнего пользователя
+                .HasForeignKey(oc => oc.LastUserId) // Внешний ключ для последнего пользователя
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<OwnerChangeEntity>()
                 .HasOne(oc => oc.NewUser) // У изменения владельца есть новый пользователь
                 .WithMany() // Один пользователь может не иметь связанных изменений
-                .HasForeignKey(oc => oc.NewUserId); // Внешний ключ для нового пользователя
+                .HasForeignKey(oc => oc.NewUserId)
+                .OnDelete(DeleteBehavior.SetNull); // Внешний ключ для нового пользователя
         }
     }
 }
