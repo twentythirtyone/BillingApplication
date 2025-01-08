@@ -3,8 +3,6 @@
   <br>
   <a href="https://77.222.38.141"><img src="http://postimg.su/image/0Uh3b16q/alfatelekom.png" alt="Alfa Telekom" width="200"></a>
   <br>
-  ShowWork
-  <br>
 </h1>
 
 > [!IMPORTANT]  
