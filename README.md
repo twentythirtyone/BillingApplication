@@ -1,15 +1,14 @@
-# Alfa Telekom
+<h1 align="center">Alfa Telekom</h1>
 <h1 align="center">
   <br>
-  <a href="https://77.222.38.141"><img src="http://postimg.su/image/0Uh3b16q/alfatelekom.png" alt="Alfa Telekom" width="200"></a>
+  <a href="https://77.222.38.141"><img src="http://postimg.su/image/0Uh3b16q/alfatelekom.png" alt="Alfa Telekom" width="300"></a>
   <br>
 </h1>
+<h4 align="center">Веб-приложение для автоматизации и управления процессами
+биллинга мобильного оператора.</h4>
 
 > [!IMPORTANT]  
 > Дисклеймер: Данный сайт является студенческим учебным проектом, созданным исключительно в образовательных целях. Он не является официальным проектом, не связан с деятельностью и не одобрен АО "АЛЬФА-БАНК". Вся представленная информация используется только для обучения, и любой контент, относящийся к АО "АЛЬФА-БАНК", использован в рамках добросовестного использования без умысла на коммерческую выгоду или нарушение прав.
-
-<h4 align="center">Веб-приложение для автоматизации и управления процессами
-биллинга мобильного оператора.</h4>
 
 ## Описание
 Cистема предназначена для автоматизации всех процессов биллинга мобильного оператора с обеспечением следующей функциональности: управление счетами абонентов, создание счетов,
@@ -40,11 +39,11 @@ Cистема предназначена для автоматизации вс�
   <img width="12" />
   </br>
   <h3>Frontend:</h3>
-  <a href="https://www.w3.org/html/"><img src="https://fuzeservers.ru/wp-content/uploads/1/2/f/12fe80952f7ce58a3adc27c592b3a3c9.png" height="40" alt="html logo"  /></a>
+  <a href="https://www.w3.org/html/"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/HTML.svg" height="40" alt="html logo"  /></a>
   <img width="12" />
-  <a href="https://www.w3.org/Style/CSS/Overview.en.html"><img src="https://gas-kvas.com/uploads/posts/2023-02/1675463201_gas-kvas-com-p-fonovii-risunok-v-css3-16.jpg" height="40" alt="css logo"  /></a>
+  <a href="https://www.w3.org/Style/CSS/Overview.en.html"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/CSS.svg" height="40" alt="css logo"  /></a>
   <img width="12" />
-  <a href="https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor"><img src="https://i0.wp.com/erhankocabuga.com/wp-content/uploads/2019/08/net-blazor.png?w=1400&ssl=1" height="40" alt="blazor logo"  /></a>
+  <a href="https://react.dev/"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/React-Dark.svg" height="40" alt="react logo"  /></a>
   <img width="12" />
 </div>
 
