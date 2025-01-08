@@ -1,4 +1,3 @@
-<h1 align="center">Alfa Telekom</h1>
 <h1 align="center">
   <br>
   <a href="https://77.222.38.141"><img src="http://postimg.su/image/0Uh3b16q/alfatelekom.png" alt="Alfa Telekom" width="300"></a>
@@ -29,11 +28,11 @@ Cистема предназначена для автоматизации вс�
   <h3>Backend:</h3>
   <a href="https://dotnet.microsoft.com/en-us/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-plain-wordmark.svg" height="40" alt="dot-net logo"  /></a>
   <img width="12" />
-  <a href="https://dotnet.microsoft.com/en-us/apps/aspnet"><img src="https://infogeek.in/assets/images/features/mvc.png" height="40" alt="aspnet logo"  /></a>
+  <a href="https://dotnet.microsoft.com/en-us/apps/aspnet"><img src="https://user-images.githubusercontent.com/54532837/236268072-6a9e6dd3-9e9f-41ee-b4ba-c4df8aa11886.png" height="40" alt="aspnet logo"  /></a>
   <img width="12" />
   <a href="https://www.postgresql.org/"><img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/postgresql.png" height="40" alt="psql logo"  /></a>
   <img width="12" />
-  <a href="https://learn.microsoft.com/ru-ru/aspnet/entity-framework"><img src="https://github.com/campusMVP/dotnetCoreLogoPack/blob/master/Entity%20Framework%20Core/Bitmap%20RGB/Bitmap-MEDIUM_Entity-Framework-Core-Logo_Black_Square_RGB.png" height="40" alt="ef logo"  /></a>
+  <a href="https://github.com/campusMVP/dotnetCoreLogoPack/blob/master/Entity%20Framework%20Core/Bitmap%20RGB/Bitmap-MEDIUM_Entity-Framework-Logo_2colors_Square_RGB.png" height="40" alt="ef logo"  /></a>
   <img width="12" />
   <a href="https://www.quartz-scheduler.org/"><img src="https://dz2cdn1.dzone.com/storage/temp/14824345-1622849995838.png" height="40" alt="quartz logo"  /></a>
   <img width="12" />
