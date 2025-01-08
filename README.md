@@ -26,23 +26,23 @@ Cистема предназначена для автоматизации вс�
 ## Разработано с помощью
 <div align="left">
   <h3>Backend:</h3>
-  <a href="https://dotnet.microsoft.com/en-us/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-plain-wordmark.svg" height="40" alt="dot-net logo"  /></a>
+  <a href="https://dotnet.microsoft.com/en-us/"><img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/dot-net/dot-net-plain-wordmark.svg" height="60" alt="dot-net logo"  /></a>
   <img width="12" />
-  <a href="https://dotnet.microsoft.com/en-us/apps/aspnet"><img src="https://user-images.githubusercontent.com/54532837/236268072-6a9e6dd3-9e9f-41ee-b4ba-c4df8aa11886.png" height="40" alt="aspnet logo"  /></a>
+  <a href="https://dotnet.microsoft.com/en-us/apps/aspnet"><img src="https://user-images.githubusercontent.com/54532837/236268072-6a9e6dd3-9e9f-41ee-b4ba-c4df8aa11886.png" height="60" alt="aspnet logo"  /></a>
   <img width="12" />
-  <a href="https://www.postgresql.org/"><img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/postgresql.png" height="40" alt="psql logo"  /></a>
+  <a href="https://www.postgresql.org/"><img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/postgresql.png" height="60" alt="psql logo"  /></a>
   <img width="12" />
-  <a href=""> <img src="https://github.com/campusMVP/dotnetCoreLogoPack/blob/master/Entity%20Framework%20Core/Bitmap%20RGB/Bitmap-MEDIUM_Entity-Framework-Logo_2colors_Square_RGB.png?raw=true" height="40" alt="ef logo"  /></a>
+  <a href=""> <img src="https://github.com/campusMVP/dotnetCoreLogoPack/blob/master/Entity%20Framework%20Core/Bitmap%20RGB/Bitmap-MEDIUM_Entity-Framework-Logo_2colors_Square_RGB.png?raw=true" height="60" alt="ef logo"  /></a>
   <img width="12" />
-  <a href="https://www.quartz-scheduler.org/"><img src="https://dz2cdn1.dzone.com/storage/temp/14824345-1622849995838.png" height="40" alt="quartz logo"  /></a>
+  <a href="https://www.quartz-scheduler.org/"><img src="https://dz2cdn1.dzone.com/storage/temp/14824345-1622849995838.png" height="60" alt="quartz logo"  /></a>
   <img width="12" />
   </br>
   <h3>Frontend:</h3>
-  <a href="https://www.w3.org/html/"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/HTML.svg" height="40" alt="html logo"  /></a>
+  <a href="https://www.w3.org/html/"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/HTML.svg" height="60" alt="html logo"  /></a>
   <img width="12" />
-  <a href="https://www.w3.org/Style/CSS/Overview.en.html"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/CSS.svg" height="40" alt="css logo"  /></a>
+  <a href="https://www.w3.org/Style/CSS/Overview.en.html"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/CSS.svg" height="60" alt="css logo"  /></a>
   <img width="12" />
-  <a href="https://react.dev/"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/React-Dark.svg" height="40" alt="react logo"  /></a>
+  <a href="https://react.dev/"><img src="https://github.com/tandpfun/skill-icons/blob/main/icons/React-Dark.svg" height="60" alt="react logo"  /></a>
   <img width="12" />
 </div>
 
