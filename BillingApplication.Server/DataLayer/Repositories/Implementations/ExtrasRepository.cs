@@ -29,9 +29,10 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                  );
             }
             ExtrasEntity extrasEntity = ExtrasMapper.ExtrasModelToExtrasEntity(extras);
+            if (context.Extras.Any(x => x.Title == extras.Title))
+                throw new Exception("Такое название пакета уже есть");
             await context.Extras.AddAsync(extrasEntity);
             await context.SaveChangesAsync();
-
             return extrasEntity?.Id;
         }
 

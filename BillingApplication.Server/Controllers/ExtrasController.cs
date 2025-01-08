@@ -52,9 +52,19 @@ namespace BillingApplication.Controllers
         [RoleAuthorize(UserRoles.ADMIN)]
         public async Task<IActionResult> Create([FromBody] Extras extrasModel)
         {
-            var result = await extrasManager.AddNewExtra(extrasModel);
-            logger.LogInformation($"ADDING: new Extra has been added.\nModel: {JsonSerializer.Serialize(extrasModel)}\n");
-            return Ok(result);
+            try
+            {
+                var result = await extrasManager.AddNewExtra(extrasModel);
+                logger.LogInformation($"ADDING: new Extra has been added.\nModel: {JsonSerializer.Serialize(extrasModel)}\n");
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError($"ERROR ADDING: Extra {extrasModel.Id}  has not been added" +
+                                     $"\nMessage:{ex.Message}" +
+                                     $"\nModel: {JsonSerializer.Serialize(extrasModel)}\n");
+                return BadRequest(ex.Message);
+            }
         }
 
         [RoleAuthorize(UserRoles.ADMIN)]

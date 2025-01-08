@@ -33,7 +33,7 @@ namespace BillingApplication.Controllers
                 logger.LogInformation($"ADDING: Tariff {tariffModel.Tariff.Id} with Bundle {tariffModel.BundleId} added");
                 return Ok(result);
             }
-            catch(Exception ex) when(ex is TariffNotFoundException || ex is InvalidOperationException)
+            catch(Exception ex)
             {
                 logger.LogError($"ERROR ADDING: Tariff {tariffModel.Tariff.Id} with Bundle {tariffModel.BundleId} has not been added" +
                                       $"\nMessage:{ex.Message}" +

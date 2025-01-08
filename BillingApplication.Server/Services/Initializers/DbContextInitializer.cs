@@ -40,6 +40,7 @@ namespace BillingApplication.Server.Services.Initializers
             AddBundleIfNotExist(id: 16, calltime: 200, internet: 15 * 1024, messages: 100);
             AddBundleIfNotExist(id: 17, calltime: 150, messages: 150);
             AddBundleIfNotExist(id: 18, calltime: 50, internet: 2 * 1024, messages: 50);
+            AddBundleIfNotExist(id: 19, calltime: 0, internet: 0, messages: 0);
 
             AddExtrasIfNotExist(id: 1, title: "100 на связи", price: 100, bundleId: 5);
             AddExtrasIfNotExist(id: 2, title: "Сеть на максимум", price: 100, bundleId: 10);
@@ -48,7 +49,7 @@ namespace BillingApplication.Server.Services.Initializers
             AddExtrasIfNotExist(id: 5, title: "Сетевой мини", price: 70, bundleId: 9);
             AddExtrasIfNotExist(id: 6, title: "SMS мини", price: 70, bundleId: 1);
 
-            AddTariffIfNotExist(id: 1, title: "Стандартный", price: 250, bundleId: 18);
+            AddTariffIfNotExist(id: 1, title: "Стандартный", price: 0, bundleId: 19);
             AddTariffIfNotExist(id: 2, title: "Оптимум", price: 300, bundleId: 14);
             AddTariffIfNotExist(id: 3, title: "Всё и сразу", price: 800, bundleId: 15);
             AddTariffIfNotExist(id: 4, title: "Золотая середина", price: 450, bundleId: 16);
