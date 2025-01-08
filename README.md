@@ -32,7 +32,7 @@ Cистема предназначена для автоматизации вс�
   <img width="12" />
   <a href="https://www.postgresql.org/"><img src="https://raw.githubusercontent.com/marwin1991/profile-technology-icons/refs/heads/main/icons/postgresql.png" height="40" alt="psql logo"  /></a>
   <img width="12" />
-  <a href="https://github.com/campusMVP/dotnetCoreLogoPack/blob/master/Entity%20Framework%20Core/Bitmap%20RGB/Bitmap-MEDIUM_Entity-Framework-Logo_2colors_Square_RGB.png" height="40" alt="ef logo"  /></a>
+  <a href=""> <img src="https://github.com/campusMVP/dotnetCoreLogoPack/blob/master/Entity%20Framework%20Core/Bitmap%20RGB/Bitmap-MEDIUM_Entity-Framework-Logo_2colors_Square_RGB.png?raw=true" height="40" alt="ef logo"  /></a>
   <img width="12" />
   <a href="https://www.quartz-scheduler.org/"><img src="https://dz2cdn1.dzone.com/storage/temp/14824345-1622849995838.png" height="40" alt="quartz logo"  /></a>
   <img width="12" />
