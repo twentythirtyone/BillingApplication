@@ -8,7 +8,7 @@ export const TariffFormModal = ({ tariff, onClose, onSave }) => {
       title: tariff?.title || '',
       description: tariff?.description || '',
       price: tariff?.price || 0,
-      internet: tariff?.bundle?.internet || 0,
+      internet: tariff?.bundle?.internet / 1024 || 0,
       callTime: tariff?.bundle?.callTime || '',
       messages: tariff?.bundle?.messages || 0,
       bundleId: tariff?.bundle?.id || 0,

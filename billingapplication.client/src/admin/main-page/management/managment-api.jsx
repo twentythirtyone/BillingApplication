@@ -23,4 +23,4 @@ export const deleteTariff = (id) => tariffInstance.delete(`/id/${id}`);
 export const fetchExtras = () => extraInstance.get('/');
 export const addExtra = (extra) => extraInstance.post('/new', extra);
 export const updateExtra = (extra) => extraInstance.patch('/update', extra);
-export const deleteExtra = (id) => extraInstance.delete(`/id/${id}`);
+export const deleteExtra = (id) => extraInstance.delete(`/${id}`);

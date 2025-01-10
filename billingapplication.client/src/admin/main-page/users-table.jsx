@@ -51,14 +51,15 @@ export const UserTable = () => {
         onChange={handleSearch}
         style={{ fontSize:'16px', padding: '6px',border:'none', borderRadius: '10px' }}
       />
+      <div>
       <table border="1" className="custom-table">
         <thead>
           <tr>
-            <th className="col-id">ID</th>
-            <th className="col-name">ФИО</th>
-            <th>Номер</th>
-            <th>Тариф</th>
-            <th className="col-email">Email</th>
+              <th className="col-id">ID</th>
+              <th className="col-name">ФИО</th>
+              <th>Номер</th>
+              <th>Тариф</th>
+              <th className="col-email">Email</th>
           </tr>
         </thead>
         <tbody>
@@ -73,6 +74,7 @@ export const UserTable = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

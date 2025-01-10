@@ -12,7 +12,7 @@ export const ExtrasFormModal = ({ extra, onClose, onSave }) => {
         bundleId: extra?.bundle?.id || 0,
         callTime: extra?.bundle?.callTime || '',
         messages: extra?.bundle?.messages || 0,
-        internet: extra?.bundle?.internet || 0,
+        internet: extra?.bundle?.internet / 1024 || 0,
         bundleId: 0,
     });
 
@@ -42,7 +42,7 @@ export const ExtrasFormModal = ({ extra, onClose, onSave }) => {
                   id: formData.bundleId,
                   callTime: serviceType === 'callTime' ? formData.callTime : '',
                   messages: serviceType === 'messages' ? formData.messages : 0,
-                  internet: serviceType === 'internet' ? formData.internet : 0,
+                  internet: serviceType === 'internet' ? formData.internet * 1024 : 0,
               },
           },
           bundleId: formData.bundleId,

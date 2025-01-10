@@ -54,14 +54,15 @@ export const TariffTable = () => {
   return (
     <div>
       <h1>Тарифы</h1>
-      <table>
-        <thead className="tariffs-heading">
+      <table className='custom-table'>
+        <thead>
           <tr>
-            <th>Название</th>
+            <th style={{ width: '50px' }}>ID</th>
+            <th style={{ width: '190px' }}>Название</th>
             <th>Цена</th>
             <th>Интернет</th>
             <th>Звонки</th>
-            <th>SMS</th>
+            <th style={{ width: '70px' }}>SMS</th>
             <th style={{ color: '#8596AC' }}>Редактировать</th>
             <th style={{ color: '#8596AC' }}>Удалить</th>
           </tr>
@@ -69,6 +70,7 @@ export const TariffTable = () => {
         <tbody style={{ color: '#8596AC' }}>
           {tariffs.map((tariff) => (
             <tr key={tariff.id}>
+              <td>{tariff.id}</td>
               <td style={{ color: '#fff' }}>{tariff.title || '—'}</td>
               <td>{tariff.price ? `${tariff.price}₽` : '0'}</td>
               <td>{tariff.bundle?.internet / 1024 || '0'}</td>
