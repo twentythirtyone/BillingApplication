@@ -1381,3 +1381,10 @@ input:focus {
 .password-edit-container {
     display: flex; 
 }
+
+.analitics-page {
+    width: 1000px;
+}
+.tariff-extras-graph-sect {
+    display: flex;
+}

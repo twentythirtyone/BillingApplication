@@ -1,19 +1,19 @@
 ﻿import { NavLink } from 'react-router-dom';
-import controlIcon from '../../assets/img/sidebar/control.svg';
+//import controlIcon from '../../assets/img/sidebar/control.svg';
 import tariffIcon from '../../assets/img/sidebar/tariff.svg';
 import addServicesIcon from '../../assets/img/sidebar/add-services.svg';
 import historyIcon from '../../assets/img/sidebar/history.svg';
 import analyticsIcon from '../../assets/img/sidebar/analitics.svg';
-import settingsIcon from '../../assets/img/sidebar/settings.svg';
+//import settingsIcon from '../../assets/img/sidebar/settings.svg';
 
 export const Sidebar = () => {
     const menuItems = [
-        { path: 'control', name: 'Панель управления', icon: controlIcon },
-        { path: 'monitoring', name: 'Мониторинг', icon: tariffIcon },
+        //{ path: 'control', name: 'Панель управления', icon: controlIcon },
+        { path: 'monitoring', name: 'Клиенты', icon: tariffIcon },
         { path: 'management', name: 'Управление услугами', icon: addServicesIcon },
         { path: 'user-control', name: 'Управление пользователями', icon: historyIcon },
-        { path: 'analytics', name: 'Аналитика', icon: analyticsIcon },
-        { path: 'settings', name: 'Настройки', icon: settingsIcon },
+        { path: 'analytics', name: 'Статистика', icon: analyticsIcon },
+        //{ path: 'settings', name: 'Настройки', icon: settingsIcon },
     ];
 
     return (

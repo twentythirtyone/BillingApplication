@@ -47,16 +47,17 @@ export const ClientRegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const TOKEN = localStorage.getItem('token');
-
+  
     const requestBody = {
-      user: {
+      subscriberModel: {
         ...formData.user,
         id: 0,
         salt: '',
         passportId: 0,
         paymentDate: new Date().toISOString(),
+        callTime: '00:00:00',
       },
       passport: {
         ...formData.passport,
@@ -64,45 +65,54 @@ export const ClientRegisterForm = () => {
         issueDate: new Date(formData.passport.issueDate).toISOString(),
         expiryDate: new Date(formData.passport.expiryDate).toISOString(),
       },
+      tariffId: formData.tariffId,
     };
-
+  
     try {
-      const response = await axios.post(
-        '/billingapplication/auth/register/subscriber',
-        requestBody,
-        {
-          headers: { Authorization: `Bearer ${TOKEN}` },
-        }
-      );
-      alert(`Пользователь зарегистрирован с ID: ${response.data}`);
-
-      // Сбрасываем состояние формы после успешной отправки
-      setFormData({
-        user: {
-          id: 0,
-          email: '',
-          password: '',
-          salt: '',
-          passportId: 0,
-          tariffId: 0,
-          number: '',
-          balance: 0,
-          paymentDate: '',
-          callTime: '00:00:00',
-          messages: 0,
-          internet: 0,
+      const response = await fetch('/billingapplication/auth/register/subscriber', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${TOKEN}`,
         },
-        passport: {
-          id: 0,
-          passportNumber: '',
-          fullName: '',
-          issueDate: '',
-          expiryDate: '',
-          issuedBy: '',
-          registration: '',
-        },
-        tariffId: 0,
+        body: JSON.stringify(requestBody),
       });
+  
+      if (response.ok) {
+        const data = await response.json();
+        alert(`Пользователь зарегистрирован с ID: ${data}`);
+        
+        // Сбрасываем состояние формы после успешной отправки
+        setFormData({
+          user: {
+            id: 0,
+            email: '',
+            password: '',
+            salt: '',
+            passportId: 0,
+            tariffId: 0,
+            number: '',
+            balance: 0,
+            paymentDate: '',
+            callTime: '00:00:00',
+            messages: 0,
+            internet: 0,
+          },
+          passport: {
+            id: 0,
+            passportNumber: '',
+            fullName: '',
+            issueDate: '',
+            expiryDate: '',
+            issuedBy: '',
+            registration: '',
+          },
+          tariffId: 0,
+        });
+      } else {
+        const errorData = await response.json();
+        console.error('Ошибка при регистрации:', errorData);
+      }
     } catch (error) {
       console.error('Ошибка при регистрации:', error);
     }
