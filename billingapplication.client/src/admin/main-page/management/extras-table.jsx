@@ -52,13 +52,14 @@ export const ExtrasTable = () => {
   return (
     <div>
       <h1>Дополнительные услуги</h1>
-      <table>
-        <thead className="tariffs-heading">
+      <table className='custom-table'>
+        <thead>
           <tr>
-            <th>Название</th>
-            <th>Цена</th>
-            <th>Услуга</th>
-            <th>Объем</th>
+            <th style={{ width: '50px' }}>ID</th>
+            <th style={{ width: '190px' }}>Название</th>
+            <th style={{ width: '140px' }}>Цена</th>
+            <th style={{ width: '140px' }}>Услуга</th>
+            <th style={{ width: '130px' }}>Объем</th>
             <th style={{ color: '#8596AC' }}>Редактировать</th>
             <th style={{ color: '#8596AC' }}>Удалить</th>
           </tr>
@@ -81,6 +82,7 @@ export const ExtrasTable = () => {
   
             return (
               <tr key={extra.id}>
+                <td>{extra.id}</td>
                 <td style={{ color: '#fff' }}>{extra.title || '—'}</td>
                 <td>{extra.price ? `${extra.price}₽` : '0'}</td>
                 <td>{serviceType}</td>
