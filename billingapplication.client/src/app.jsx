@@ -13,13 +13,13 @@ import { AddServicesPage } from './main-page/add-services-page.jsx'
 import { UserSettings } from './main-page/user-settings.jsx'
 
 import { AdminMainPage } from './admin/main-page/admin-main-page.jsx'
-import { Control } from './admin/main-page/control.jsx'
 import { TariffTable } from './admin/main-page/management/tariff-table.jsx'
 import { UserControl } from './admin/main-page/users-control.jsx'
 import { UserTable } from './admin/main-page/users-table.jsx'
 import { UserAnalytics } from './admin/main-page/user-analytics.jsx'
 import { ClientRegisterForm } from './admin/main-page/client-registration.jsx'
 import { OperatorRegistrationForm } from './admin/main-page/operator-registration.jsx'
+import { AnaliticsPage } from './admin/main-page/analitics/analitics-page.jsx'
 
 import './style.css'
 
@@ -34,14 +34,12 @@ createRoot(document.getElementById('root')).render(
                     <Route path='operator' element={<AdminMainPage />}>
                         <Route index element={<Navigate to="management" />} />
                         <Route path="management" element={<TariffTable />} />
-                        <Route path="control" element={<Control />} />
                         <Route path="monitoring" element={<UserTable/>} />
                         <Route path="user-control" element={<UserControl/>}/>
                         <Route path="user-control/client-registration" element={<ClientRegisterForm/>}/>
                         <Route path="user-control/operator-registration" element={<OperatorRegistrationForm/>}/>
                         <Route path="monitoring/user-analytics/:id" element={<UserAnalytics />} />
-                        <Route path="analytics" element={<Control />} />
-                        <Route path="settings" element={<Control />} />
+                        <Route path="analytics" element={<AnaliticsPage />} />
                     </Route>
 
                     <Route path="main" element={<MainPage />}>
