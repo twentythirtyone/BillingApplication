@@ -102,6 +102,118 @@ namespace BillingApplication.Server.Services.Initializers
                     Registration = "Екакебибург"
                 }
                 );
+            AddUserIfNotExist(
+               email: "holosteam@yandex.ru",
+               number: "89020326386",
+               balance: 500,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 4,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Чичиков Андрей Васильевич",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
+            AddUserIfNotExist(
+               email: "creeperonok@gmail.com",
+               number: "89000426386",
+               balance: 900,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 5,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Маратов Антон Николаевич",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
+            AddUserIfNotExist(
+               email: "belikovnikitavasilevich@gmail.com",
+               number: "89030326386",
+               balance: 700,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 6,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Чухарев Кирилл Алексеевич",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
+            AddUserIfNotExist(
+               email: "belikov.nikita22@bk.ru",
+               number: "81000326386",
+               balance: 600,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 7,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Бондарев Эдуард Андреевич",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
+            AddUserIfNotExist(
+               email: "belikov.nikita@bk.ru",
+               number: "82000326386",
+               balance: 200,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 8,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Бубликов Денис Антонов",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
+            AddUserIfNotExist(
+               email: "holofaceit@gmail.com",
+               number: "89000327386",
+               balance: 800,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 9,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Калмачов Борат Мамутов",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
+            AddUserIfNotExist(
+               email: "mirasovaalsui@mail.ru",
+               number: "89000326986",
+               balance: 1000,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 10,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Бибонов Биг Босс",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
 
             await SyncAutoIncrement(dbContext, "Operators");
             await SyncAutoIncrement(dbContext, "Subscribers");
@@ -143,6 +255,7 @@ namespace BillingApplication.Server.Services.Initializers
                 var tariff = await dbContext.Tariffs.FindAsync(1);
 
                 AddPassportIfNotExist(passport);
+                var date = DateTime.UtcNow.AddMonths(new Random().Next(-2,0));
 
                 dbContext.Subscribers.Add(new SubscriberEntity
                 {
@@ -160,7 +273,7 @@ namespace BillingApplication.Server.Services.Initializers
                     MessagesCount = tariff!.Bundle.Messages,
                     CallTime = tariff!.Bundle.CallTIme,
                     Password = encrypt.HashPassword(password, salt),
-                    CreationDate = DateTime.UtcNow
+                    CreationDate = date
                 });
 
                 

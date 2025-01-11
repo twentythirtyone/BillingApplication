@@ -28,8 +28,8 @@ namespace BillingApplication.Server.Quartz
                 .WithIdentity("UserActionsTrigger", "default")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                .WithIntervalInHours(24)
-                //.WithIntervalInMinutes(1) для тестирования
+                //.WithIntervalInHours(24)
+                .WithIntervalInMinutes(1) // для тестирования или наполнения данными
                 .RepeatForever())
                 .Build();
 
