@@ -46,7 +46,7 @@ namespace BillingApplication.Server.Quartz
                     var gbytes = rnd.Next(1, 3);
                     var extraNames = (await extrasManager.GetExtras()).ToArray();
                     var randomExtra = extraNames[rnd.Next(extraNames.Length)]; 
-                    var randomDate = DateTime.UtcNow.AddMonths(rnd.Next(-2, 0));
+                    var randomDate = DateTime.UtcNow.AddMonths(rnd.Next(-3, 1));
 
                     await callsManager!.AddNewCall(
                             new Calls { 
