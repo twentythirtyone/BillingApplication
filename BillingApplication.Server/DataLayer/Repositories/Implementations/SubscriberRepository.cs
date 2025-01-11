@@ -285,14 +285,20 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                                      .Where(x => x.CreationDate.Date >= startDate && x.CreationDate.Date <= endDate)
                                      .ToListAsync();
 
-            var newUsersByMonth = users
-                .GroupBy(x => x.CreationDate.ToUniversalTime().ToString("MMMM", new System.Globalization.CultureInfo("ru-RU"))) 
-                .OrderBy(g => DateTime.ParseExact(g.Key, "MMMM", new System.Globalization.CultureInfo("ru-RU")))
-                .ToDictionary(g => g.Key, g => g.Count());
+            var culture = new System.Globalization.CultureInfo("ru-RU");
 
+            var newUsersByMonth = users
+                .GroupBy(x => new { Year = x.CreationDate.Year, Month = x.CreationDate.Month })
+                .OrderBy(g => g.Key.Year)
+                .ThenBy(g => g.Key.Month)
+                .ToDictionary(
+                    g => $"{culture.DateTimeFormat.GetMonthName(g.Key.Month)}", // Название месяца
+                    g => g.Count()
+                );
 
             return newUsersByMonth;
         }
+
 
 
     }

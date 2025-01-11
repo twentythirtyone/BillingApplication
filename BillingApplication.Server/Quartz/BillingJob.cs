@@ -42,7 +42,7 @@ namespace BillingApplication.Server.Quartz
 
                     if (DateTime.UtcNow.Subtract(lastPaymentDate).Days > 30)
                     {
-                        if(user.Balance >= user.Tariff.Price)
+                        if(user.Balance >= user.Tariff.Price && user.Tariff.Id != Constants.DEFAULT_TARIFF_ID)
                         {
                             var bundle = await tariffManager.GetBundleByTariffId(user.Tariff.Id);
                             user.Internet += bundle.Internet;
