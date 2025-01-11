@@ -341,9 +341,11 @@ height: 34px;
     }
 
 .content-layout {
+    width: 1400px;
     display:flex;
     margin-top: 15px;
     justify-content: center;
+    overflow: hidden;
 }
 
 /* Боковая панель */
@@ -355,6 +357,7 @@ height: 34px;
     top: 0;
     height: 86.9vh;
     margin-right: 20px;
+    margin-left: -100px;
 }
 .sidebar-title {
     color: #AB3D36;
