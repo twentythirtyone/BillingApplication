@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using React.AspNet;
 using System.Security.Claims;
 using System.Text;
+using System.Net;
 using BillingApplication.Server.Services.Manager.BundleManager;
 using BillingApplication.Server.Services.Manager.SubscriberManager;
 using BillingApplication.Server.Services.Manager.TariffManager;
@@ -131,7 +132,7 @@ internal class Program
         {
             options.AddPolicy("AllowSpecificOrigin", builder =>
             {
-                builder.WithOrigins("https://localhost:5173")
+                builder.WithOrigins(["https://alfatelekom.ru"])
                        .AllowAnyHeader()
                        .AllowAnyMethod()
                        .AllowCredentials();

@@ -1,0 +1,19 @@
+FROM node:18-alpine
+
+LABEL org.opencontainers.image.source https://github.com/twentythirtyone/BillingApplication
+
+RUN apk add --no-cache bash
+
+WORKDIR /app
+
+COPY billingapplication.client/package*.json ./
+
+RUN npm install react-loading && npm install
+
+COPY billingapplication.client/ .
+
+COPY ./docker/scripts/wait-for-it.sh ./scripts/
+
+EXPOSE 5173
+
+CMD ["npm", "run", "dev"]

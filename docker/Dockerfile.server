@@ -1,0 +1,26 @@
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+
+LABEL org.opencontainers.image.source https://github.com/twentythirtyone/BillingApplication
+
+WORKDIR /src
+
+COPY BillingApplication.Server/ ./
+
+RUN dotnet restore "BillingApplication.Server.csproj"
+
+RUN dotnet build "BillingApplication.Server.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "BillingApplication.Server.csproj" -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+
+COPY --from=publish /app/publish .
+
+ENV DOTNET_USER_SECRETS=/root/.microsoft/usersecrets
+
+EXPOSE 7262
+EXPOSE 5183
+
+ENTRYPOINT ["dotnet", "BillingApplication.Server.dll"]

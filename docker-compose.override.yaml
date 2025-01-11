@@ -1,0 +1,15 @@
+services:
+  server:
+    volumes:
+      - ${APPDATA}/microsoft/usersecrets:/root/.microsoft/usersecrets
+
+  nginx:
+    build:
+      dockerfile: docker/Dockerfile.nginx.local
+    image: ghcr.io/twentythirtyone/billing-nginx-local:latest
+    volumes:
+      - ./local/nginx/ssl:/etc/nginx/ssl 
+  
+  pgbouncer:
+    ports:
+      - 6432:6432

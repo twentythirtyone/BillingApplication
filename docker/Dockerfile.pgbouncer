@@ -1,0 +1,7 @@
+FROM edoburu/pgbouncer:latest
+
+LABEL org.opencontainers.image.source https://github.com/twentythirtyone/BillingApplication
+
+COPY docker/scripts/entrypoint.sh /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]

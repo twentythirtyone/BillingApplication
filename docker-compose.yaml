@@ -1,0 +1,88 @@
+volumes:
+  postgres-data:
+    external: false
+
+networks:
+  alpha-network:
+
+services:
+  client:
+    container_name: billing-app-client
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.client
+    image: ghcr.io/twentythirtyone/billing-clinet:latest
+    environment:
+      - BACKEND_HOST=http://server
+      - BACKEND_PORT=5183
+    command: ["sh", "-c", "./scripts/wait-for-it.sh server:5183 -- npm run dev"]
+    depends_on:
+      - server
+    networks:
+      alpha-network:
+
+  server:
+    container_name: billing-app-server
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.server
+    image: ghcr.io/twentythirtyone/billing-server:latest    
+    environment:
+      - ASPNETCORE_URLS=http://+:5183
+      - ASPNETCORE_HOSTINGSTARTUPASSEMBLIES=Microsoft.AspNetCore.SpaProxy
+      - DOTNET_RUNNING_IN_CONTAINER=true
+    volumes:
+      - ${HOME}/.microsoft/usersecrets:/root/.microsoft/usersecrets
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      alpha-network:
+  
+  nginx:
+    container_name: billing-app-nginx
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.nginx
+    image: ghcr.io/twentythirtyone/billing-nginx:latest
+    ports:
+      - "443:443" 
+    command: ["sh", "-c", "./scripts/wait-for-it.sh client:5173 -- nginx -g 'daemon off;'"]
+    volumes:
+      - ${CERT_PATH}:/etc/nginx/ssl 
+      - /etc/letsencrypt:/etc/letsencrypt 
+    depends_on:
+      - server 
+      - client
+    networks:
+      alpha-network:
+
+  db:
+    container_name: billing-app-db
+    image: postgres:15-alpine
+    env_file:
+      - ./.env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      alpha-network:
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 7s
+      timeout: 3s
+      retries: 5
+  
+  pgbouncer:
+    container_name: billing-app-pgbouncer
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.pgbouncer
+    image: ghcr.io/twentythirtyone/billing-pgbouncer:latest
+    restart: always
+    networks:
+      alpha-network:
+    env_file:
+      - ./.env
+    depends_on:
+      - db

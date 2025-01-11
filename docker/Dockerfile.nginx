@@ -1,0 +1,10 @@
+FROM nginx:alpine
+
+LABEL org.opencontainers.image.source https://github.com/twentythirtyone/BillingApplication
+
+RUN apk add --no-cache bash
+
+COPY ./nginx /etc/nginx
+COPY ./docker/scripts/wait-for-it.sh ./scripts/
+
+CMD ["nginx", "-g", "daemon off;"]
