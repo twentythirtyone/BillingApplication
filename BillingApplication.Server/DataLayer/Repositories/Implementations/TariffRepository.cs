@@ -60,7 +60,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             foreach (var subscriber in tariff.Subscribers)
             {
                 subscriber.TariffId = Constants.DEFAULT_TARIFF_ID;
-                await emailSender.SendEmailAsync(subscriber.Email, "Уведомление", "Ваш тариф устарел и больше не функционирует.\n" +
+                await emailSender.SendEmailAsync(subscriber.Email, "Уведомление", "Ваш тариф устарел и больше не функционирует. " +
                                                                                   "Ваши остатки пакетов сохранены, но по их окончанию условия тарифа" +
                                                                                   "прекращают своё действие. ");
                 context.TariffChanges.Add(
