@@ -176,8 +176,22 @@ namespace BillingApplication.Server.Services.Initializers
             async void AddTariffIfNotExist(int id, string title, int price, int bundleId)
             {
                 if (existingTariffs.Any(eb => eb.Id == id)) return;
-
                 var bundle = await dbContext.Bundles.FindAsync(bundleId);
+
+                if (id == 1)
+                {
+                    var defaultTariff = await dbContext.Tariffs.FindAsync(1);
+                    if (defaultTariff != null)
+                    {
+                        defaultTariff.Title = title;
+                        defaultTariff.Price = price;
+                        defaultTariff.Description = "";
+                        defaultTariff.TariffPlan = bundleId;
+                        defaultTariff.Bundle = bundle!;
+                        return;
+                    }
+                }
+
                 dbContext.Tariffs.Add(new TariffEntity
                 {
                     Id = id,

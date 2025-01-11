@@ -1,6 +1,8 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Entities;
 using BillingApplication.Server.DataLayer.Entities;
+using BillingApplication.Services.Models.Subscriber.Stats;
+using BillingApplication.Services.Models.Utilites;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication
@@ -30,6 +32,7 @@ namespace BillingApplication
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            AutoIncrementAdd(modelBuilder);
 
             // Связь между PassportInfo и Subscriber
             modelBuilder.Entity<PassportInfoEntity>()
@@ -96,7 +99,7 @@ namespace BillingApplication
                 .HasMany(b => b.Tariffs) // Один бандл имеет много тарифов
                 .WithOne(t => t.Bundle) // У тарифа есть один бандл
                 .HasForeignKey(t => t.TariffPlan)// Внешний ключ в тарифе
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             // Связь между Bundle и Extras
@@ -131,6 +134,21 @@ namespace BillingApplication
                 .WithMany() // Один пользователь может не иметь связанных изменений
                 .HasForeignKey(oc => oc.NewUserId)
                 .OnDelete(DeleteBehavior.SetNull); // Внешний ключ для нового пользователя
+        }
+
+        void AutoIncrementAdd(ModelBuilder modelBuilder)
+        {
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                var clrType = entityType.ClrType;
+                var idProperty = clrType.GetProperty("Id");
+
+                if (idProperty != null && idProperty.PropertyType == typeof(int))
+                {
+                    modelBuilder.Entity(clrType).Property("Id").ValueGeneratedOnAdd();
+                }
+            }
+
         }
     }
 }
