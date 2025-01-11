@@ -133,7 +133,7 @@ export const TariffTable = () => {
             </table>
           </div>
   
-          {!showModal && (
+          { isAdmin && !showModal && (
             <button className="add-new-tariff" onClick={handleAddClick}>
               Добавить новый план...
             </button>

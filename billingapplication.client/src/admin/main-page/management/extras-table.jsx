@@ -134,7 +134,7 @@ export const ExtrasTable = () => {
       </div>
       
   
-      {!showModal && (
+      {isAdmin && !showModal && (
         <button className="add-new-tariff" onClick={handleAddClick}>
           Добавить новую услугу...
         </button>
