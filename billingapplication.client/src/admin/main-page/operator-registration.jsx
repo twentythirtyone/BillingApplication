@@ -34,8 +34,6 @@ export const OperatorRegistrationForm = () => {
                 isAdmin: formData.isAdmin,
             }
 
-            console.log('Отправляемое тело запроса:', JSON.stringify(requestBody, null, 2));
-
             const response = await fetch(
                 '/billingapplication/auth/register/operator',
                 {

@@ -1594,3 +1594,14 @@ body {
 .admin-sidebar {
     margin-left: 70px;
 }
+
+.extras-modal-select{
+    padding: 2px 12px;
+    border-radius: 12px;
+    margin-bottom: 5px;
+    margin-top: -3px;
+    margin-left: 9px;
+    width: 300px;
+}
+
+.extras-modal-select:focus { outline: none; }

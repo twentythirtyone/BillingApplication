@@ -81,14 +81,17 @@ export const ExtrasFormModal = ({ extra, onClose, onSave }) => {
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: +e.target.value })}
                 />
+                <div style={{display:'flex'}}>
                 <label>
                     Тип услуги:
                 </label>
-                <select value={serviceType} onChange={handleServiceChange}>
+                <select className='extras-modal-select' value={serviceType} onChange={handleServiceChange}>
                     <option value="internet">Интернет</option>
                     <option value="callTime">Минуты</option>
                     <option value="messages">СМС</option>
                 </select>
+                </div>
+                
                 {serviceType === 'internet' && (
                     <label>
                         Интернет (ГБ):
@@ -100,14 +103,17 @@ export const ExtrasFormModal = ({ extra, onClose, onSave }) => {
                     </label>
                 )}
                 {serviceType === 'callTime' && (
-                    <label>
+                    <>
+                    
+                    <label style={{marginBottom: '0px'}}>
                         Звонки:
+                    </label>
                         <TimeField
                             value={formData.callTime}
                             onChange={(e) => setFormData({ ...formData, callTime: e.target.value })}
                             showSeconds
                         />
-                    </label>
+                        </>
                 )}
                 {serviceType === 'messages' && (
                     <label>
