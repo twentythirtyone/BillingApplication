@@ -1,15 +1,13 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Entities;
 using BillingApplication.Services.Auth;
-using BillingApplication.Services.Models.Subscriber;
-using BillingApplication.Services.Models.Utilites;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication.Server.Services.Initializers
 {
     public class DbContextInitializer
     {
-        public static void InitializeDbContext(BillingAppDbContext dbContext, IEncrypt encrypt)
+        public async static void InitializeDbContext(BillingAppDbContext dbContext, IEncrypt encrypt)
         {
             dbContext.Database.Migrate();
             var existingOperators = dbContext.Operators.ToArray();
@@ -105,7 +103,22 @@ namespace BillingApplication.Server.Services.Initializers
                 }
                 );
 
+            await SyncAutoIncrement(dbContext, "Operators");
+            await SyncAutoIncrement(dbContext, "Subscribers");
+            await SyncAutoIncrement(dbContext, "PassportInfos");
+            await SyncAutoIncrement(dbContext, "Bundles");
+            await SyncAutoIncrement(dbContext, "Tariffs");
+            await SyncAutoIncrement(dbContext, "Extras");
+
             dbContext.SaveChanges();
+
+            async Task SyncAutoIncrement(DbContext dbContext, string tableName)
+            {
+                var sql = $"SELECT setval(pg_get_serial_sequence('\"{tableName}\"', 'Id'), MAX(\"{tableName}\".\"Id\")) FROM \"{tableName}\";";
+                await dbContext.Database.ExecuteSqlRawAsync(sql);
+            }
+
+            
 
             void AddOperatorIfNotExist(string email, string nickname, string password, bool isAdmin)
             {
@@ -153,7 +166,7 @@ namespace BillingApplication.Server.Services.Initializers
                 
             }
 
-            async void AddPassportIfNotExist(PassportInfoEntity passport)
+            void AddPassportIfNotExist(PassportInfoEntity passport)
             {
                 if (existingPassports.Any(eb => eb.Id == passport.Id)) return;
 
