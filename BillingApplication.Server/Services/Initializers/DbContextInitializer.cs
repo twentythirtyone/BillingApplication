@@ -214,6 +214,22 @@ namespace BillingApplication.Server.Services.Initializers
                    Registration = "Екакебибург"
                }
                );
+            AddUserIfNotExist(
+               email: "andreipogirei@yandex.ru",
+               number: "89999996986",
+               balance: 1000,
+               password: "Qwerty123!",
+               passport: new PassportInfoEntity
+               {
+                   Id = 13,
+                   ExpiryDate = DateTime.UtcNow,
+                   FullName = "Бибонов Биг Босс",
+                   IssueDate = DateTime.UtcNow,
+                   IssuedBy = "МВД России",
+                   PassportNumber = "6666 666664",
+                   Registration = "Екакебибург"
+               }
+               );
 
             AddUserIfNotExist(
               email: "holofaceit123@gmail.com",

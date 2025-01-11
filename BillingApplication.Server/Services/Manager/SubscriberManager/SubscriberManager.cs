@@ -65,10 +65,23 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
 
         public async Task<SubscriberViewModel?> ValidateSubscriberCredentials(string phoneNumber, string password)
         {
-            // Находим пользователя по Телефону
             var user = await subscriberRepository.GetSubscriberByPhone(phoneNumber);
+            if (phoneNumber.StartsWith("+") && user == null)
+            {
+                phoneNumber = "8" + phoneNumber.Substring(1, phoneNumber.Length-2);
+                user = await subscriberRepository.GetSubscriberByPhone(phoneNumber);
+            }
+            else if (user == null)
+            {
+                phoneNumber = "+7" + phoneNumber.Substring(1, phoneNumber.Length - 1);
+                user = await subscriberRepository.GetSubscriberByPhone(phoneNumber);
+            }
+
             if (user == null)
+            {
                 throw new UserNotFoundException("Телефон пользователя не найден");
+
+            }
 
             // Проверяем пароль
             var hashedPassword = encrypt.HashPassword(password, user.Salt);

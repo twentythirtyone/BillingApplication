@@ -67,7 +67,7 @@ namespace BillingApplication.Server.Services.MailService
                 {
                     try
                     {
-                        await client.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.SslOnConnect);
+                        await client.ConnectAsync(_settings.Host, _settings.Port, SecureSocketOptions.Auto);
                         client.AuthenticationMechanisms.Remove("XOAUTH2");
                         client.Authenticate(_settings.UserName, _settings.Password);
                         await client.SendAsync(mail);
