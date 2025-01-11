@@ -1,16 +1,37 @@
 ﻿import logo from '../assets/img/logo.svg';
-import { useUser } from '../user-context.jsx';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const Header = () => {
-    const { userData, loading } = useUser(); // Деструктурируем данные и статус загрузки
+    const token = localStorage.getItem("token");
+    const [userData, setUserData] = useState({
+        email: "...",
+        passportInfo: {
+            fullName: '... '
+        }
+    });
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
     const menuRef = useRef(null);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
+    };
+
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get("/billingapplication/subscribers/current", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "*/*",
+                },
+            });
+
+            setUserData(response.data);
+        } catch (error) {
+            console.error("Ошибка при получении данных пользователя:", error);
+        }
     };
 
     const handleLogout = async () => {
@@ -37,6 +58,7 @@ const Header = () => {
     };
 
     useEffect(() => {
+        fetchUserData();
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
                 setIsMenuOpen(false);
@@ -48,17 +70,9 @@ const Header = () => {
         };
     }, []);
 
-    // Обработка загрузки данных пользователя
-    if (loading) {
-        return <div>Загрузка...</div>;
-    }
 
-    // Если данных пользователя нет (например, не авторизован)
-    if (!userData) {
-        return null; // Или можно перенаправить пользователя
-    }
-
-    const splittedUserName = userData.passportInfo.fullName.split(' ');
+    const userName = userData.passportInfo.fullName || 'Загрузка...'
+    const splittedUserName = userName.split(' ') ;
 
     return (
         <header className="main-page-header">
@@ -71,7 +85,7 @@ const Header = () => {
                 <button className="profile-button" onClick={toggleMenu}>
                     <img className="profile-pic" src="..\src\assets\img\avatar.svg" alt="Avatar" />
                     {splittedUserName[0] + ' ' + splittedUserName[1]}
-                    <div className="profile-button-email">{userData.email}</div>
+                    <div className="profile-button-email">{userData.email || 'Загрузка...'}</div>
                 </button>
                 {isMenuOpen && (
                     <div className="profile-menu">

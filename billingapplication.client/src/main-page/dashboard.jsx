@@ -1,61 +1,61 @@
 import { useEffect, useState } from 'react';
 import ReactLoading from 'react-loading';
-import { useUser } from '../user-context.jsx';
 import { AdditionalServices } from './additional-services.jsx';
 import { TariffOptions } from './tariff-options.jsx';
 import { fetchExpenses } from '../requests.jsx';
+import axios from "axios";
 
 const Dashboard = () => {
-    const { userData, loading: userLoading, refreshUserData } = useUser(); // Достаем метод обновления из контекста
+    const token = localStorage.getItem("token");
+    const [userData, setUserData] = useState({
+        number: "",
+        email: "",
+        balance: "",
+        tariff: {
+            title: "",
+            bundle: {
+                callTime: "",
+            }
+        }
+    });
     const [userExpenses, setUserExpenses] = useState(null);
-    const [loading, setLoading] = useState(true);
 
     // Функция для загрузки расходов
     const loadExpenses = async () => {
-        setLoading(true);
         try {
             const expenses = await fetchExpenses();
             setUserExpenses(expenses);
         } catch (err) {
             console.error("Ошибка при загрузке расходов:", err);
-        } finally {
-            setLoading(false);
+        }
+    };
+
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get("/billingapplication/subscribers/current", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: "*/*",
+                },
+            });
+
+            setUserData(response.data);
+        } catch (error) {
+            console.error("Ошибка при получении данных пользователя:", error);
         }
     };
 
     // Первичная загрузка данных
     useEffect(() => {
-        const initialize = async () => {
-            if (userData) {
-                await loadExpenses();
-            }
-            setLoading(false); // Завершаем первичную загрузку
-        };
-        initialize();
+        document.title = "Панель управления";
+        fetchUserData()
+        loadExpenses();  
     }, [userData]);
 
-    useEffect(() => {
-        document.title = "Панель управления";
-    }, []);
-
-    // Если данные пользователя или расходы загружаются, показываем индикатор
-    if (userLoading || loading) {
-        return (
-            <div className="dashboard">
-                <ReactLoading
-                    type="cylon"
-                    color="#FF3B30"
-                    height={667}
-                    width={375}
-                    className="loading"
-                />
-            </div>
-        );
-    }
-
-    // Если пользователь не авторизован
-    if (!userData) {
-        return null; // Вы можете добавить здесь логику перенаправления, если нужно
+    if (!userData || !userExpenses) {
+        return (<div className="tariff">
+            <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading'/>;
+        </div>)
     }
 
     const prettyNumber = userData.number.replace(

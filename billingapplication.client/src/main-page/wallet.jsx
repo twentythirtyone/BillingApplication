@@ -1,89 +1,91 @@
 ﻿import { useEffect, useState } from 'react';
-import { useUser } from '../user-context.jsx';
+import axios from 'axios';
 import cardIcon from '../assets/img/wallet/card.svg';
 import simIcon from '../assets/img/wallet/sim.svg';
 import smsIcon from '../assets/img/wallet/sms.svg';
 import internetIcon from '../assets/img/wallet/internet.svg';
 import dollarIcon from '../assets/img/wallet/dollar.svg';
+import ReactLoading from 'react-loading';
 import { ExpensesChart } from './expences-graph.jsx';
 
-const token = localStorage.getItem('token');
-
-function Wallet() {
-    const [transactionHistory, setTransactionHistory] = useState([]);
+export const Wallet = () => {
+    const [transactionHistory, setTransactionHistory] = useState(null);
     const [error, setError] = useState(null);
-    const [visibleCount, setVisibleCount] = useState(3);
     const [isPopupVisible, setPopupVisible] = useState(false);
     const [amount, setAmount] = useState('');
     const [isLoading, setLoading] = useState(false);
     const [expenses, setExpenses] = useState(0);
     const [filterType, setFilterType] = useState('payments');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
 
-    const { userData, loading: userLoading, refreshUserData } = useUser();
+    const token = localStorage.getItem("token");
+    const [userData, setUserData] = useState({
+        number: "Нет данных",
+        email: "Нет данных",
+        balance: 0,
+        tariff: {
+            title: "Нет данных",
+            bundle: {
+                callTime: "Нет данных",
+            }
+        }
+    });
+
+    const fetchUserData = async () => {
+        try {
+            const response = await axios.get("/billingapplication/subscribers/current", {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setUserData(response.data);
+        } catch (error) {
+            console.error("Ошибка при получении данных пользователя:", error);
+        }
+    };
+
+    const fetchHistory = async () => {
+        try {
+            const response = await axios.get('/billingapplication/subscribers/wallet/history', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setTransactionHistory(response.data);
+        } catch (err) {
+            setError(err.message);
+        }
+    };
+
+    const getExpenses = async () => {
+        try {
+            const response = await axios.get('/billingapplication/subscribers/expenses/month/current', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            setExpenses(response.data);
+        } catch (error) {
+            console.error("Ошибка получения данных расходов:", error);
+        }
+    };
 
     useEffect(() => {
         document.title = 'Кошелек';
-
-        const fetchHistory = async () => {
-            try {
-                const response = await fetch('/billingapplication/subscribers/wallet/history', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`Ошибка: ${response.status}`);
-                }
-    
-                const data = await response.json();
-                setTransactionHistory(data);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
-        const getExpenses = async () => {
-            try {
-                const response = await fetch('/billingapplication/subscribers/expenses/month/current', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Ошибка: ${response.status}`);
-                }
-
-                const data = await response.json();
-                setExpenses(data);
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-
+        fetchUserData();
         fetchHistory();
         getExpenses();
     }, []);
-
-    const handleShowMore = () => {
-        setVisibleCount((prevCount) => prevCount + 3);
-    };
 
     const handleTopUp = async () => {
         if (!amount || isNaN(amount)) {
             alert('Введите корректную сумму');
             return;
         }
-
         setLoading(true);
 
         const topUpData = {
-            id: 0,
             phoneId: userData.id,
             senderInfo: userData?.number || '',
             amount: parseFloat(amount),
@@ -91,59 +93,60 @@ function Wallet() {
         };
 
         try {
-            const token = localStorage.getItem('token');
-            const response = await fetch('/billingapplication/topups/add', {
-                method: 'POST',
+            const response = await axios.post('/billingapplication/topups/add', topUpData, {
                 headers: {
-                    'Content-Type': 'application/json',
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify(topUpData),
             });
-
-            if (!response.ok) {
-                throw new Error('Ошибка при пополнении счета');
-            }
-
             alert('Счет успешно пополнен');
             setPopupVisible(false);
             setAmount('');
-            refreshUserData();
+            fetchUserData();
         } catch (err) {
-            alert(err.message);
+            alert(err.response?.data?.message || "Ошибка пополнения");
         } finally {
             setLoading(false);
         }
     };
 
     const getIcon = (string) => {
-        if (string.includes('звонок')) {
-            return simIcon;
-        } else if (string.toLowerCase().includes('смс')) {
-            return smsIcon;
-        } else if (string.toLowerCase().includes('гб') || string.toLowerCase().includes('гига')) {
-            return internetIcon;
-        } else if (string.toLowerCase().includes('пополнение')) {
-            return dollarIcon;
-        } else {
-            return cardIcon;
-        }
+        if (string.includes('звонок')) return simIcon;
+        if (string.toLowerCase().includes('смс')) return smsIcon;
+        if (string.toLowerCase().includes('гб') || string.toLowerCase().includes('гига')) return internetIcon;
+        if (string.toLowerCase().includes('пополнение')) return dollarIcon;
+        return cardIcon;
     };
 
     const handleFilterChange = (event) => {
         setFilterType(event.target.value);
     };
 
-    const getFilteredData = () => {
-        if (filterType === 'payments') {
-            return transactionHistory.payments || [];
-        } else if (filterType === 'topUps') {
-            return transactionHistory.topUps || [];
-        }
-        return [];
+    const handleDateFilter = () => {
+        const currentHistory = getFilteredData();
+        if (!Array.isArray(currentHistory)) return [];
+        const filtered = currentHistory.filter((transaction) => {
+            const transactionDate = new Date(transaction.date);
+            const start = startDate ? new Date(startDate) : null;
+            const end = endDate ? new Date(endDate) : null;
+            return (!start || transactionDate >= start) && (!end || transactionDate <= end);
+        });
+        return filtered;
     };
 
-    const filteredData = transactionHistory ? getFilteredData() : [];
+    const getFilteredData = () => {
+        if (!transactionHistory || typeof transactionHistory !== 'object') return [];
+        return filterType === 'payments' ? transactionHistory.payments || [] : transactionHistory.topUps || [];
+    };
+
+    const filteredData = handleDateFilter();
+
+    if (!transactionHistory || !userData || !expenses) {
+        return (
+            <div className="tariff">
+                <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading' />;
+            </div>
+        );
+    }
 
     return (
         <div className="wallet">
@@ -185,18 +188,39 @@ function Wallet() {
             <div className="transaction-history">
                 <h3>История операций</h3>
 
-                <select value={filterType} onChange={handleFilterChange} className='history-select'>
-                    <option value="payments">Списания</option>
-                    <option value="topUps">Пополнения</option>
-                </select>
+                <div className='history-filters'>
+                    <select value={filterType} onChange={handleFilterChange} className='history-select'>
+                        <option value="payments">Списания</option>
+                        <option value="topUps">Пополнения</option>
+                    </select>
+                    <div className='history-filter-date'>
+                        <div >c </div>
+                        <input
+                            type="date"
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                            className='date-filter'
+                            placeholder='Начальная дата'
+                        />
+                        <div className='history-filter-label'>по</div>
+                        <input
+                            type="date"
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            className='date-filter'
+                            placeholder='Конечная дата'
+                        />
+                        </div>
+                </div>
+
                 {error ? (
                     <p className="error">{error}</p>
                 ) : filteredData.length === 0 ? (
-                    <p>Загрузка или нет данных...</p>
+                    <ul className="transaction-list"><li className="topup-button transaction">Нет данных</li></ul>
                 ) : (
                     <>
                         <ul className="transaction-list">
-                            {filteredData.slice(0, visibleCount).map((transaction, index) => (
+                            {filteredData.map((transaction, index) => (
                                 <li key={index} className="topup-button transaction">
                                     <div className="topup-button-img transaction-img">
                                         <img src={getIcon(transaction.name || 'Пополнение')} alt="icon" />
@@ -209,11 +233,6 @@ function Wallet() {
                                 </li>
                             ))}
                         </ul>
-                        {visibleCount < filteredData.length && (
-                            <button className="show-more-transactions" onClick={() => setVisibleCount(visibleCount + 5)}>
-                                Показать еще
-                            </button>
-                        )}
                     </>
                 )}
             </div>
@@ -224,6 +243,4 @@ function Wallet() {
             <ExpensesChart />
         </div>
     );
-}
-
-export default Wallet;
+};
