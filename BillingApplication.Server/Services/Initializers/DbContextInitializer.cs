@@ -216,7 +216,7 @@ namespace BillingApplication.Server.Services.Initializers
                );
 
             AddUserIfNotExist(
-              email: "holofaceit@gmail.com",
+              email: "holofaceit123@gmail.com",
               number: "89540326986",
               balance: 1000,
               password: "Qwerty123!",
@@ -232,7 +232,7 @@ namespace BillingApplication.Server.Services.Initializers
               }
               );
             AddUserIfNotExist(
-              email: "holofaceit@gmail.com",
+              email: "holo12314565faceit@gmail.com",
               number: "89345676986",
               balance: 1000,
               password: "Qwerty123!",
