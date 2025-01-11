@@ -1,4 +1,5 @@
 ﻿using BillingApplication.Mapper;
+using BillingApplication.Server.Services.Initializers;
 using BillingApplication.Server.Services.Manager.CallsManager;
 using BillingApplication.Server.Services.Manager.ExtrasManager;
 using BillingApplication.Server.Services.Manager.InternetManager;
@@ -32,6 +33,8 @@ namespace BillingApplication.Server.Quartz
                 var messagesManager = scope.ServiceProvider.GetService<IMessagesManager>();
                 var internetManager = scope.ServiceProvider.GetService<IInternetManager>();
                 var extrasManager = scope.ServiceProvider.GetService<IExtrasManager>();
+                var paymentsManager = scope.ServiceProvider.GetService<IPaymentsManager>();
+
 
                 var subscribers = await subscriberManager!.GetSubscribers();
 
@@ -41,15 +44,13 @@ namespace BillingApplication.Server.Quartz
                 {
                     var minutes = rnd.Next(1, 10);
                     var gbytes = rnd.Next(1, 3);
-                    var extraNames = (await extrasManager.GetExtras())
-                        .Select(x=>x.Title)
-                        .OrderBy(x=>x)
-                        .ToArray();
-                    var randomExtraName = extraNames[rnd.Next(extraNames.Length)]; 
+                    var extraNames = (await extrasManager.GetExtras()).ToArray();
+                    var randomExtra = extraNames[rnd.Next(extraNames.Length)]; 
+                    var randomDate = DateTime.UtcNow.AddMonths(rnd.Next(-2, 0));
 
                     await callsManager!.AddNewCall(
                             new Calls { 
-                                Date = DateTime.UtcNow,
+                                Date = randomDate,
                                 Duration = minutes,
                                 FromSubscriberId = (int)user.Id!,
                                 ToPhoneNumber = "88009003254",
@@ -60,7 +61,7 @@ namespace BillingApplication.Server.Quartz
                     await messagesManager!.AddNewMessage(
                             new Messages
                             {
-                                Date = DateTime.UtcNow,
+                                Date = randomDate,
                                 FromPhoneId = (int)user.Id!,
                                 ToPhoneNumber = "88009003254",
                                 MessageText = Guid.NewGuid().ToString().Substring(0, 15),
@@ -71,12 +72,23 @@ namespace BillingApplication.Server.Quartz
                     await internetManager!.AddTraffic(
                             new Internet 
                             { 
-                                Date = DateTime.UtcNow,
+                                Date = randomDate,
                                 PhoneId = (int)user.Id!,
                                 SpentInternet = gbytes * 1024,
                                 Price = ((gbytes * 1024) / 100) * Constants.INTERNET_PER_100MB_PRICE
                             }
                         );
+
+                    await paymentsManager!.AddPayment(
+                        new Payment 
+                        { 
+                            Date = randomDate,
+                            Amount = randomExtra.Price,
+                            Name = randomExtra.Title,
+                            PhoneId = (int)user.Id
+                        }
+                    );
+
 
                     await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), user.PassportInfo, user.Tariff.Id);
                 }

@@ -23,7 +23,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             var paymentEntity = PaymentMapper.PaymentModelToPaymenEntity(payment);
             paymentEntity!.Date = DateTime.UtcNow;
             var existingUser = await context.Subscribers.FindAsync(paymentEntity.PhoneId);
-            if (existingUser != null)
+            if (existingUser != null && existingUser.Balance >= payment.Amount)
             {
                 existingUser!.Balance -= payment.Amount;
                 await context.Payments.AddAsync(paymentEntity!);

@@ -59,7 +59,11 @@ namespace BillingApplication.Server.Quartz
 
                             if (id is not null)
                                 await SendEmail(emailSender!, user.Email, "Уведомление о плате за тариф",
-                                           $"Ежемесячное списание средств по тарифу.\nТелефон: {user.Number}\nСтоимость: {user.Tariff.Price}\nДата:{DateTime.UtcNow})");
+                                           @$"Ежемесячное списание средств по тарифу.
+                                              Телефон: {user.Number}
+                                              Стоимость: {user.Tariff.Price}
+                                              Дата:{DateTime.UtcNow}
+                                            ");
                             
                         }
                         else

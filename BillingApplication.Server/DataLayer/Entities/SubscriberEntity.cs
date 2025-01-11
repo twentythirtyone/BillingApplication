@@ -6,31 +6,18 @@ namespace BillingApplication.Entities
 {
     public class SubscriberEntity
     {
-        [Column("id")]
         public int? Id { get; set; }
-        [Column("email")]
         public string Email { get; set; } = "";
-        [Column("password")]
         public string Password { get; set; } = "";
-        [Column("salt")]
         public string Salt { get; set; } = "";
-        [Column("passport_id")]
         public int? PassportId { get; set; }
-        [Column("tariff_id")]
         public int? TariffId { get; set; }
-        [Column("phone_number")]
         public required string Number { get; set; }
-        [Column("balance")]
         public decimal Balance { get; set; }
-        [Column("payment_date")]
         public DateTime PaymentDate { get; set; }
-        [Column("call_time")]
         public TimeSpan CallTime { get; set; }
-        [Column("messages")]
         public int MessagesCount { get; set; }
-        [Column("internet")]
         public long InternetAmount { get; set; }
-        [Column("creation_date")]
         public DateTime CreationDate { get; set; }
 
 
