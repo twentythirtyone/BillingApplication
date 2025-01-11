@@ -138,17 +138,57 @@ namespace BillingApplication
 
         void AutoIncrementAdd(ModelBuilder modelBuilder)
         {
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                var clrType = entityType.ClrType;
-                var idProperty = clrType.GetProperty("Id");
+            modelBuilder.Entity<PassportInfoEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
 
-                if (idProperty != null && idProperty.PropertyType == typeof(int))
-                {
-                    modelBuilder.Entity(clrType).Property("Id").ValueGeneratedOnAdd();
-                }
-            }
+            modelBuilder.Entity<OperatorEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
 
+            modelBuilder.Entity<SubscriberEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<BundleEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<TariffEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ExtrasEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<PaymentEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<TopUpsEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<CallsEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<InternetEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<MessagesEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<OwnerChangeEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<TariffChangeEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
         }
     }
 }

@@ -148,17 +148,25 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                 .FirstOrDefaultAsync(x => x.Id == extraId);
             if (user != null && existingExtra != null)
             {
-                await paymentsRepository.AddPayment(new Payment()
+                if(user.Balance >= existingExtra.Price)
                 {
-                    Name = $"Покупка дополнительного пакета \"{existingExtra.Title}\"",
-                    Date = DateTime.UtcNow,
-                    Amount = existingExtra.Price,
-                    PhoneId = subscriberId
-                });
-                user.InternetAmount += existingExtra.Bundle.Internet;
-                user.MessagesCount += existingExtra.Bundle.Messages;
-                user.CallTime += existingExtra.Bundle.CallTIme;
-                return await context.SaveChangesAsync();
+                    await paymentsRepository.AddPayment(new Payment()
+                    {
+                        Name = $"Покупка дополнительного пакета \"{existingExtra.Title}\"",
+                        Date = DateTime.UtcNow,
+                        Amount = existingExtra.Price,
+                        PhoneId = subscriberId
+                    });
+                    user.InternetAmount += existingExtra.Bundle.Internet;
+                    user.MessagesCount += existingExtra.Bundle.Messages;
+                    user.CallTime += existingExtra.Bundle.CallTIme;
+                    return await context.SaveChangesAsync();
+                }
+                else
+                {
+                    throw new Exception("Недостаточно средств для покупки тарифа");
+                }
+                
             }
             return null;
         }
