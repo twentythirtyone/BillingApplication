@@ -78,11 +78,6 @@ namespace BillingApplication.Server.Quartz
                             }
                         );
 
-                    await subscriberManager!.AddExtraToSubscriber(
-                        randomExtraId,
-                        (int)user.Id
-                       );
-
                     await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), user.PassportInfo, user.Tariff.Id);
                 }
             }
