@@ -345,7 +345,7 @@ height: 34px;
     display:flex;
     margin-top: 15px;
     justify-content: center;
-    overflow: hidden;
+    overflow: auto;
 }
 
 /* Боковая панель */
