@@ -1,6 +1,8 @@
 ﻿using BillingApplication.DataLayer.Entities;
 using BillingApplication.Entities;
 using BillingApplication.Server.DataLayer.Entities;
+using BillingApplication.Services.Models.Subscriber.Stats;
+using BillingApplication.Services.Models.Utilites;
 using Microsoft.EntityFrameworkCore;
 
 namespace BillingApplication
@@ -30,6 +32,7 @@ namespace BillingApplication
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            AutoIncrementAdd(modelBuilder);
 
             // Связь между PassportInfo и Subscriber
             modelBuilder.Entity<PassportInfoEntity>()
@@ -96,7 +99,7 @@ namespace BillingApplication
                 .HasMany(b => b.Tariffs) // Один бандл имеет много тарифов
                 .WithOne(t => t.Bundle) // У тарифа есть один бандл
                 .HasForeignKey(t => t.TariffPlan)// Внешний ключ в тарифе
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             // Связь между Bundle и Extras
@@ -131,6 +134,61 @@ namespace BillingApplication
                 .WithMany() // Один пользователь может не иметь связанных изменений
                 .HasForeignKey(oc => oc.NewUserId)
                 .OnDelete(DeleteBehavior.SetNull); // Внешний ключ для нового пользователя
+        }
+
+        void AutoIncrementAdd(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PassportInfoEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<OperatorEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<SubscriberEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<BundleEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<TariffEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<ExtrasEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<PaymentEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<TopUpsEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<CallsEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<InternetEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<MessagesEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<OwnerChangeEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
+
+            modelBuilder.Entity<TariffChangeEntity>()
+                .Property(b => b.Id)
+                .ValueGeneratedOnAdd();
         }
     }
 }

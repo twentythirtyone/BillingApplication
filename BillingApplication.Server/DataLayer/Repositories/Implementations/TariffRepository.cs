@@ -27,10 +27,13 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             if (existingBundle == null)
             {
                 existingBundle = BundleMapper.BundleModelToBundleEntity(tariff!.Bundle);
-                await context.Bundles.AddAsync(
-                    existingBundle!
-                 );
+                await context.Bundles.AddAsync(existingBundle!);
+                await context.SaveChangesAsync();
             }
+
+            bundleId = existingBundle.Id;
+            existingBundle = await context.Bundles.FindAsync(bundleId);
+
             var tariffEntity = TariffMapper.TariftModelToTarifEntity(tariff, existingBundle!);
 
             if (context.Tariffs.Any(x => x.Title == tariff.Title))

@@ -1,6 +1,5 @@
 ﻿using BillingApplication.Mapper;
 using BillingApplication.Server.Services.Manager.CallsManager;
-using BillingApplication.Server.Services.Manager.ExtrasManager;
 using BillingApplication.Server.Services.Manager.InternetManager;
 using BillingApplication.Server.Services.Manager.MessagesManager;
 using BillingApplication.Server.Services.Manager.PaymentsManager;
@@ -14,10 +13,10 @@ using Quartz;
 
 namespace BillingApplication.Server.Quartz
 {
-    public class UserActionsJob : IJob
+    public class FakeDataJob : IJob
     {
         private readonly IServiceScopeFactory serviceScopeFactory;
-        public UserActionsJob(IServiceScopeFactory serviceScopeFactory)
+        public FakeDataJob(IServiceScopeFactory serviceScopeFactory)
         {
             this.serviceScopeFactory = serviceScopeFactory;
         }
@@ -31,7 +30,6 @@ namespace BillingApplication.Server.Quartz
                 var callsManager = scope.ServiceProvider.GetService<ICallsManager>();
                 var messagesManager = scope.ServiceProvider.GetService<IMessagesManager>();
                 var internetManager = scope.ServiceProvider.GetService<IInternetManager>();
-                var extrasManager = scope.ServiceProvider.GetService<IExtrasManager>();
 
                 var subscribers = await subscriberManager!.GetSubscribers();
 
@@ -41,19 +39,15 @@ namespace BillingApplication.Server.Quartz
                 {
                     var minutes = rnd.Next(1, 10);
                     var gbytes = rnd.Next(1, 3);
-                    var extraNames = (await extrasManager.GetExtras())
-                        .Select(x=>x.Title)
-                        .OrderBy(x=>x)
-                        .ToArray();
-                    var randomExtraName = extraNames[rnd.Next(extraNames.Length)]; 
 
                     await callsManager!.AddNewCall(
-                            new Calls { 
+                            new Calls
+                            {
                                 Date = DateTime.UtcNow,
                                 Duration = minutes,
                                 FromSubscriberId = (int)user.Id!,
                                 ToPhoneNumber = "88009003254",
-                                Price = Constants.CALL_PER_MINUTE_PRICE * minutes 
+                                Price = Constants.CALL_PER_MINUTE_PRICE * minutes
                             }
                         );
 
@@ -69,19 +63,14 @@ namespace BillingApplication.Server.Quartz
                         );
 
                     await internetManager!.AddTraffic(
-                            new Internet 
-                            { 
+                            new Internet
+                            {
                                 Date = DateTime.UtcNow,
                                 PhoneId = (int)user.Id!,
                                 SpentInternet = gbytes * 1024,
                                 Price = ((gbytes * 1024) / 100) * Constants.INTERNET_PER_100MB_PRICE
                             }
                         );
-
-                    await subscriberManager!.AddExtraToSubscriber(
-                        randomExtraId,
-                        (int)user.Id
-                       );
 
                     await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(user), user.PassportInfo, user.Tariff.Id);
                 }

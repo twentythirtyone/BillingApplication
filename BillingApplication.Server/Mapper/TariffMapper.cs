@@ -16,7 +16,7 @@ namespace BillingApplication.Mapper
                 Title = tariffModel.Title ?? "None",
                 Description = tariffModel.Description ?? "None",
                 Price = tariffModel.Price,
-                Bundle = bundleEntity
+                Bundle = bundleEntity,
             };
         }
 
