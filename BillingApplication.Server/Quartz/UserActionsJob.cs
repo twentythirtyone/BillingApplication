@@ -46,11 +46,10 @@ namespace BillingApplication.Server.Quartz
                     var gbytes = rnd.Next(1, 3);
                     var extraNames = (await extrasManager.GetExtras()).ToArray();
                     var randomExtra = extraNames[rnd.Next(extraNames.Length)]; 
-                    var randomDate = DateTime.UtcNow.AddMonths(rnd.Next(-2, 0));
 
                     await callsManager!.AddNewCall(
                             new Calls { 
-                                Date = randomDate,
+                                Date = DateTime.UtcNow.AddMonths(rnd.Next(-3, 1)),
                                 Duration = minutes,
                                 FromSubscriberId = (int)user.Id!,
                                 ToPhoneNumber = "88009003254",
@@ -61,7 +60,7 @@ namespace BillingApplication.Server.Quartz
                     await messagesManager!.AddNewMessage(
                             new Messages
                             {
-                                Date = randomDate,
+                                Date = DateTime.UtcNow.AddMonths(rnd.Next(-3, 1)),
                                 FromPhoneId = (int)user.Id!,
                                 ToPhoneNumber = "88009003254",
                                 MessageText = Guid.NewGuid().ToString().Substring(0, 15),
@@ -72,7 +71,7 @@ namespace BillingApplication.Server.Quartz
                     await internetManager!.AddTraffic(
                             new Internet 
                             { 
-                                Date = randomDate,
+                                Date = DateTime.UtcNow.AddMonths(rnd.Next(-3, 1)),
                                 PhoneId = (int)user.Id!,
                                 SpentInternet = gbytes * 1024,
                                 Price = ((gbytes * 1024) / 100) * Constants.INTERNET_PER_100MB_PRICE
@@ -82,7 +81,7 @@ namespace BillingApplication.Server.Quartz
                     await paymentsManager!.AddPayment(
                         new Payment 
                         { 
-                            Date = randomDate,
+                            Date = DateTime.UtcNow.AddMonths(rnd.Next(-3, 1)),
                             Amount = randomExtra.Price,
                             Name = randomExtra.Title,
                             PhoneId = (int)user.Id

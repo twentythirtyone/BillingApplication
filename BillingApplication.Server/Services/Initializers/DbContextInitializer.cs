@@ -215,6 +215,39 @@ namespace BillingApplication.Server.Services.Initializers
                }
                );
 
+            AddUserIfNotExist(
+              email: "holofaceit@gmail.com",
+              number: "89540326986",
+              balance: 1000,
+              password: "Qwerty123!",
+              passport: new PassportInfoEntity
+              {
+                  Id = 11,
+                  ExpiryDate = DateTime.UtcNow,
+                  FullName = "Баронов Мюнхаузен Викторов",
+                  IssueDate = DateTime.UtcNow,
+                  IssuedBy = "МВД России",
+                  PassportNumber = "6666 666664",
+                  Registration = "Екакебибург"
+              }
+              );
+            AddUserIfNotExist(
+              email: "holofaceit@gmail.com",
+              number: "89345676986",
+              balance: 1000,
+              password: "Qwerty123!",
+              passport: new PassportInfoEntity
+              {
+                  Id = 12,
+                  ExpiryDate = DateTime.UtcNow,
+                  FullName = "Непомнящий Ян Сергеевич",
+                  IssueDate = DateTime.UtcNow,
+                  IssuedBy = "МВД России",
+                  PassportNumber = "6666 666664",
+                  Registration = "Екакебибург"
+              }
+              );
+
             await SyncAutoIncrement(dbContext, "Operators");
             await SyncAutoIncrement(dbContext, "Subscribers");
             await SyncAutoIncrement(dbContext, "PassportInfos");
@@ -255,7 +288,7 @@ namespace BillingApplication.Server.Services.Initializers
                 var tariff = await dbContext.Tariffs.FindAsync(1);
 
                 AddPassportIfNotExist(passport);
-                var date = DateTime.UtcNow.AddMonths(new Random().Next(-2,0));
+                var date = DateTime.UtcNow.AddMonths(new Random().Next(-4,0));
 
                 dbContext.Subscribers.Add(new SubscriberEntity
                 {
