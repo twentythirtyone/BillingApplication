@@ -1,6 +1,7 @@
 ﻿/* eslint-disable react/prop-types */
 import { Doughnut } from "react-chartjs-2";
 import { timeToMinutes, getMaxValue } from './functions.js'
+import ReactLoading from 'react-loading';
 import "chart.js/auto";
 
 export const TariffOptions = ({ userData }) => {
@@ -28,6 +29,20 @@ export const TariffOptions = ({ userData }) => {
             },
         ],
     });
+
+        if (!userData) {
+            return (
+                <div className="dashboard">
+                    <ReactLoading
+                        type="cylon"
+                        color="#FF3B30"
+                        height={667}
+                        width={375}
+                        className="loading"
+                    />
+                </div>
+            );
+        }
 
     return (
         <div className="tariff-options">

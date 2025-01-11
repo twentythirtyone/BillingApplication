@@ -1,7 +1,4 @@
-﻿import getUserExpenses from './main-page/expences.jsx'
-
-
-import axios from 'axios';
+﻿import axios from 'axios';
 
 // Настройка базового клиента
 const apiClient = axios.create({

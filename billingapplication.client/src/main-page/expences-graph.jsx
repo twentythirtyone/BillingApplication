@@ -80,7 +80,7 @@ export const ExpensesChart = () => {
     }, []);
 
     return (
-        <div style={{ width: '600px', margin: '0 auto', marginTop: '40px', marginLeft: '0px' }}>
+        <div style={{ width: '500px', margin: '0 auto', marginTop: '0', marginLeft: '100px' }}>
             <Bar
                 data={chartData}
                 options={{
@@ -92,6 +92,9 @@ export const ExpensesChart = () => {
                     },
                     scales: {
                         x: {
+                            border:{
+                                display:false
+                              },
                             grid: {
                                 display: false,
                             },
@@ -104,6 +107,9 @@ export const ExpensesChart = () => {
                             },
                         },
                         y: {
+                            border:{
+                                display:false
+                              },
                             grid: {
                                 display: false,
                             },
