@@ -11,7 +11,10 @@ const tariffInstance = axios.create({
 
 const extraInstance = axios.create({
   baseURL: EXTRA_API,
-  headers: { Authorization: `Bearer ${TOKEN}` },
+  headers: { 
+    Authorization: `Bearer ${TOKEN}`,
+    Accept: '*/*',
+  },
 });
 
 

@@ -18,7 +18,7 @@ export const Sidebar = () => {
 
     return (
         <div className='sidebar admin-sidebar'>
-            <div className='sidebar-title admin-sidebar'>Billing System</div>
+            <div className='sidebar-title' style={{color:'white'}}>Billing System</div>
             <div className='sidebar-menu'>
                 {menuItems.map((item, index) => (
                     <NavLink to={item.path} key={index} className='sidebar-link admin-link'>

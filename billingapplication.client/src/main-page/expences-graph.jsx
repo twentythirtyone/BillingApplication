@@ -70,7 +70,6 @@ export const ExpensesChart = () => {
                         },
                     ],
                 });
-                console.log(serverData)
             } catch (error) {
                 console.error('Ошибка при получении данных:', error);
             }
@@ -80,7 +79,7 @@ export const ExpensesChart = () => {
     }, []);
 
     return (
-        <div style={{ width: '500px', margin: '0 auto', marginTop: '0', marginLeft: '100px' }}>
+        <div style={{ width: '500px', margin: '0 auto', marginTop: '-10px', marginLeft: '100px' }}>
             <Bar
                 data={chartData}
                 options={{

@@ -146,7 +146,7 @@ export const UserCharts = ({ userId }) => {
       <div>
         <label>
           Выберите тип данных:
-          <select value={selectedType} onChange={handleTypeChange} style={{ marginLeft: '10px', borderRadius: '6px' }}>
+          <select value={selectedType} onChange={handleTypeChange} className='user-chart-select'>
             <option value="calls">Звонки</option>
             <option value="internet">Интернет</option>
             <option value="sms">СМС</option>

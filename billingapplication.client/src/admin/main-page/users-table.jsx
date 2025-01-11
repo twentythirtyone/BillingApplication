@@ -42,39 +42,43 @@ export const UserTable = () => {
   };
 
   return (
-    <div className="user-table">
-      <h1>Клиеты Alfa-Telecom</h1>
-      <input
-        type="text"
-        placeholder="Поиск по ФИО"
-        value={searchTerm}
-        onChange={handleSearch}
-        style={{ fontSize:'16px', padding: '6px',border:'none', borderRadius: '10px' }}
-      />
-      <div>
-      <table border="1" className="custom-table">
-        <thead>
-          <tr>
-              <th className="col-id">ID</th>
-              <th className="col-name">ФИО</th>
-              <th>Номер</th>
-              <th>Тариф</th>
-              <th className="col-email">Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr key={user.id} onClick={() => handleRowClick(user.id)}>
-              <td>{user.id}</td>
-              <td>{user.passportInfo.fullName}</td>
-              <td>{user.number}</td>
-              <td>{user.tariff.title}</td>
-              <td >{user.email}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div>
+      <div className="user-table">
+            <h1>Клиеты Alfa-Telecom</h1>
+              <input
+                type="text"
+                placeholder="Поиск по ФИО"
+                value={searchTerm}
+                onChange={handleSearch}
+                style={{ fontSize:'16px', padding: '6px',border:'none', borderRadius: '10px' }}
+              />
+              <div>
+              <div className="custom-table-wrapper">
+            <table className="custom-table">
+                <thead>
+                    <tr>
+                        <th className="col-id">ID</th>
+                        <th className="col-name">ФИО</th>
+                        <th>Номер</th>
+                        <th>Тариф</th>
+                        <th className="col-email">Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredUsers.map((user) => (
+                        <tr key={user.id} onClick={() => handleRowClick(user.id)}>
+                            <td>{user.id}</td>
+                            <td>{user.passportInfo.fullName}</td>
+                            <td>{user.number}</td>
+                            <td>{user.tariff.title}</td>
+                            <td>{user.email}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
       </div>
     </div>
+    </div>  
   );
 };

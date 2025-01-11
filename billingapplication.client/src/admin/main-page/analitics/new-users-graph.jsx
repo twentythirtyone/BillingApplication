@@ -24,6 +24,20 @@ export const TariffPieChart = ({ urlAPI, title }) => {
   const token = localStorage.getItem('token');
   const [chartData, setChartData] = useState(null);
 
+  
+  const sortMonths = (obj) => {
+    const monthOrder = [
+      "февраль", "март", "апрель", "май", "июнь", 
+      "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь","январь"
+    ];
+  
+    const sortedEntries = Object.entries(obj).sort(
+      ([monthA], [monthB]) => monthOrder.indexOf(monthA) - monthOrder.indexOf(monthB)
+    );
+  
+    return Object.fromEntries(sortedEntries);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -33,19 +47,10 @@ export const TariffPieChart = ({ urlAPI, title }) => {
             accept: '*/*',
           },
         });
-
-        const responseData = response.data;
-
-        const extendedData = {
-          Октябрь: 0,
-          Ноябрь: 0,
-          Декабрь: 0,
-          ...responseData,
-        };
-
+        const sortedData = sortMonths(response.data);
         // Извлекаем метки и значения для диаграммы
-        const labels = Object.keys(extendedData);
-        const values = Object.values(extendedData);
+        const labels = Object.keys(sortedData);
+        const values = Object.values(sortedData);
 
         setChartData({
           labels,
@@ -102,8 +107,7 @@ export const TariffPieChart = ({ urlAPI, title }) => {
               ticks: {
                 color: '#FFFFFF',
                 font: {
-                    size: 14, // Размер шрифта в пикселях
-                    
+                    size: 14,
                   },
               },
               grid: {

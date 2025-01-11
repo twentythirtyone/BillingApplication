@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 
 export const ClientRegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -29,6 +28,8 @@ export const ClientRegisterForm = () => {
     tariffId: 0,
   });
 
+  const [serverResponse, setServerResponse] = useState(''); // Новое состояние для ответа от сервера
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -47,9 +48,9 @@ export const ClientRegisterForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const TOKEN = localStorage.getItem('token');
-  
+
     const requestBody = {
       subscriberModel: {
         ...formData.user,
@@ -58,6 +59,7 @@ export const ClientRegisterForm = () => {
         passportId: 0,
         paymentDate: new Date().toISOString(),
         callTime: '00:00:00',
+        creationDate: new Date().toISOString(),
       },
       passport: {
         ...formData.passport,
@@ -67,7 +69,7 @@ export const ClientRegisterForm = () => {
       },
       tariffId: formData.tariffId,
     };
-  
+
     try {
       const response = await fetch('/billingapplication/auth/register/subscriber', {
         method: 'POST',
@@ -77,12 +79,10 @@ export const ClientRegisterForm = () => {
         },
         body: JSON.stringify(requestBody),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
-        alert(`Пользователь зарегистрирован с ID: ${data}`);
-        
-        // Сбрасываем состояние формы после успешной отправки
+        setServerResponse(`Пользователь зарегистрирован с ID: ${data}`);
         setFormData({
           user: {
             id: 0,
@@ -110,11 +110,11 @@ export const ClientRegisterForm = () => {
           tariffId: 0,
         });
       } else {
-        const errorData = await response.json();
-        console.error('Ошибка при регистрации:', errorData);
+        const errorText = await response.text();
+        setServerResponse(`Ошибка при регистрации: ${errorText}`);
       }
     } catch (error) {
-      console.error('Ошибка при регистрации:', error);
+      setServerResponse(`Ошибка при регистрации: ${error.message}`);
     }
   };
 
@@ -122,104 +122,107 @@ export const ClientRegisterForm = () => {
     <div>
       <form onSubmit={handleSubmit}>
         <h1>Регистрация нового клиента</h1>
-        <div className='clientRegister'>
-        <div>
-          <input
-            placeholder='Email'
-            type="email"
-            name="email"
-            value={formData.user.email}
-            onChange={handleChange}
-            required
-          />
+        <div className="clientRegister">
+          <div>
+            <input
+              placeholder="Email"
+              type="email"
+              name="email"
+              value={formData.user.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <input
+              placeholder="Пароль"
+              type="password"
+              name="password"
+              value={formData.user.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <input
+              placeholder="Номер телефона"
+              type="text"
+              name="number"
+              value={formData.user.number}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <h2>Данные паспорта</h2>
+          <div>
+            <input
+              placeholder="Номер паспорта"
+              type="text"
+              name="passportNumber"
+              value={formData.passport.passportNumber}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <input
+              placeholder="ФИО"
+              type="text"
+              name="fullName"
+              value={formData.passport.fullName}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Дата выдачи</label>
+            <input
+              placeholder="Дата выдачи"
+              type="date"
+              name="issueDate"
+              value={formData.passport.issueDate}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Дата истечения срока действия</label>
+            <input
+              placeholder="Дата истечения срока действия"
+              type="date"
+              name="expiryDate"
+              value={formData.passport.expiryDate}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <input
+              placeholder="Кем выдан"
+              type="text"
+              name="issuedBy"
+              value={formData.passport.issuedBy}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <input
+              placeholder="Прописка"
+              type="text"
+              name="registration"
+              value={formData.passport.registration}
+              onChange={handleChange}
+              required
+            />
+          </div>
         </div>
-        <div>
-          <input
-            placeholder='Пароль'
-            type="password"
-            name="password"
-            value={formData.user.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <input
-            placeholder='Номер телефона'
-            type="text"
-            name="number"
-            value={formData.user.number}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        
-        <h2>Данные паспорта</h2>
-        <div>
-          <input
-            placeholder='Номер паспорта'
-            type="text"
-            name="passportNumber"
-            value={formData.passport.passportNumber}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <input
-            placeholder='ФИО'
-            type="text"
-            name="fullName"
-            value={formData.passport.fullName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Дата выдачи</label>
-          <input
-            placeholder='Дата выдачи'
-            type="date"
-            name="issueDate"
-            value={formData.passport.issueDate}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Дата истечения срока действия</label>
-          <input
-            placeholder='Дата истечения срока действия'
-            type="date"
-            name="expiryDate"
-            value={formData.passport.expiryDate}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <input
-            placeholder='Кем выдан'
-            type="text"
-            name="issuedBy"
-            value={formData.passport.issuedBy}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <input
-            placeholder='Прописка'
-            type="text"
-            name="registration"
-            value={formData.passport.registration}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        </div>
-        <button className='registerButton' type="submit">Зарегистрировать</button>
+        <button className="registerButton" type="submit">
+          Зарегистрировать
+        </button>
       </form>
+      {serverResponse && <p>{serverResponse}</p>}
     </div>
   );
 };

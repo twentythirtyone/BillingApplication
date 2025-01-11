@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import axios from 'axios';
 
 export const OperatorRegistrationForm = () => {
     const [formData, setFormData] = useState({
@@ -22,21 +21,43 @@ export const OperatorRegistrationForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
-            const response = await axios.post('/billingapplication/auth/register/operator', {
+            const token = localStorage.getItem('token');
+
+            const requestBody = {
                 id: 0,
                 email: formData.email,
                 nickname: formData.nickname,
                 password: formData.password,
-                salt: '',
+                salt: 'string',
                 isAdmin: formData.isAdmin,
-            });
+            }
 
-            setMessage(`Оператор успешно зарегистрирован: ${response.data}`);
-        } catch (error) {
-            setMessage(
-                error.response?.data?.message || 'При регистрации произошла ошибка'
+            console.log('Отправляемое тело запроса:', JSON.stringify(requestBody, null, 2));
+
+            const response = await fetch(
+                '/billingapplication/auth/register/operator',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify(requestBody),
+                }
             );
+
+            if (!response.ok) {
+                const errorData = await response.text();
+                throw new Error(errorData.message || 'Произошла ошибка при регистрации');
+            }
+
+            const responseData = await response.json();
+            setMessage(`Оператор успешно зарегистрирован: ${responseData}`);
+        } catch (error) {
+            console.error('Ошибка запроса:', error.message);
+            setMessage(error.message || 'При регистрации произошла ошибка');
         }
     };
 
@@ -78,20 +99,22 @@ export const OperatorRegistrationForm = () => {
                             required
                         />
                     </div>
-                    </div>
-                    <div className='admin-checkbox'>
-                        <label htmlFor="isAdmin">
+                </div>
+                <div className='admin-checkbox'>
+                    <label htmlFor="isAdmin">
                         Роль админа:
-                            <input
-                                type="checkbox"
-                                id="isAdmin"
-                                name="isAdmin"
-                                checked={formData.isAdmin}
-                                onChange={handleChange}
-                            />
-                        </label>
-                    </div>
-                <button className='registerButton' type="submit">Зарегистрировать</button>
+                        <input
+                            type="checkbox"
+                            id="isAdmin"
+                            name="isAdmin"
+                            checked={formData.isAdmin}
+                            onChange={handleChange}
+                        />
+                    </label>
+                </div>
+                <button className='registerButton' type="submit">
+                    Зарегистрировать
+                </button>
             </form>
             {message && <p>{message}</p>}
         </div>

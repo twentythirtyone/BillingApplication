@@ -5,6 +5,7 @@ import deleteIcon from '../../../assets/img/delete.svg';
 import editIcon from '../../../assets/img/edit.svg';
 import ConfirmModal from './confirm-modal';
 import { ExtrasTable } from './extras-table.jsx';
+import axios from 'axios';
 
 export const TariffTable = () => {
   const [tariffs, setTariffs] = useState([]);
@@ -12,30 +13,42 @@ export const TariffTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const [view, setView] = useState('tariffs');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const authToken = localStorage.getItem('token');
+
+  const checkUserRole = async () => {
+    try {
+      const response = await axios.get('/billingapplication/auth/current', {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      const { roles } = response.data;
+      setIsAdmin(roles.includes('Admin'));
+    } catch (error) {
+      console.error('Ошибка при проверке роли:', error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetchTariffs(authToken);
+      setTariffs(response.data);
+    } catch (error) {
+      console.error('Error fetching tariffs:', error);
+    }
+  };
+
   useEffect(() => {
     document.title = "Управление услугами";
-    if (!authToken) return; // Ждем, пока появится токен
+    fetchData();
+    checkUserRole();
+    const intervalId = setInterval(fetchData, 5000);
 
-    const fetchData = async () => {
-      setLoading(true); // Включаем индикатор загрузки
-      try {
-        const response = await fetchTariffs(authToken);
-        setTariffs(response.data);
-      } catch (error) {
-        console.error('Error fetching tariffs:', error);
-      } finally {
-        setLoading(false); // Выключаем индикатор загрузки
-      }
-    };
-
-    fetchData(); // Первичная загрузка данных
-    const intervalId = setInterval(fetchData, 5000); // Обновление каждые 5 секунд
-
-    return () => clearInterval(intervalId); // Очистка
+    return () => clearInterval(intervalId);
   }, [authToken]);
 
   const handleDelete = () => {
@@ -52,91 +65,112 @@ export const TariffTable = () => {
   };
 
   return (
-    <div>
-      <h1>Тарифы</h1>
-      <table className='custom-table'>
-        <thead>
-          <tr>
-            <th style={{ width: '50px' }}>ID</th>
-            <th style={{ width: '190px' }}>Название</th>
-            <th>Цена</th>
-            <th>Интернет</th>
-            <th>Звонки</th>
-            <th style={{ width: '70px' }}>SMS</th>
-            <th style={{ color: '#8596AC' }}>Редактировать</th>
-            <th style={{ color: '#8596AC' }}>Удалить</th>
-          </tr>
-        </thead>
-        <tbody style={{ color: '#8596AC' }}>
-          {tariffs.map((tariff) => (
-            <tr key={tariff.id}>
-              <td>{tariff.id}</td>
-              <td style={{ color: '#fff' }}>{tariff.title || '—'}</td>
-              <td>{tariff.price ? `${tariff.price}₽` : '0'}</td>
-              <td>{tariff.bundle?.internet / 1024 || '0'}</td>
-              <td>{tariff.bundle?.callTime || '0'}</td>
-              <td>{tariff.bundle?.messages || '0'}</td>
-              {tariff.title !== 'Стандартный' && (
-                <>
-                  <td>
-                    <button className="table-buttons">
-                      <img
-                        src={editIcon}
-                        onClick={() => {
-                          setSelectedTariff(tariff);
-                          setShowModal(true);
-                        }}
-                      />
-                    </button>
-                  </td>
-                  <td>
-                    <button className="table-buttons">
-                      <img
-                        src={deleteIcon}
-                        onClick={() => {
-                          setDeleteId(tariff.id);
-                          setShowConfirm(true);
-                        }}
-                      />
-                    </button>
-                  </td>
-                </>
-              )}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {!showModal && (
-        <button className="add-new-tariff" onClick={handleAddClick}>
-          Добавить новый план...
-        </button>
+    <div style={{width:'1000px'}}>
+      <h1>Управление услугами</h1>
+      <select
+        value={view}
+        onChange={(e) => setView(e.target.value)}
+        className='tariff-table-select'
+      >
+        <option value="tariffs">Тарифы</option>
+        <option value="extras">Дополнительные услуги</option>
+      </select>
+  
+      {view === 'tariffs' ? (
+        <div>
+          <div className="custom-table-wrapper">
+            <table className="custom-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '50px' }}>ID</th>
+                  <th style={{ width: '180px' }}>Название</th>
+                  <th style={{ width: '90px' }}>Цена</th>
+                  <th style={{ width: '100px' }}>Интернет</th>
+                  <th style={{ width: '120px' }}>Звонки</th>
+                  <th style={{ width: '90px' }}>SMS</th>
+                  {isAdmin && <th style={{ color: '#8596AC' }}>Редактировать</th>}
+                  {isAdmin && <th style={{ color: '#8596AC' }}>Удалить</th>}
+                </tr>
+              </thead>
+              <tbody style={{ color: '#8596AC' }}>
+                {tariffs.map((tariff) => (
+                  <tr key={tariff.id}>
+                    <td>{tariff.id}</td>
+                    <td style={{ color: '#fff' }}>{tariff.title || '—'}</td>
+                    <td>{tariff.price ? `${tariff.price}₽` : '0'}</td>
+                    <td>{tariff.bundle?.internet / 1024 || '0'}</td>
+                    <td>{tariff.bundle?.callTime || '0'}</td>
+                    <td>{tariff.bundle?.messages || '0'}</td>
+                    {isAdmin && tariff.title !== 'Стандартный' && (
+                      <>
+                        <td>
+                          <button className="table-buttons">
+                            <img
+                              src={editIcon}
+                              onClick={() => {
+                                setSelectedTariff(tariff);
+                                setShowModal(true);
+                              }}
+                            />
+                          </button>
+                        </td>
+                        <td>
+                          <button className="table-buttons">
+                            <img
+                              src={deleteIcon}
+                              onClick={() => {
+                                setDeleteId(tariff.id);
+                                setShowConfirm(true);
+                              }}
+                            />
+                          </button>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+  
+          {!showModal && (
+            <button className="add-new-tariff" onClick={handleAddClick}>
+              Добавить новый план...
+            </button>
+          )}
+  
+          {showModal && (
+            <TariffFormModal
+              tariff={selectedTariff}
+              onClose={() => setShowModal(false)}
+              onSave={(updatedTariff) => {
+                if (selectedTariff) {
+                  setTariffs((prev) =>
+                    prev.map((t) =>
+                      t.id === updatedTariff.id ? updatedTariff : t
+                    )
+                  );
+                } else {
+                  setTariffs((prev) => [...prev, updatedTariff]);
+                }
+                fetchData();
+              }}
+            />
+          )}
+  
+          {showConfirm && (
+            <ConfirmModal
+              message="Вы уверены, что хотите удалить тариф?"
+              onConfirm={handleDelete}
+              onCancel={() => setShowConfirm(false)}
+            />
+          )}
+        </div>
+      ) : (
+        <>
+          <ExtrasTable />
+        </>
       )}
-
-      {showModal && (
-        <TariffFormModal
-          tariff={selectedTariff}
-          onClose={() => setShowModal(false)}
-          onSave={(updatedTariff) => {
-            if (selectedTariff) {
-              setTariffs((prev) =>
-                prev.map((t) => (t.id === updatedTariff.id ? updatedTariff : t))
-              );
-            } else {
-              setTariffs((prev) => [...prev, updatedTariff]);
-            }
-          }}
-        />
-      )}
-
-      {showConfirm && (
-        <ConfirmModal
-          message="Вы уверены, что хотите удалить тариф?"
-          onConfirm={handleDelete}
-          onCancel={() => setShowConfirm(false)}
-        />
-      )}
-        <ExtrasTable />
     </div>
   );
 };

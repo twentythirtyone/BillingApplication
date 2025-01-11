@@ -345,7 +345,6 @@ height: 34px;
     display:flex;
     margin-top: 15px;
     justify-content: center;
-    overflow: auto;
 }
 
 /* Боковая панель */
@@ -357,7 +356,7 @@ height: 34px;
     top: 0;
     height: 86.9vh;
     margin-right: 20px;
-    margin-left: -100px;
+    margin-left: -160px;
 }
 .sidebar-title {
     color: #AB3D36;
@@ -628,6 +627,8 @@ height: 34px;
 
     .tariff-features {
         list-style-type: none;
+        margin-top: 7px;
+        margin-left: -2px;
     }
 
     .tariff-features li:before {
@@ -654,8 +655,8 @@ height: 34px;
 .tariff-card-section {
     background-color: white;
     margin-right: 20px;
-    padding: 5px 20px 0 20px;
-    
+    padding: 0px 20px 0 23px;
+    height: 245px;
     width: 250px;
     border-radius: 15px;
     border: 1px solid #E0E0E0;
@@ -730,6 +731,14 @@ height: 34px;
     text-align: left;
     table-layout: fixed;
     width: 1000px;
+}
+
+.content-layout .admin{
+    height: 100%;
+    width: 1600px;
+    display:flex;
+    margin-top: 15px;
+    justify-content: center;
 }
 
 .tariffs-table th, .tariffs-table td {
@@ -986,8 +995,12 @@ height: 34px;
     background-color:#e2e2e2;
 }
 
+.user-table {
+    width: 1000px;
+}
+
 .user-table-container {
-    height: 600px;
+    height: 800px;
     overflow: scroll;
     overflow-x: hidden;
 }
@@ -1018,66 +1031,86 @@ height: 34px;
     width: 250px;
 }
 
-.custom-table {
+.custom-table-wrapper {
     margin-top: 20px;
-    border-spacing: 0; 
+    max-height: 500px; 
+    overflow-y: auto; 
     border: 1px solid #474A57;
-    border-radius: 12px;
-    width: 1000px;
+    border-radius: 12px; 
+    border-right: none;
+}
+
+.custom-table-wrapper::-webkit-scrollbar {
+    width: 16px;
+    border: 1px solid #474A57;
+  }
+
+  .custom-table-wrapper::-webkit-scrollbar-track {
+    background: #1E2026;
+  }
+
+  .custom-table-wrapper::-webkit-scrollbar-thumb {
+    background-color: rgb(168, 168, 168); 
+    border-radius: 20px;
+    border: 5px solid #1E2026;
+  }
+
+.custom-table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
 }
 
 .custom-table thead {
     background-color: #262930; 
+    position: sticky;
+    top: 0;
+    z-index: 2;
 }
 
 .custom-table thead th {
-    border: none;
-    padding: 12px 15px 12px 15px;
+    padding: 12px 15px;
     text-align: left;
     border-bottom: 1px solid #fff;
-}
-
-.custom-table thead tr:first-child th:first-child { 
-    border-top-left-radius: 12px; 
-}
-
-.custom-table thead tr:first-child th:last-child { 
-    border-top-right-radius: 12px; 
+    color: white;
 }
 
 .custom-table tbody tr {
     height: 65px;
-    border-radius: 12px;
 }
 
 .custom-table tbody td {
     padding: 10px;
-    border: none; 
     border-bottom: 1px solid #fff;
 }
 
 .custom-table tbody tr:hover {
-    background-color: #242732;
+    background-color: #242732; /* Фон при наведении на строку */
     cursor: pointer;
 }
 
-.custom-table tbody tr:last-child td {
-    border-bottom: none;
+/* Скругленные углы таблицы */
+.custom-table-wrapper .custom-table thead th:first-child {
+    border-top-left-radius: 12px; /* Верхний левый угол */
 }
 
-.custom-table tbody tr:last-child td:first-child {
-    border-bottom-left-radius: 12px;
+.custom-table-wrapper .custom-table thead th:last-child {
+    border-top-right-radius: 12px; /* Верхний правый угол */
 }
 
-.custom-table tbody tr:last-child td:last-child {
-    border-bottom-right-radius: 12px;
+.custom-table-wrapper .custom-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 12px; /* Нижний левый угол */
+}
+
+.custom-table-wrapper .custom-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 12px; /* Нижний правый угол */
 }
 
 .user-analytics {
     width: 1000px;
 }
 .user-analytics-graph {
-    width: 700px;
+    width: 1000px;
 }
 
 .clientRegister {
@@ -1523,4 +1556,41 @@ font-family: 'Inter', sans-serif;
 .tariff-right {  
     margin-top: -149px;
     margin-left: 850px;
+}
+
+body::-webkit-scrollbar {
+    width: 16px;
+    }
+    
+body::-webkit-scrollbar-track {
+    background: #F4F7F3;
+    }
+    
+body::-webkit-scrollbar-thumb {
+    background-color: rgb(168, 168, 168); 
+    border-radius: 20px;
+    border: 5px solid #F4F7F3;
+    }
+body {
+    overflow-x: hidden;
+}
+
+.tariff-table-select {
+    margin-top: -5px;
+    padding: 4px 10px;
+    font-size: 18px;
+    border-radius: 8px;
+}
+
+.tariff-table-select:focus { outline: none; }
+
+.user-chart-select {
+    margin-left: 10px;
+    border-radius: 6px   
+}
+
+.user-chart-select:focus { outline: none; }
+
+.admin-sidebar {
+    margin-left: 70px;
 }

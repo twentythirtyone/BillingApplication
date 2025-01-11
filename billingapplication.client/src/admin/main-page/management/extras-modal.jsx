@@ -10,10 +10,9 @@ export const ExtrasFormModal = ({ extra, onClose, onSave }) => {
         package: extra?.package || '',
         price: extra?.price || 0,
         bundleId: extra?.bundle?.id || 0,
-        callTime: extra?.bundle?.callTime || '',
+        callTime: extra?.bundle?.callTime || '00:00:00',
         messages: extra?.bundle?.messages || 0,
         internet: extra?.bundle?.internet / 1024 || 0,
-        bundleId: 0,
     });
 
     const [serviceType, setServiceType] = useState('internet');
@@ -33,20 +32,18 @@ export const ExtrasFormModal = ({ extra, onClose, onSave }) => {
         e.preventDefault();
 
         const updatedExtra = {
-          tariff: {
-              id: formData.id,
-              title: formData.title,
-              description: formData.description,
-              price: formData.price,
-              bundle: {
-                  id: formData.bundleId,
-                  callTime: serviceType === 'callTime' ? formData.callTime : '',
-                  messages: serviceType === 'messages' ? formData.messages : 0,
-                  internet: serviceType === 'internet' ? formData.internet * 1024 : 0,
-              },
-          },
-          bundleId: formData.bundleId,
-      };
+            id: formData.id,
+            title: formData.title,
+            description: formData.description,
+            price: formData.price,
+            bundle: {
+              id: formData.bundleId,
+              callTime: serviceType === 'callTime' ? formData.callTime : '00:00:00',
+              messages: serviceType === 'messages' ? formData.messages : 0,
+              internet: serviceType === 'internet' ? formData.internet * 1024 : 0,
+            },
+          };
+          
 
       const apiCall = extra ? updateExtra : addExtra;
       apiCall(updatedExtra)

@@ -4,6 +4,7 @@ import { ExtrasFormModal } from './extras-modal';
 import deleteIcon from '../../../assets/img/delete.svg';
 import editIcon from '../../../assets/img/edit.svg';
 import ConfirmModal from './confirm-modal';
+import axios from 'axios';
 
 export const ExtrasTable = () => {
   const [extras, setExtras] = useState([]);
@@ -11,26 +12,38 @@ export const ExtrasTable = () => {
   const [showModal, setShowModal] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const authToken = localStorage.getItem('token');
-  useEffect(() => {
-    if (!authToken) return;
 
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const response = await fetchExtras(authToken);
-        setExtras(response.data);
-      } catch (error) {
-        console.error('Error fetching extras:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const checkUserRole = async () => {
+    try {
+      const response = await axios.get('/billingapplication/auth/current', {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+
+      const { roles } = response.data;
+      setIsAdmin(roles.includes('Admin'));
+    } catch (error) {
+      console.error('Ошибка при проверке роли:', error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const response = await fetchExtras(authToken);
+      setExtras(response.data);
+    } catch (error) {
+      console.error('Error fetching extras:', error);
+    }
+  };
+
+  useEffect(() => {
 
     fetchData();
+    checkUserRole();
     const intervalId = setInterval(fetchData, 5000);
 
     return () => clearInterval(intervalId);
@@ -51,7 +64,7 @@ export const ExtrasTable = () => {
 
   return (
     <div>
-      <h1>Дополнительные услуги</h1>
+      <div className="custom-table-wrapper">
       <table className='custom-table'>
         <thead>
           <tr>
@@ -59,9 +72,9 @@ export const ExtrasTable = () => {
             <th style={{ width: '190px' }}>Название</th>
             <th style={{ width: '140px' }}>Цена</th>
             <th style={{ width: '140px' }}>Услуга</th>
-            <th style={{ width: '130px' }}>Объем</th>
-            <th style={{ color: '#8596AC' }}>Редактировать</th>
-            <th style={{ color: '#8596AC' }}>Удалить</th>
+            <th style={{ width: '143px' }}>Объем</th>
+            {isAdmin && <th style={{ color: '#8596AC' }}>Редактировать</th>}
+            {isAdmin && <th style={{ color: '#8596AC' }}>Удалить</th>}
           </tr>
         </thead>
         <tbody style={{ color: '#8596AC' }}>
@@ -87,7 +100,7 @@ export const ExtrasTable = () => {
                 <td>{extra.price ? `${extra.price}₽` : '0'}</td>
                 <td>{serviceType}</td>
                 <td>{serviceVolume}</td>
-                {extra.title !== 'Стандартный' && (
+                {isAdmin && (
                   <>
                     <td>
                       <button className="table-buttons">
@@ -118,6 +131,8 @@ export const ExtrasTable = () => {
           })}
         </tbody>
       </table>
+      </div>
+      
   
       {!showModal && (
         <button className="add-new-tariff" onClick={handleAddClick}>
