@@ -126,6 +126,7 @@ export const UserSettings = () => {
     };
 
     useEffect(() => {
+        document.title='Настройки';
         fetchUserData();
     }, []);
 

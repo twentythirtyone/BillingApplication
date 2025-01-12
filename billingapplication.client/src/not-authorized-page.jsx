@@ -1,7 +1,12 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const PleaseAuthorise = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title='Пройдите авторизацию'
+  });
 
   return (
     <div className="please-authorise">

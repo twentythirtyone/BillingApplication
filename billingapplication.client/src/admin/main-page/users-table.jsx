@@ -9,6 +9,8 @@ export const UserTable = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.title = 'Клиенты';
+
     const fetchUsers = async () => {
       try {
         const token = localStorage.getItem('token');

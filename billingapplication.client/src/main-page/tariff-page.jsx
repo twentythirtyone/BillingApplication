@@ -16,6 +16,8 @@ export const TariffPage = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
+    document.title='Тариф'
+
     const token = localStorage.getItem("token");
     const fetchTariff = async (token) => {
       const tarif = await getTariff(token);

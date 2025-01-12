@@ -1,8 +1,13 @@
 import { TariffBarChart } from './tariff-graph.jsx';
 import { TariffPieChart} from './new-users-graph.jsx';
 import { PaymentLineChart} from './payment-line-chart.jsx';
+import { useEffect } from 'react';
 
 export const AnaliticsPage = () => {
+    useEffect(() => {
+        document.title = 'Статистика';
+    })
+
     return (
         <div className="analitics-page">
             <div className='tariff-extras-graph-sect'>

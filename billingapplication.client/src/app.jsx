@@ -33,7 +33,7 @@ createRoot(document.getElementById('root')).render(
                     <Route path='login' element={<LoginForm />} />
                     <Route path='operator-login' element={<AdminLoginForm />} />
                     <Route path='operator' element={<AdminMainPage />}>
-                        <Route index element={<Navigate to="management" />} />
+                        <Route index element={<Navigate to="monitoring" />} />
                         <Route path="management" element={<TariffTable />} />
                         <Route path="monitoring" element={<UserTable/>} />
                         <Route path="user-control" element={<UserControl/>}/>

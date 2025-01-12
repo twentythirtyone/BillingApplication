@@ -59,6 +59,8 @@ export const AddServicesPage = () => {
     }
 
     useEffect(() => {
+        document.title='Доп услуги'
+
         fetchExpenses();
         getAddServs();
     }, []);

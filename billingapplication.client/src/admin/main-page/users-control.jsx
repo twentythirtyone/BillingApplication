@@ -30,6 +30,8 @@ export const UserControl = () => {
         }
       };
       useEffect(() => {
+        document.title = 'Управление пользователями';
+
         checkUserRole();
       })
 
