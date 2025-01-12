@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+
 import { useState } from 'react'; 
 import { addExtra, updateExtra } from './managment-api.jsx';
 import TimeField from 'react-simple-timefield';
