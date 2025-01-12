@@ -1,14 +1,14 @@
+/* eslint-disable react/prop-types */
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS } from 'chart.js/auto';
 
 export const UserCharts = ({ userId }) => {
   const [chartsData, setChartsData] = useState({});
   const [selectedType, setSelectedType] = useState('calls');
   const [totalSum, setTotalSum] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const token = localStorage.getItem('token');
 
@@ -31,7 +31,7 @@ export const UserCharts = ({ userId }) => {
 
         prepareChartData(groupedData);
       } catch (error) {
-        setError('Ошибка при загрузке аналитики.');
+        console.error('Ошибка при загрузке аналитики:', error);
       } finally {
         setIsLoading(false);
       }
@@ -61,9 +61,10 @@ export const UserCharts = ({ userId }) => {
             {
               label: 'Длительность звонков (минуты)',
               data: durationData,
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 1,
+              borderColor: 'rgba(0, 255, 191, 0.9)',
+              borderWidth: 3,
+              backgroundColor: 'none',
+              tension: 0.4,
             },
           ],
         };
@@ -75,11 +76,12 @@ export const UserCharts = ({ userId }) => {
           labels,
           datasets: [
             {
-              label: 'Объем данных (ГБ)',
+              label: 'Объем трафика (ГБ)',
               data: internetData.map((value) => value / 1024), // Преобразование в ГБ
-              backgroundColor: 'rgba(153, 102, 255, 0.2)',
-              borderColor: 'rgba(153, 102, 255, 1)',
-              borderWidth: 1,
+              borderColor: 'rgba(0, 255, 255, 0.9)',
+              borderWidth: 3,
+              backgroundColor: 'none',
+              tension: 0.4,
             },
           ],
         };
@@ -91,11 +93,12 @@ export const UserCharts = ({ userId }) => {
           labels,
           datasets: [
             {
-              label: 'Количество SMS',
+              label: 'Количество отправленных SMS',
               data: smsData,
-              backgroundColor: 'rgba(255, 159, 64, 0.2)',
-              borderColor: 'rgba(255, 159, 64, 1)',
-              borderWidth: 1,
+              borderColor: 'rgba(0, 162, 255, 0.9)', // Неоновый фиолетовый
+              borderWidth: 3,
+              backgroundColor: 'none',
+              tension: 0.4,
             },
           ],
         };
@@ -107,11 +110,12 @@ export const UserCharts = ({ userId }) => {
           labels,
           datasets: [
             {
-              label: 'Сумма оплаты (₽)',
+              label: 'Общая сумма платежей (₽)',
               data: paymentData,
-              backgroundColor: 'rgba(54, 162, 235, 0.2)',
-              borderColor: 'rgba(54, 162, 235, 1)',
-              borderWidth: 1,
+              borderColor: 'rgba(168, 118, 248, 0.9)', // Неоновый жёлтый
+              borderWidth: 3,
+              backgroundColor: 'none',
+              tension: 0.4,
             },
           ],
         };
@@ -143,25 +147,59 @@ export const UserCharts = ({ userId }) => {
   return (
     <div className="user-charts">
       <h2>Активность пользователя</h2>
-      <div>
-        <label>
-          Выберите тип данных:
-          <select value={selectedType} onChange={handleTypeChange} className='user-chart-select'>
-            <option value="calls">Звонки</option>
-            <option value="internet">Интернет</option>
-            <option value="sms">СМС</option>
-            <option value="payments">Платежи</option>
-          </select>
-        </label>
-      </div>
-      <div className='user-analytics-graph'>
+      <label>
+        Выберите тип данных:
+        <select value={selectedType} onChange={handleTypeChange} className="user-chart-select">
+          <option value="calls">Звонки</option>
+          <option value="internet">Интернет</option>
+          <option value="sms">СМС</option>
+          <option value="payments">Платежи</option>
+        </select>
+      </label>
+      <div className="user-analytics-graph">
         {chartsData[selectedType] && (
-            <>
-            <Line data={chartsData[selectedType]} />
-            <p>Потрачено за текущий период: {totalSum}</p>
-            </>
+          <Line
+            data={chartsData[selectedType]}
+            options={{
+              plugins: {
+                legend: {
+                  display: false,
+                },
+              },
+              elements: {
+                line: {
+                  tension: 0.4, // Убедитесь, что интерполяция линии включена
+                },
+              },
+              scales: {
+                x: {
+                  border:{
+                      display:false
+                    },
+                  ticks: {
+                    color: '#737373',
+                    font: {
+                      size: 14,
+                      weight: 700,
+                    },
+                  },
+                  grid: {
+                    color: '#FFFFFF',
+                    borderColor: '#FFFFFF',
+                    display: false,
+                  },
+                },
+                y: {
+                  display: false, // Убираем подписи оси Y
+                },
+              },
+              responsive: true,
+              maintainAspectRatio: false,
+            }}
+          />
         )}
       </div>
+      <p>Потрачено за текущий период: {totalSum}</p>
     </div>
   );
 };

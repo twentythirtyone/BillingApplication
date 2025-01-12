@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export const UserInfo = ({ userId }) => {
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   const token = localStorage.getItem('token');
 
@@ -19,7 +20,7 @@ export const UserInfo = ({ userId }) => {
         });
         setUserData(response.data);
       } catch (error) {
-        setError('Ошибка при загрузке данных пользователя.');
+        console.error(error);
       } finally {
         setIsLoading(false);
       }
@@ -33,13 +34,13 @@ export const UserInfo = ({ userId }) => {
   }
 
   return (
-    <div>
+    <div className='user-info-container'>
       <h1>{userData?.passportInfo?.fullName || 'Неизвестный пользователь'}</h1>
-      <p>Номер ID: <strong>{userData?.id || '—'}</strong></p>
-      <p>Номер: <strong>{userData?.number || '—'}</strong></p>
-      <p>Email: <strong>{userData?.email || '—'}</strong></p>
-      <p>Баланс: <strong>{userData?.balance || 0} ₽</strong></p>
-      <p>Тариф: <strong>«{userData?.tariff?.title || 'Нет данных'}»</strong></p>
-    </div>
+      <p><span>ID</span> <strong>{userData?.id || '—'}</strong></p>
+      <p><span>Номер</span> <strong>{userData?.number || '—'}</strong></p>
+      <p><span>Email</span> <strong>{userData?.email || '—'}</strong></p>
+      <p><span>Баланс</span> <strong>{userData?.balance || 0} ₽</strong></p>
+      <p><span>Тариф</span> <strong>«{userData?.tariff?.title || 'Нет данных'}»</strong></p>
+  </div>
   );
 };

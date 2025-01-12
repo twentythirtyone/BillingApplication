@@ -996,6 +996,7 @@ height: 34px;
 }
 
 .user-table {
+    font-family: 'Inter', sans-serif;
     width: 1000px;
 }
 
@@ -1107,13 +1108,12 @@ height: 34px;
 }
 
 .user-analytics {
-    width: 1000px;
-}
-.user-analytics-graph {
+    font-family: 'Inter', sans-serif;
     width: 1000px;
 }
 
 .clientRegister {
+    font-family: 'Inter', sans-serif;
     display: flex;
     flex-direction: column;
     width: 1000px;
@@ -1446,6 +1446,7 @@ input:focus {
 
 .analitics-page {
     width: 1000px;
+    font-family: 'Inter', sans-serif;
 }
 .tariff-extras-graph-sect {
     display: flex;
@@ -1559,7 +1560,7 @@ font-family: 'Inter', sans-serif;
 }
 
 body::-webkit-scrollbar {
-    width: 16px;
+    width: 8px;
     }
     
 body::-webkit-scrollbar-track {
@@ -1569,7 +1570,6 @@ body::-webkit-scrollbar-track {
 body::-webkit-scrollbar-thumb {
     background-color: rgb(168, 168, 168); 
     border-radius: 20px;
-    border: 5px solid #F4F7F3;
     }
 body {
     overflow-x: hidden;
@@ -1605,3 +1605,66 @@ body {
 }
 
 .extras-modal-select:focus { outline: none; }
+
+.user-info-container {
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    max-width: 800px;
+  }
+  
+  .user-info-container h1 {
+    font-size: 26px;
+    font-weight: 600;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #E5E8EB;
+    margin-bottom: 0;
+  }
+  
+  .user-info-container p {
+    display: flex; /* Flexbox для выравнивания */
+    align-items: center; /* Центрирование по вертикали */
+    border-bottom: 1px solid #E5E8EB;
+    height: 55px; /* Фиксированная высота */
+    margin: 0;
+  }
+
+  .user-info-container p:last-child {
+    border: none;
+  }
+
+  .user-info-container p span {
+    color: #A6A8B5;
+    flex: 0 0 150px; /* Фиксированная ширина для первой части */
+  }
+  
+  .user-info-container strong {
+    flex: 1; /* Занимает оставшееся пространство */
+    font-weight: 400;
+    color: #E5E5E5;
+    text-align: left; /* Выровнено по левому краю */
+  }
+
+.user-charts h2 {
+    font-size: 22px;
+}
+
+.user-analytics-graph {
+    width: 770px;
+    height: 350px;
+    border: 1px solid #474A57;
+    border-radius: 12px;
+    margin-top: 10px;
+    padding: 0 10px 5px 10px;
+}
+
+.user-charts select {
+    font-family: 'Inter', sans-serif;
+    color: white;
+    padding: 5px 15px;
+    width: 200px;
+    border-radius: 12px;
+    font-size: 14px;
+    background-color: #262930;
+    border: 1px solid #474A57;
+    margin-left: 419px;
+}
