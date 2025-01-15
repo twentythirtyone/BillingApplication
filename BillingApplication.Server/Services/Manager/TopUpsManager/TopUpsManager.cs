@@ -24,6 +24,8 @@ namespace BillingApplication.Server.Services.Manager.TopUpsManager
             var existingUser = await subscriberManager.GetSubscriberById(entity.PhoneId);
             if (existingUser == null)
                 throw new UserNotFoundException();
+            if (entity.Amount < 1)
+                throw new Exception("Нельзя пополнить баланс на отрицательное число");
             existingUser.Balance += entity.Amount;
 
             await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(existingUser),
