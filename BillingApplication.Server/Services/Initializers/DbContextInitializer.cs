@@ -334,7 +334,6 @@ namespace BillingApplication.Server.Services.Initializers
 
             async void AddTariffIfNotExist(int id, string title, int price, int bundleId)
             {
-                if (existingTariffs.Any(eb => eb.Id == id)) return;
                 var bundle = await dbContext.Bundles.FindAsync(bundleId);
 
                 if (id == 1)
@@ -347,9 +346,12 @@ namespace BillingApplication.Server.Services.Initializers
                         defaultTariff.Description = "";
                         defaultTariff.TariffPlan = bundleId;
                         defaultTariff.Bundle = bundle!;
+                        await dbContext.SaveChangesAsync();
                         return;
                     }
                 }
+
+                if (existingTariffs.Any(eb => eb.Id == id)) return;
 
                 dbContext.Tariffs.Add(new TariffEntity
                 {
