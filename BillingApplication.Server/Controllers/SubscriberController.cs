@@ -477,6 +477,7 @@ namespace BillingApplication.Controllers
                 var currentUser = await subscriberManager.GetSubscriberById(auth.GetCurrentUserId());
                 currentUser.TariffId = tariffId;
                 await subscriberManager.UpdateSubscriber(SubscriberMapper.UserVMToUserModel(currentUser), currentUser.PassportInfo, tariffId);
+                await subscriberManager.AddPaymentForTariff((int)currentUser.Id);
                 logger.LogInformation($"UPDATE TARIFF: User {currentUser.Id} changed his tariff to {tariffId}");
                 return Ok(currentUser.TariffId);
             }
