@@ -49,12 +49,6 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
                 }
 
                 var tariff = userUpdate.Tariff ?? new Tariffs() { Title = "", Id = -1 };
-                if (tariff.Id != tariffId)
-                {
-                    user.CallTime = new TimeSpan(0, 0, 0);
-                    user.Internet = 0;
-                    user.Messages = 0;
-                }
 
                 id = await subscriberRepository.Update(user, passport, tariffId);
             }
