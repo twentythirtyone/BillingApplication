@@ -347,6 +347,7 @@ namespace BillingApplication.Server.Services.Initializers
                         defaultTariff.Description = "";
                         defaultTariff.TariffPlan = bundleId;
                         defaultTariff.Bundle = bundle!;
+                        await dbContext.SaveChangesAsync();
                         return;
                     }
                 }
