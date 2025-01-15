@@ -48,9 +48,14 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
                     user.Password = encrypt.HashPassword(user.Password, user.Salt);
                 }
 
-                var tariff = userUpdate.Tariff ?? new Tariffs() { Title = "", Id = -1 };
-
                 id = await subscriberRepository.Update(user, passport, tariffId);
+                userUpdate = await subscriberRepository.GetSubscriberById(user.Id);
+                var lastTariffId = userUpdate.Tariff.Id;
+
+                if (lastTariffId != tariffId)
+                {
+                    await AddPaymentForTariff((int)id);
+                }
             }
             else
                 throw new UserNotFoundException();
@@ -148,7 +153,7 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             if (user == null)
                 throw new UserNotFoundException();
             if (user.Balance < user.Tariff.Price)
-                return -1;
+                throw new Exception("Недостаточно средств");
             await paymentRepository.AddPayment(new Payment() 
             {
                 Name = "Оплата тарифа",
