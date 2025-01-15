@@ -54,7 +54,7 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             var lastTariffId = currentUser!.Tariff.Id;
             var currentPassport = await context.PassportInfos.FindAsync(passportInfo.Id);
             PassportMapper.UpdatePassportEntity(currentPassport!, passportInfo);
-            if (currentUser.Balance < currentUser.Tariff.Price)
+            if (currentUser.Balance < existingTariff.Price)
                 existingTariff = currentUser.Tariff;
             SubscriberMapper.UpdateEntity(currentUser, user, existingTariff!, currentPassport!);
 
