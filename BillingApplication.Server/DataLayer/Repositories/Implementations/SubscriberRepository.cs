@@ -50,10 +50,12 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
             {
                 existingTariff = await context.Tariffs.FindAsync(Constants.DEFAULT_TARIFF_ID);
             }
-            var currentUser = await context.Subscribers.FindAsync(user.Id);
+            var currentUser = await context.Subscribers.Include(x=>x.Tariff).FirstOrDefaultAsync(x=>x.Id == user.Id);
             var lastTariffId = currentUser!.Tariff.Id;
             var currentPassport = await context.PassportInfos.FindAsync(passportInfo.Id);
             PassportMapper.UpdatePassportEntity(currentPassport!, passportInfo);
+            if (currentUser.Balance < currentUser.Tariff.Price)
+                existingTariff = currentUser.Tariff;
             SubscriberMapper.UpdateEntity(currentUser, user, existingTariff!, currentPassport!);
 
             if (lastTariffId != existingTariff!.Id && currentUser is not null)

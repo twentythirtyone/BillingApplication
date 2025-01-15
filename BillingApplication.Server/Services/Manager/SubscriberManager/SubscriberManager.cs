@@ -153,6 +153,8 @@ namespace BillingApplication.Server.Services.Manager.SubscriberManager
             var user = await subscriberRepository.GetSubscriberById(subscriberId);
             if (user == null)
                 throw new UserNotFoundException();
+            if (user.Balance < user.Tariff.Price)
+                return -1;
             await paymentRepository.AddPayment(new Payment() 
             {
                 Name = "Оплата тарифа",
