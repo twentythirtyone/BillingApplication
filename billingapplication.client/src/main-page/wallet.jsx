@@ -102,6 +102,8 @@ export const Wallet = () => {
             setPopupVisible(false);
             setAmount('');
             fetchUserData();
+            fetchHistory();
+            getExpenses();
         } catch (err) {
             alert(err.response?.data?.message || "Ошибка пополнения");
         } finally {
@@ -140,10 +142,10 @@ export const Wallet = () => {
 
     const filteredData = handleDateFilter();
 
-    if (!transactionHistory || !userData || !expenses) {
+    if (userData === null || expenses === null) { 
         return (
             <div className="tariff">
-                <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading' />;
+                <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading' />
             </div>
         );
     }

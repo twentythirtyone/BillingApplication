@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchTariffs, deleteTariff } from './managment-api.jsx';
-import { TariffFormModal } from './tariff-modal';
+import { AddTariffModal, EditTariffModal } from './tariff-modal';
 import deleteIcon from '../../../assets/img/delete.svg';
 import editIcon from '../../../assets/img/edit.svg';
 import ConfirmModal from './confirm-modal';
@@ -10,7 +10,8 @@ import axios from 'axios';
 export const TariffTable = () => {
   const [tariffs, setTariffs] = useState([]);
   const [selectedTariff, setSelectedTariff] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false); 
+const [showEditModal, setShowEditModal] = useState(false); 
   const [showConfirm, setShowConfirm] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const [view, setView] = useState('tariffs');
@@ -36,7 +37,9 @@ export const TariffTable = () => {
   const fetchData = async () => {
     try {
       const response = await fetchTariffs(authToken);
-      setTariffs(response.data);
+      const sortedData = response.data.sort((a, b) => a.id - b.id);
+  
+      setTariffs(sortedData);
     } catch (error) {
       console.error('Error fetching tariffs:', error);
     }
@@ -60,8 +63,15 @@ export const TariffTable = () => {
       .catch((error) => console.error('Error deleting tariff:', error));
   };
 
+
   const handleAddClick = () => {
-    setShowModal(true);
+    setShowAddModal(true);
+  };
+
+  // Обработчик для редактирования
+  const handleEditClick = (tariff) => {
+      setSelectedTariff(tariff);
+      setShowEditModal(true);
   };
 
   return (
@@ -104,15 +114,12 @@ export const TariffTable = () => {
                     {isAdmin && tariff.title !== 'Стандартный' && (
                       <>
                         <td>
-                          <button className="table-buttons">
-                            <img
-                              src={editIcon}
-                              onClick={() => {
-                                setSelectedTariff(tariff);
-                                setShowModal(true);
-                              }}
-                            />
-                          </button>
+                            <button className="table-buttons">
+                                <img
+                                    src={editIcon}
+                                    onClick={() => handleEditClick(tariff)}
+                                />
+                            </button>
                         </td>
                         <td>
                           <button className="table-buttons">
@@ -133,29 +140,36 @@ export const TariffTable = () => {
             </table>
           </div>
   
-          { isAdmin && !showModal && (
+          { isAdmin && !showAddModal && (
             <button className="add-new-tariff" onClick={handleAddClick}>
               Добавить новый план...
             </button>
           )}
   
-          {showModal && (
-            <TariffFormModal
-              tariff={selectedTariff}
-              onClose={() => setShowModal(false)}
-              onSave={(updatedTariff) => {
-                if (selectedTariff) {
-                  setTariffs((prev) =>
-                    prev.map((t) =>
-                      t.id === updatedTariff.id ? updatedTariff : t
-                    )
-                  );
-                } else {
-                  setTariffs((prev) => [...prev, updatedTariff]);
-                }
-                fetchData();
-              }}
+          {showAddModal && (
+            <AddTariffModal
+                onClose={() => setShowAddModal(false)}
+                onSave={(newTariff) => {
+                    setTariffs((prev) => [...prev, newTariff]);
+                    fetchData();
+                }}
             />
+          )}
+
+          {showEditModal && selectedTariff && (
+              <EditTariffModal
+                  tariff={selectedTariff}
+                  onClose={() => {
+                      setShowEditModal(false);
+                      setSelectedTariff(null); // Очистка выбранного тарифа
+                  }}
+                  onSave={(updatedTariff) => {
+                      setTariffs((prev) =>
+                          prev.map((t) => (t.id === updatedTariff.id ? updatedTariff : t))
+                      );
+                      fetchData();
+                  }}
+              />
           )}
   
           {showConfirm && (

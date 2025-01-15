@@ -10,28 +10,29 @@ export const AnaliticsPage = () => {
 
     return (
         <div className="analitics-page">
-            <div className='tariff-extras-graph-sect'>
-                <div>
-                    <h2>Пользователи тарифов</h2>
-                    <TariffBarChart urlAPI={'/billingapplication/tariff/user_count'} title={'Количество пользователей'}/>
-                
+            <div className='admin-graphics-container'>
+                <div className='tariff-extras-graph-sect'>
+                    <div>
+                        <h2>Пользователи тарифов</h2>
+                        <TariffBarChart urlAPI={'/billingapplication/tariff/user_count'} title={'Количество пользователей'}/>
+                    
+                    </div>
+                    <div style={{ marginLeft:'20px' }}>
+                    <h2>Приобритение доп. услуг</h2>
+                    <TariffBarChart urlAPI={'/billingapplication/extras/month'} title={'Количество купивших услугу'}/>   
+                    </div>
                 </div>
-                <div style={{ marginLeft:'20px' }}>
-                <h2>Приобритение доп. услуг</h2>
-                <TariffBarChart urlAPI={'/billingapplication/extras/month'} title={'Количество купивших услугу'}/>   
+                <div className='tariff-extras-graph-sect'>
+                    <div>
+                        <h2>Новые пользователи</h2>
+                        <TariffPieChart urlAPI={'/billingapplication/subscribers/new_users/count'} title={'Количество новых пользователей'}/>
+                    </div>
+                    <div style={{ marginLeft:'20px'}}>
+                        <h2>Оплата услуг</h2>
+                        <PaymentLineChart/>   
+                    </div>
                 </div>
-            </div>
-            <div className='tariff-extras-graph-sect'>
-                <div>
-                    <h2>Новые пользователи</h2>
-                    <TariffPieChart urlAPI={'/billingapplication/subscribers/new_users/count'} title={'Количество новых пользователей'}/>
-                </div>
-                <div style={{ marginLeft:'20px'}}>
-                    <h2>Оплата услуг</h2>
-                    <PaymentLineChart/>   
-                </div>
-            </div>
-            
+            </div>     
         </div>
     )
 }

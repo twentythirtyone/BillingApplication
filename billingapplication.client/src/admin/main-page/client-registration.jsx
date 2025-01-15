@@ -176,23 +176,29 @@ export const ClientRegisterForm = () => {
             />
           </div>
           <div>
-            <label>Дата выдачи</label>
             <input
+              type="text"
               placeholder="Дата выдачи"
-              type="date"
               name="issueDate"
               value={formData.passport.issueDate}
+              onFocus={(e) => (e.target.type = 'date')}
+              onBlur={(e) => {
+                if (!e.target.value) e.target.type = 'text';
+              }}
               onChange={handleChange}
               required
             />
           </div>
           <div>
-            <label>Дата истечения срока действия</label>
             <input
               placeholder="Дата истечения срока действия"
-              type="date"
+              type="text"
               name="expiryDate"
               value={formData.passport.expiryDate}
+              onFocus={(e) => (e.target.type = 'date')}
+              onBlur={(e) => {
+                if (!e.target.value) e.target.type = 'text';
+              }}
               onChange={handleChange}
               required
             />

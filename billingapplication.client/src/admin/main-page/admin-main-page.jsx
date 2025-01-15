@@ -37,7 +37,7 @@ export const AdminMainPage = () => {
       }, [navigate]);
 
     return (
-        <div className='main-page admin'>
+        <div className='admin-main-page'>
             <Header />
             <div className='content-layout admin'>
             <Sidebar />

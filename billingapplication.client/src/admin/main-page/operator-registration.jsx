@@ -65,8 +65,8 @@ export const OperatorRegistrationForm = () => {
             <form onSubmit={handleSubmit}>
                 <div className='clientRegister'>
                     <div>
-                        <label htmlFor="email">Email:</label>
                         <input
+                            placeholder='email'
                             type="email"
                             id="email"
                             name="email"
@@ -76,8 +76,8 @@ export const OperatorRegistrationForm = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="nickname">Имя:</label>
                         <input
+                        placeholder='email'
                             type="text"
                             id="nickname"
                             name="nickname"

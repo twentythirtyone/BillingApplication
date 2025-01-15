@@ -9,6 +9,7 @@ const Dashboard = () => {
     const token = localStorage.getItem("token");
     const [userData, setUserData] = useState({
         number: "",
+        paymentDate: '',
         email: "",
         balance: "",
         tariff: {
@@ -18,7 +19,7 @@ const Dashboard = () => {
             }
         }
     });
-    const [userExpenses, setUserExpenses] = useState(null);
+    const [userExpenses, setUserExpenses] = useState(0);
 
     // Функция для загрузки расходов
     const loadExpenses = async () => {
@@ -52,16 +53,56 @@ const Dashboard = () => {
         loadExpenses();  
     }, [userData]);
 
-    if (!userData || !userExpenses) {
-        return (<div className="tariff">
-            <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className='loading'/>;
-        </div>)
+    if (
+        !userData.number && !userData.email && 
+        !userData.balance && userExpenses === 0
+    ) {
+        return (
+            <div className="tariff">
+                <ReactLoading type="cylon" color="#FF3B30" height={667} width={375} className="loading" />
+            </div>
+        );
     }
 
     const prettyNumber = userData.number.replace(
         /(\+7|8)(\d{3})(\d{3})(\d{2})(\d{2})/,
         "+7 $2 $3-$4-$5"
     );
+
+    const formatDateAndNextMonth = (dateString) => {
+        try {
+            // Преобразуем строку времени в объект Date
+            const date = new Date(dateString);
+    
+            // Проверяем, является ли объектом Date и допустимой датой
+            if (isNaN(date.getTime())) {
+                throw new Error("Invalid date");
+            }
+    
+            // Получаем день из даты
+            const day = date.getDate();
+    
+            // Создаем объект текущей даты
+            const currentDate = new Date();
+    
+            // Переходим к следующему месяцу
+            const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1);
+    
+            // Получаем название месяца
+            const monthNames = [
+                "января", "февраля", "марта", "апреля", "мая", "июня",
+                "июля", "августа", "сентября", "октября", "ноября", "декабря"
+            ];
+            const nextMonthName = monthNames[nextMonth.getMonth()];
+    
+            // Формируем результат
+            return `${day} ${nextMonthName}`;
+        } catch {
+            // Возвращаем пустую строку в случае ошибки
+            return "";
+        }
+    }
+    console.log(userData)
 
     return (
         <div className="dashboard">
@@ -82,6 +123,7 @@ const Dashboard = () => {
             </div>
             <div className="tariff-section">
                 <h2>Тариф: {userData.tariff.title}</h2>
+                <p className='tarrif-write-off'>Списание {formatDateAndNextMonth(userData.paymentDate)}, {userData.tariff.price}₽</p>
                 <TariffOptions userData={userData} />
             </div>
             <h2>Дополнительные услуги</h2>

@@ -34,7 +34,8 @@ export const ExtrasTable = () => {
   const fetchData = async () => {
     try {
       const response = await fetchExtras(authToken);
-      setExtras(response.data);
+      const sortedData = response.data.sort((a, b) => a.id - b.id);
+      setExtras(sortedData);
     } catch (error) {
       console.error('Error fetching extras:', error);
     }

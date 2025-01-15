@@ -254,10 +254,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    max-width: 100vw;
+    min-height: 100vh;
+    min-width: 1280px;
     flex-direction: column;
-    font-family: "Plus Jakarta Sans", sans-serif;
+    font-family: 'Inter', sans-serif;
     background-color: #F4F7F3;
     margin: 0;
 }
@@ -345,6 +345,7 @@ height: 34px;
     display:flex;
     margin-top: 15px;
     justify-content: center;
+    
 }
 
 /* Боковая панель */
@@ -402,6 +403,7 @@ height: 34px;
 .dashboard {
     margin-top: 30px;
     width: 700px;
+    
 }
 
 .phone-number {
@@ -482,6 +484,12 @@ height: 34px;
     font-family: Arial, sans-serif;
     color: #333;
     margin-bottom: -20px;
+}
+
+.tarrif-write-off {
+    font-weight: 400;
+    margin-left: 7px;
+    margin-top: -10px;
 }
 
 .tariff-options {
@@ -682,6 +690,19 @@ height: 34px;
     width: 700px;
 }
 
+.admin-main-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-width: 1280px;
+    flex-direction: column;
+    font-family: "Plus Jakarta Sans", sans-serif;
+    margin: 0;
+    background-color: #1E2026;
+    color: #FFFFFF;
+}
+
 .admin {
     background-color: #1E2026;
     color: #FFFFFF;
@@ -699,6 +720,11 @@ height: 34px;
 .admin-link:hover {
     background-color: #2C303E;
 }
+
+body .admin{
+    background-color: #1E2026; /* Тот же цвет, что и в `.admin-header` */
+}
+
 .admin-header {
     display: flex;
     justify-content: space-between;
@@ -707,6 +733,7 @@ height: 34px;
     border-bottom: 1px solid #2C303E;
     width: 100%;
     box-sizing: border-box;
+
 }
 .admin-profile-button {
     color: black;
@@ -1126,6 +1153,7 @@ margin-left: 10px;
 }
 
 .clientRegister input {
+font-family: 'Inter', sans-serif;
 width: 448px;
 height: 30px;
 padding: 3px 8px;
@@ -1137,6 +1165,7 @@ margin-left: 5px;
 flex: 1;
 border: 1px solid  #474A57;
 background-color:#262930;
+color: #A6A8B5;
 }
 
 .clientRegister input:focus {
@@ -1448,6 +1477,11 @@ input:focus {
     width: 1000px;
     font-family: 'Inter', sans-serif;
 }
+
+.admin-graphics-container {
+    width: 1000px;
+}
+
 .tariff-extras-graph-sect {
     display: flex;
 }
@@ -1572,7 +1606,7 @@ body::-webkit-scrollbar-thumb {
     border-radius: 20px;
     }
 body {
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .tariff-table-select {
