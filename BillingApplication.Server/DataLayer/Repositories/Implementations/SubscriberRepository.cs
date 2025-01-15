@@ -226,9 +226,9 @@ namespace BillingApplication.Server.DataLayer.Repositories.Implementations
                                 .FirstOrDefaultAsync(s => s.Id == subscriberId);
             if (user != null)
             {
-                user.CallTime += user.Tariff.Bundle.CallTIme;
-                user.InternetAmount += user.Tariff.Bundle.Internet;
-                user.MessagesCount += user.Tariff.Bundle.Messages;
+                user.CallTime = user.Tariff.Bundle.CallTIme;
+                user.InternetAmount = user.Tariff.Bundle.Internet;
+                user.MessagesCount = user.Tariff.Bundle.Messages;
                 user.PaymentDate = DateTime.UtcNow;
                 await context.SaveChangesAsync();
             }
