@@ -99,11 +99,16 @@ import TimeField from 'react-simple-timefield';
                 {serviceType === 'callTime' && (
                     <>
                     <label>Звонки:</label>
+                    <div className="time-field">
                         <TimeField
                             value={formData.callTime}
-                            onChange={(e) => setFormData({ ...formData, callTime: e.target.value })}
+                            onChange={(e) =>
+                            setFormData({ ...formData, callTime: e.target.value })
+                            }
+                            input={<input />} // Используется стандартный input
                             showSeconds
                         />
+                    </div>
                     </>
                 )}
                 {serviceType === 'messages' && (
