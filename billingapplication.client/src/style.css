@@ -39,17 +39,25 @@
 }
 
 .logo-img {
-    height: 44px;
+    font-family: 'Plus Jakarta Sans';
+    color: #EF3124;
+    font-size: 30px;
     margin-left: 150px;
+    font-weight: 600;
 }
 
 .logo {
-    font-family: 'Roboto';
+    font-family: 'Plus Jakarta Sans';
     color: #FFFFFF;
     font-size: 30px;
     font-weight: 600;
     position: absolute;
-    margin-left: 210px;
+    margin-left: 240px;
+}
+
+.logo b{
+    color: #EF3124;
+    margin-right: 4px;
 }
 
 .login-btn {
@@ -157,19 +165,27 @@
     margin-bottom: 50px;
     display: flex;
     align-items: center;
+    font-family: 'Plus Jakarta Sans';
 }
 
 .logo-img1 {
-    height: 55px;
-    margin-left: -30px;
+    color: #EF3124;
+    font-size: 32px;
+    margin-right: -45px;
+    font-weight: 600;
+
 }
 
 .logo-text1 {
+    font-family: 'Plus Jakarta Sans';
     margin-left: 60px;
-    font-family: 'Roboto';
     color: #FFFFFF;
     font-size: 30px;
     font-weight: 600;
+}
+
+.admin-login {
+    font-family: 'Inter';
 }
 
 .log-form {
@@ -271,16 +287,37 @@
     border-bottom: 1px solid #ddd;
     width: 100%;
     box-sizing: border-box;
+    min-width: 1280px;
+    display:flex;
+    justify-content: center;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1280px;
+    padding-left: 40px;
+    display:flex;
+    margin-left: 100px;
+}
+
+.header-left {
+    display: flex;
+
 }
 
 .header-logo {
-    margin-top: -10px;
-    width: 15px;
+    font-family: 'Plus Jakarta Sans';
+    margin-top: -4px;
+    font-size: 20px;
+    color: #EF3124;
+    font-weight: 700;
     margin-right: 10px;
-    margin-left: 350px;
 }
 
 .header-title {
+    font-family: 'Inter', sans-serif;
     font-size: 18px;
     font-weight: 700;
     margin: 0 auto;
@@ -297,7 +334,7 @@
     cursor: pointer;
     padding: 10px 15px;
     padding-left: 50px;
-    margin-right: 210px;
+    margin-right: 110px;
     text-align: start;
 }
 
@@ -346,7 +383,6 @@ height: 34px;
     display:flex;
     margin-top: 15px;
     justify-content: center; 
-
 }
 
 .admin-content-layout {
@@ -748,6 +784,13 @@ height: 34px;
     border-bottom: 1px solid #2C303E;
     width: 100%;
     box-sizing: border-box;
+    min-width: 1280px;
+    display:flex;
+    justify-content: center;
+}
+
+.admin-header-logo {
+    margin-top: -1px;
 }
 .admin-profile-button {
     color: black;
@@ -757,7 +800,6 @@ height: 34px;
     font-weight: 700;
     cursor: pointer;
     padding: 10px 15px;
-    margin-right: 250px;
     background: white;
 }
     .admin-profile-button:hover {

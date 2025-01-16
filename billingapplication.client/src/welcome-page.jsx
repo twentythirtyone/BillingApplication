@@ -15,8 +15,8 @@ const WelcomePage = () => {
         <div className='home'>
             <div className='homepage'>
                 <header className='navbar'>
-                    <img className='logo-img' src='src/assets/img/logo.svg' alt='Alfa-Telecom' />
-                    <div className='logo'>Alfa-Telecom</div>
+                    <div className='logo-img'>20:31</div>
+                    <div className='logo'> Alfa-Telecom</div>
                     <button className='login-btn' onClick={handleNavigation}>
                         Войти
                     </button>

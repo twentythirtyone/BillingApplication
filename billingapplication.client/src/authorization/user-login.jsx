@@ -61,7 +61,7 @@ const LoginForm = () => {
     return (
         <div className='login'>
             <div className='center-logo'>
-                <img className='logo-img1' src={logo} alt="Логотип" />
+                <div className='logo-img1'>20:31</div>
                 <div className='logo-text1'>Alfa-Telecom</div>
             </div>
             <form className='log-form' onSubmit={handleSubmit}>

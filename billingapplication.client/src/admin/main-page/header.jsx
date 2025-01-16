@@ -27,16 +27,18 @@ export const Header = () => {
 
     return (
         <header className="admin-header">
-            <div className='header-left'>
-                <img src={logo} className="header-logo" alt="Logo" />
-                <span className="header-title">Alfa-Telecom</span>
-            </div>
+            <div className='header-container'>
+                <div className='header-left'>
+                    <div className="header-logo">20:31</div>
+                    <span className="header-title">Alfa-Telecom</span>
+                </div>
 
-            <div className="header-right">
-                <button className="admin-profile-button" onClick={handleLogout}>
-                Выйти
-                </button>
-            </div>
+                <div className="header-right">
+                    <button className="admin-profile-button" onClick={handleLogout}>
+                    Выйти
+                    </button>
+                </div>
+            </div>        
         </header>
     );
 };
