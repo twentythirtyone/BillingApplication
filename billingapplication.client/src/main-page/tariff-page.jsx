@@ -74,12 +74,8 @@ export const TariffPage = () => {
         await payTariff(tariff.id);
     
         alert("Тариф успешно изменен и оплачен!");
-      } catch (error) {
-        const serverMessage =
-          error.response?.data?.message || 
-          "Произошла ошибка при выполнении операции.";
-    
-        alert(serverMessage);
+      } catch {
+        alert("На вашем счету недостаточно средств");
       } finally {
         setIsProcessing(false);
       }
@@ -97,7 +93,7 @@ export const TariffPage = () => {
     setVisibleIndex((prev) => (prev - 3 + filteredTariffs.length) % filteredTariffs.length);
   };
 
-  if (!tariffs.length || !mainTariff) {
+  if (!tariffs.length || !mainTariff || !userTariffId) {
     return (
       <div className="tariff">
         <ReactLoading
