@@ -349,6 +349,13 @@ height: 34px;
 
 }
 
+.admin-content-layout {
+    width: 1440px;
+    display:flex;
+    margin-top: 15px;
+    justify-content: center; 
+}
+
 .content-layout-outlet {
     width: 900px;
     padding: 0 20px;
@@ -737,11 +744,10 @@ height: 34px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px;
+    padding: 12px;
     border-bottom: 1px solid #2C303E;
     width: 100%;
     box-sizing: border-box;
-
 }
 .admin-profile-button {
     color: black;
@@ -863,7 +869,7 @@ height: 34px;
 
 .modal select{
     padding: 10px 12px;
-    width: 280px;
+    width: 350px;
     margin-left: 20px;
     background-color: #262930;
     border: 1px solid #474A57;
@@ -873,15 +879,20 @@ height: 34px;
 }
 
 .modal select{
-    padding: 9px 12px;
-    width: 280px;
-    margin-left: 20px;
+    padding: 10px 12px;
+    width: 405px;
+    margin-left: 0px;
+    margin-bottom: 10px;
     background-color: #262930;
     border: 1px solid #474A57;
     border-radius: 12px;
     color: #A6A8B5;
     outline: none;
     font-size: 16px;
+}
+
+.time-field {
+    width: 398px;
 }
 
 .modal-extra label {
@@ -1231,9 +1242,32 @@ background-color:#262930;
 color: #A6A8B5;
 }
 
+.clientRegister input::placeholder {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    color: #A6A8B5;
+    }
+
 .clientRegister input:focus {
 outline: none;
 }
+
+.admin-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+.admin-checkbox label {
+    font-size: 16px;
+  }
+  
+  .admin-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #2072ca; 
+  }
 
 .clientRegister h2 {
 margin-bottom: 8px;

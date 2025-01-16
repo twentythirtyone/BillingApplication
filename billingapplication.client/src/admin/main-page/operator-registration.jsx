@@ -66,7 +66,7 @@ export const OperatorRegistrationForm = () => {
                 <div className='clientRegister'>
                     <div>
                         <input
-                            placeholder='email'
+                            placeholder='Email'
                             type="email"
                             id="email"
                             name="email"
@@ -77,7 +77,7 @@ export const OperatorRegistrationForm = () => {
                     </div>
                     <div>
                         <input
-                        placeholder='email'
+                        placeholder='Nickname'
                             type="text"
                             id="nickname"
                             name="nickname"
@@ -87,8 +87,8 @@ export const OperatorRegistrationForm = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="password">Пароль:</label>
                         <input
+                            placeholder='Пароль'
                             type="password"
                             id="password"
                             name="password"
@@ -101,6 +101,7 @@ export const OperatorRegistrationForm = () => {
                 <div className='admin-checkbox'>
                     <label htmlFor="isAdmin">
                         Роль админа:
+                        </label>
                         <input
                             type="checkbox"
                             id="isAdmin"
@@ -108,7 +109,6 @@ export const OperatorRegistrationForm = () => {
                             checked={formData.isAdmin}
                             onChange={handleChange}
                         />
-                    </label>
                 </div>
                 <button className='registerButton' type="submit">
                     Зарегистрировать

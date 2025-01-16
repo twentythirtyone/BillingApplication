@@ -10,7 +10,7 @@ export const AnaliticsPage = () => {
 
     return (
         <div className="analitics-page">
-            <div className='admin-graphics-container'>
+            <div className='graph-container'>
                 <div className='tariff-extras-graph-sect'>
                     <div>
                         <h2>Пользователи тарифов</h2>
