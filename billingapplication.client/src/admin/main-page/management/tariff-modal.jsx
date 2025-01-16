@@ -142,32 +142,37 @@ export const EditTariffModal = ({ tariff, onClose, onSave }) => {
     };
 
     return (
-        <div className="modal">
+        <div className="modal modal-extra">
             <form onSubmit={handleSubmit}>
+              <label>Название</label>
                 <input
                     placeholder="Название"
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 />
+                 <label>Описание</label>
                 <input
                     placeholder="Описание"
                     type="text"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 />
+                 <label>Цена</label>
                 <input
                     placeholder="Цена"
                     type="number"
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: +e.target.value })}
                 />
+                 <label>Интернет (ГБ)</label>
                 <input
                     placeholder="Интернет (ГБ)"
                     type="number"
                     value={formData.internet}
                     onChange={(e) => setFormData({ ...formData, internet: e.target.value })}
                 />
+                 <label>Звонки</label>
                 <TimeField
                     value={formData.callTime || ''}
                     onChange={(e) => handleCallTimeChange(e.target.value)}
@@ -185,6 +190,7 @@ export const EditTariffModal = ({ tariff, onClose, onSave }) => {
                     }
                     showSeconds
                 />
+                 <label>SMS</label>
                 <input
                     placeholder="SMS"
                     type="number"

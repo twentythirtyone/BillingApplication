@@ -824,19 +824,20 @@ height: 34px;
         background-color: grey;
     }
 
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 20px;
-    width: 400px;
-    border-radius: 12px;
-    border: 1px solid #bfbfbf;
-    z-index: 2;
-    color: white;
-    background-color: #242732;
-}
+    .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        padding: 60px 35px 28px 35px;
+        width: 400px;
+        border-radius: 12px;
+        z-index: 2;
+        color: white;
+        background-color: #1E2026;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Добавлено */
+    }
 
 .modal label {
     display: block;
@@ -846,11 +847,45 @@ height: 34px;
 
 .modal form input {
     width: calc(100% - 20px);
-    padding: 6px 10px;
+    padding: 10px 12px;
+    font-size: 16px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    background-color: #262930;
+    border: 1px solid #474A57;
     border-radius: 12px;
-    font-size: 14px;
+    color: #A6A8B5;
+}
+
+.modal form input::placeholder {
+    font-size: 16px;
+    color: #A6A8B5;
+}
+
+.modal select{
+    padding: 10px 12px;
+    width: 280px;
+    margin-left: 20px;
+    background-color: #262930;
+    border: 1px solid #474A57;
+    border-radius: 12px;
+    color: #A6A8B5;
+    outline: none;
+}
+
+.modal select{
+    padding: 9px 12px;
+    width: 280px;
+    margin-left: 20px;
+    background-color: #262930;
+    border: 1px solid #474A57;
+    border-radius: 12px;
+    color: #A6A8B5;
+    outline: none;
+    font-size: 16px;
+}
+
+.modal-extra label {
+    margin-bottom: 10px;
 }
 
 .tariff-modal-buttons {
@@ -860,8 +895,10 @@ height: 34px;
 }
 
 .tariff-modal-buttons button {
+    font-family: 'Inter', sans-serif;
     margin-top: 20px;
-    background-color: white;
+    background-color: #E8EDF2;
+    color: #000000;
     border: none;
     border-radius: 12px;
     padding: 7px 14px;
@@ -1030,6 +1067,24 @@ height: 34px;
     background-color:#e2e2e2;
 }
 
+.user-table-search {
+    font-size: 16px;
+    padding: 10px 12px;
+    width: 300px;
+    border: none;
+    border-radius: 10px;
+    background-color: #262930;
+    border-radius: 12px;
+    border: 1px solid #474A57;
+    color: #A6A8B5;
+    outline:none;
+}
+
+.user-table-search::placeholder {
+    font-size: 16px;
+    color: #A6A8B5;
+}
+
 .user-table {
     font-family: 'Inter', sans-serif;
     width: 1000px;
@@ -1069,7 +1124,7 @@ height: 34px;
 
 .custom-table-wrapper {
     margin-top: 20px;
-    max-height: 500px; 
+    max-height: 505px; 
     overflow-y: auto; 
     border: 1px solid #474A57;
     border-radius: 12px; 

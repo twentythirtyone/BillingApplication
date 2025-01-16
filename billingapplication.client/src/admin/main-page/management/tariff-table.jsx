@@ -80,7 +80,7 @@ const [showEditModal, setShowEditModal] = useState(false);
       <select
         value={view}
         onChange={(e) => setView(e.target.value)}
-        className='tariff-table-select'
+        className='user-table-search'
       >
         <option value="tariffs">Тарифы</option>
         <option value="extras">Дополнительные услуги</option>
