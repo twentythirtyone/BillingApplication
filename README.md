@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://77.222.38.141"><img src="http://postimg.su/image/0Uh3b16q/alfatelekom.png" alt="Alfa Telekom" width="300"></a>
+  <a href="https://77.222.38.141"><img src="http://postimg.su/image/wGGKTsMz/browser_hAlMsSHAk0.png" alt="Alfa Telekom" width="300"></a>
   <br>
 </h1>
 <h4 align="center">Веб-приложение для автоматизации и управления процессами
