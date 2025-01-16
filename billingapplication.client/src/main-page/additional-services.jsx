@@ -1,4 +1,5 @@
-﻿import { useEffect, useState } from 'react';
+﻿/* eslint-disable react/prop-types */
+import { useEffect, useState } from 'react';
 import {getTypeExtra} from './functions.js';
 
 export const AdditionalServices = ({cutValue}) => {
@@ -70,7 +71,7 @@ export const AdditionalServices = ({cutValue}) => {
     const visibleServices = latestServices.slice(startIndex, startIndex + servicesPerPage);
 
     return (
-        <div className="additional-services">
+        <>
             {currentPage > 0 && (
                 <button className="prev-page" onClick={handlePrevPage}>
                     ‹
@@ -93,6 +94,6 @@ export const AdditionalServices = ({cutValue}) => {
                     ›
                 </button>
             )}
-        </div>
+        </>
     );
 };

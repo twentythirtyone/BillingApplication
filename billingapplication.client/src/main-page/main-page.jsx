@@ -9,6 +9,16 @@ const MainPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    document.body.style.backgroundColor = '#F4F7F3';
+    document.body.style.color = 'black';
+
+    return () => {
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+    };
+  }, []);
+
+  useEffect(() => {
     const checkAuthorization = async () => {
       try {
         const token = localStorage.getItem('token');
@@ -41,7 +51,7 @@ const MainPage = () => {
       <Header />
       <div className='content-layout'>
         <Sidebar />
-        <Outlet />
+          <Outlet />
       </div>
     </div>
   );

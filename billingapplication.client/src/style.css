@@ -267,7 +267,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 8px;
     border-bottom: 1px solid #ddd;
     width: 100%;
     box-sizing: border-box;
@@ -341,11 +341,19 @@ height: 34px;
     }
 
 .content-layout {
-    width: 1400px;
+    width: 1280px;
     display:flex;
     margin-top: 15px;
-    justify-content: center;
-    
+    justify-content: center; 
+
+}
+
+.content-layout-outlet {
+    width: 900px;
+    padding: 0 20px;
+    background-color: #ECECEC;
+    border: 1px solid #E7E7E7;
+    border-radius: 18px;
 }
 
 /* Боковая панель */
@@ -438,6 +446,7 @@ height: 34px;
         font-size: 18px;
         color: #333;
         font-size: 16px;
+        background-color: #FFFFFF;
     }
 
         .balance div:first-child {
@@ -506,6 +515,7 @@ height: 34px;
     border-radius: 20px;
     padding: 15px;
     margin-right: 100px;
+    background-color: white;
 }
 
 
@@ -549,8 +559,9 @@ height: 34px;
     width: 140px;
     height: 95px;
     padding: 15px;
-    background-color: #EDC7C4;
-    border-radius: 10px;
+    background-color: #FFF;
+    border: 1px solid #F5DEDB;
+    border-radius: 15px;
     text-align: center;
     margin-right: 30px;
     margin-bottom: 20px;
@@ -663,7 +674,7 @@ height: 34px;
 .tariff-card-section {
     background-color: white;
     margin-right: 20px;
-    padding: 0px 20px 0 23px;
+    padding: 0px 20px 0 20px;
     height: 245px;
     width: 250px;
     border-radius: 15px;
@@ -719,10 +730,6 @@ height: 34px;
 }
 .admin-link:hover {
     background-color: #2C303E;
-}
-
-body .admin{
-    background-color: #1E2026; /* Тот же цвет, что и в `.admin-header` */
 }
 
 .admin-header {
@@ -1363,12 +1370,14 @@ color: rgb(182, 182, 182);
 .settings-sect {
     background-color: white;    
     padding: 5px 5px 5px 5px;
+    border-radius: 15px;
 }
 
 .settings-sect-2{
     margin-top: 30px;
     background-color: white;
     padding: 5px 5px 5px 5px;
+    border-radius: 15px;
 }
 .settings-sub-tab {
     width: 680px;
@@ -1552,6 +1561,7 @@ border-radius: 6px;
 height: 15px;
 margin-left: 2px;
 font-family: 'Inter', sans-serif;
+margin-top: -2px;
 }
 
 .internet-trafic-sect {
@@ -1593,21 +1603,23 @@ font-family: 'Inter', sans-serif;
     margin-left: 850px;
 }
 
+body {
+    overflow-x: auto;
+}
+
 body::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
     }
     
 body::-webkit-scrollbar-track {
-    background: #F4F7F3;
+    background: rgb(245, 241, 241);
     }
     
 body::-webkit-scrollbar-thumb {
     background-color: rgb(168, 168, 168); 
     border-radius: 20px;
     }
-body {
-    overflow-x: auto;
-}
 
 .tariff-table-select {
     margin-top: -5px;

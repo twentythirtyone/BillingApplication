@@ -1,4 +1,5 @@
-﻿import { useEffect, useState } from 'react';
+﻿/* eslint-disable no-unused-vars */
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import cardIcon from '../assets/img/wallet/card.svg';
 import simIcon from '../assets/img/wallet/sim.svg';
@@ -72,7 +73,23 @@ export const Wallet = () => {
     };
 
     useEffect(() => {
+        const bg = document.querySelector('.content-layout-outlet');
+        if (bg) { // Проверяем, что элемент существует
+            bg.style.backgroundColor = 'white';
+            bg.style.border = 'none';
+        }
+    
+        return () => {
+            if (bg) {
+                bg.style.backgroundColor = '#ECECEC';
+                bg.style.border = '1px solid #E7E7E7'; // Указываем значение границы корректно
+            }
+        };
+    }, []);
+
+    useEffect(() => {
         document.title = 'Кошелек';
+
         fetchUserData();
         fetchHistory();
         getExpenses();
@@ -126,12 +143,18 @@ export const Wallet = () => {
     const handleDateFilter = () => {
         const currentHistory = getFilteredData();
         if (!Array.isArray(currentHistory)) return [];
-        const filtered = currentHistory.filter((transaction) => {
+        
+        // Сортируем транзакции по дате в порядке убывания (самые новые сначала)
+        const sortedHistory = currentHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Фильтруем по дате
+        const filtered = sortedHistory.filter((transaction) => {
             const transactionDate = new Date(transaction.date);
             const start = startDate ? new Date(startDate) : null;
             const end = endDate ? new Date(endDate) : null;
             return (!start || transactionDate >= start) && (!end || transactionDate <= end);
         });
+    
         return filtered;
     };
 

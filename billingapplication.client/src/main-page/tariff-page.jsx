@@ -5,6 +5,7 @@ import { getRandomObjects, timeToMinutes } from './functions.js';
 import { AdditionalServices } from './additional-services.jsx';
 import { TrafficChart } from './internet-trafic-graph.jsx';
 import { CallsChart } from './calls-trafic-graph.jsx';
+import axios from "axios";
 
 export const TariffPage = () => {
   const [tariffs, setTariffs] = useState([{
@@ -14,26 +15,49 @@ export const TariffPage = () => {
   const [mainTariff, setMainTariff] = useState(null);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [userTariffId, setUserTariffId] = useState();
 
   useEffect(() => {
     document.title='Тариф'
 
     const token = localStorage.getItem("token");
+
+    const fetchUserData = async () => {
+      try {
+          const response = await axios.get("/billingapplication/subscribers/current", {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+                  Accept: "*/*",
+              },
+          });
+
+          setUserTariffId(response.data.tariff.id);
+      } catch (error) {
+          console.error("Ошибка при получении данных пользователя:", error);
+      }
+  };
+
+
     const fetchTariff = async (token) => {
       const tarif = await getTariff(token);
       setTariffs(tarif);
 
       // Устанавливаем главный тариф только при загрузке данных
       if (tarif.length > 0) {
-        const randomTariff = getRandomObjects(tarif, 1)[0];
+        const filteredTariffs = tarif.filter(
+          (t) => t.title !== "Стандартный"
+      );
+        const randomTariff = getRandomObjects(filteredTariffs, 1)[0];
         setMainTariff(randomTariff);
       }
     };
-
+    fetchUserData();
     if (token) {
       fetchTariff(token);
     }
   }, []);
+
+
 
   const handleTariffChange = async (tariff) => {
     const userConfirmed = window.confirm(
@@ -44,23 +68,33 @@ export const TariffPage = () => {
     if (userConfirmed) {
       try {
         setIsProcessing(true);
+    
+        // Выполнение операций
         await changeTariff(tariff.id);
         await payTariff(tariff.id);
+    
         alert("Тариф успешно изменен и оплачен!");
       } catch (error) {
-        alert(error.message);
+        const serverMessage =
+          error.response?.data?.message || 
+          "Произошла ошибка при выполнении операции.";
+    
+        alert(serverMessage);
       } finally {
         setIsProcessing(false);
       }
     }
   };
 
+  const filteredTariffs = tariffs.filter(
+    (t) => t.id !== userTariffId);
+
   const handleNext = () => {
-    setVisibleIndex((prev) => (prev + 3) % tariffs.length);
+    setVisibleIndex((prev) => (prev + 3) % filteredTariffs.length);
   };
 
   const handlePrev = () => {
-    setVisibleIndex((prev) => (prev - 3 + tariffs.length) % tariffs.length);
+    setVisibleIndex((prev) => (prev - 3 + filteredTariffs.length) % filteredTariffs.length);
   };
 
   if (!tariffs.length || !mainTariff) {
@@ -77,7 +111,7 @@ export const TariffPage = () => {
     );
   }
 
-  const visibleTariffs = tariffs.slice(visibleIndex, visibleIndex + 3);
+  const visibleTariffs = filteredTariffs.slice(visibleIndex, visibleIndex + 3);
 
   return (
     <div className="tariff">
@@ -144,7 +178,7 @@ export const TariffPage = () => {
             </div>
             ))}
         </div>
-        {visibleIndex + 3 < tariffs.length && (
+        {visibleIndex + 3 < filteredTariffs.length && (
             <button className="next-page tariff-right" onClick={handleNext}>
             ›
             </button>

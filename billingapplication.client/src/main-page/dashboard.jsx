@@ -53,6 +53,8 @@ const Dashboard = () => {
         loadExpenses();  
     }, [userData]);
 
+
+
     if (
         !userData.number && !userData.email && 
         !userData.balance && userExpenses === 0
@@ -102,7 +104,6 @@ const Dashboard = () => {
             return "";
         }
     }
-    console.log(userData)
 
     return (
         <div className="dashboard">
@@ -127,7 +128,9 @@ const Dashboard = () => {
                 <TariffOptions userData={userData} />
             </div>
             <h2>Дополнительные услуги</h2>
-            <AdditionalServices/>
+            <div className='additional-services'>
+                <AdditionalServices/>
+            </div>
         </div>
     );
 };
