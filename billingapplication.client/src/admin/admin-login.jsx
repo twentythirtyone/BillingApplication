@@ -1,6 +1,5 @@
 ﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/img/logo.svg';
 
 const AdminLoginForm = () => {
     const [email, setEmail] = useState('');
@@ -54,8 +53,8 @@ const AdminLoginForm = () => {
     return (
         <div className="login">
             <div className="center-logo">
-                <img className="logo-img1" src={logo} alt="Логотип" />
-                <div className="logo-text1">Администратор</div>
+                <div className='logo-img1'>20:31</div>
+                <div className="logo-text1 admin-login">Администратор</div>
             </div>
             <form className="log-form" onSubmit={handleLogin}>
                 <input

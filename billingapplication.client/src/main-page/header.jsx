@@ -76,25 +76,27 @@ const Header = () => {
 
     return (
         <header className="main-page-header">
-            <div className="header-left">
-                <img src={logo} className="header-logo" alt="Logo" />
-                <span className="header-title">Alfa-Telecom</span>
-            </div>
+            <div className='header-container'>
+                <div className="header-left">
+                    <div className="header-logo">20:31</div>
+                    <span className="header-title">Alfa-Telecom</span>
+                </div>
 
-            <div className="header-right" ref={menuRef}>
-                <button className="profile-button" onClick={toggleMenu}>
-                    <img className="profile-pic" src="..\src\assets\img\avatar.svg" alt="Avatar" />
-                    {splittedUserName[0] + ' ' + splittedUserName[1]}
-                    <div className="profile-button-email">{userData.email || 'Загрузка...'}</div>
-                </button>
-                {isMenuOpen && (
-                    <div className="profile-menu">
-                        <button onClick={handleLogout} className="profile-menu-item">
-                            Выйти
-                        </button>
-                    </div>
-                )}
-            </div>
+                <div className="header-right" ref={menuRef}>
+                    <button className="profile-button" onClick={toggleMenu}>
+                        <img className="profile-pic" src="..\src\assets\img\avatar.svg" alt="Avatar" />
+                        {splittedUserName[0] + ' ' + splittedUserName[1]}
+                        <div className="profile-button-email">{userData.email || 'Загрузка...'}</div>
+                    </button>
+                    {isMenuOpen && (
+                        <div className="profile-menu">
+                            <button onClick={handleLogout} className="profile-menu-item">
+                                Выйти
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </div>  
         </header>
     );
 };
