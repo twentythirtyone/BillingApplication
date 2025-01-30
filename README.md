@@ -60,6 +60,14 @@ Cистема предназначена для автоматизации вс�
 ## Запуск:
 > рабоатет только из git bash (если не знаешь как то переименуй [example.env](example.env) в .env)
 
+### Создать [локальный секрет](https://makolyte.com/how-to-add-user-secrets-in-a-dotnetcore-console-app/#:~:text=2%20%E2%80%93%20Add%20secrets.json,just%20an%20empty%20JSON%20file:)
+```json
+{
+  "secret": "AlfaTelekom2031AAAABJQAAACEA3N1qw1YmAimBUVDFVgRtfUrfu2025",
+  "db_connection": "Host=pgbouncer;Port=6432;Database=billingapp;Username=billing;Password=password;Pooling=true"
+}
+```
+
 ### Создать .env файл
 ```sh
 make env
@@ -77,7 +85,7 @@ dos2unix docker/scripts/entrypoint.sh
 dos2unix docker/scripts/wait-for-it.sh
 ```
 
-- Строка подключения к бд
+- Строка подключения к бд в секрете
 ```
   "db_connection": "Host=localhost;Port=6432;Database=billingapp;Username=billing;Password=password;Pooling=true"
 ```
@@ -91,11 +99,6 @@ dotnet run --launch-profile "http"
 ### [http://localhost:5173](http://localhost:5173)
 
 ## Запуск через docker
-
-- Строка подключения к бд
-```
-  "db_connection": "Host=pgbouncer;Port=6432;Database=billingapp;Username=billing;Password=password;Pooling=true"
-```
 
 - Фоновый запуск
 ```sh
